@@ -9,6 +9,65 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
+/* ── VIEWPORT & TEXT SCALING ── */
+html{
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+
+/* Fluid container - uses padding clamp */
+.container{
+  width:100%;
+}
+
+/* Prevent nav items from causing overflow */
+nav *{min-width:0}
+.nav-brand{flex-shrink:0}
+
+/* Fix button line-height so text never wraps weird */
+button,a{
+  line-height:1.2;
+}
+
+/* Pricing amount never wraps */
+.pc-price{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:2px !important;
+  flex-wrap:nowrap !important;
+  overflow:visible !important;
+}
+.pc-amount,.pc-period{
+  white-space:nowrap !important;
+  flex-shrink:0 !important;
+}
+
+/* Stats value never wraps */
+.stat-val,.stat-val span{
+  white-space:nowrap;
+  display:inline;
+}
+
+/* Trust badges wrap nicely */
+.trust-badges{flex-wrap:wrap}
+
+/* Log entries on very small screens */
+@media(max-width:360px){
+  .log-entry{padding:7px 10px;gap:6px;font-size:0.65rem}
+  .le-app{display:none}
+  .le-tag{display:none}
+  .le-time{min-width:30px}
+  nav{padding:0 12px}
+  .container{padding:0 12px}
+}
+
+/* Feature cards on very small */
+@media(max-width:320px){
+  .features-grid{grid-template-columns:1fr !important}
+  h2.section-title{font-size:1.4rem !important}
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --c-bg:#08090a;
@@ -35,7 +94,12 @@
   --shadow:0 4px 24px rgba(0,0,0,0.5);
   --shadow-lg:0 16px 64px rgba(0,0,0,0.6);
 }
-html{scroll-behavior:smooth;font-size:16px}
+html{
+  scroll-behavior:smooth;
+  font-size:clamp(13px, 1.8vw + 8px, 16px);
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
 body{
   background:var(--c-bg);
   color:var(--c-text);
@@ -72,7 +136,7 @@ body::before{
 nav{
   position:fixed;top:0;left:0;right:0;z-index:1000;
   height:64px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;
+  padding:0 40px;min-width:0;
   background:rgba(8,9,10,0.7);
   backdrop-filter:blur(24px) saturate(180%);
   -webkit-backdrop-filter:blur(24px) saturate(180%);
@@ -92,7 +156,7 @@ nav{
   font-weight:500;text-decoration:none;transition:all 0.2s;letter-spacing:0.01em;
 }
 .nav-link:hover{color:var(--c-text);background:rgba(255,255,255,0.05)}
-.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0;min-width:0}
 .btn-nav-outline{
   padding:8px 18px;border-radius:8px;font-size:0.875rem;font-weight:600;
   color:var(--c-text2);border:1px solid var(--c-border2);background:transparent;
@@ -101,12 +165,13 @@ nav{
 }
 .btn-nav-outline:hover{color:var(--c-text);border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.04)}
 .btn-nav-primary{
-  padding:8px 20px;border-radius:8px;font-size:0.875rem;font-weight:600;
+  padding:8px 18px;border-radius:8px;font-size:0.875rem;font-weight:600;
   color:#000;border:none;
   background:linear-gradient(135deg,#00d4ff,#2196f3);
   cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;
   text-decoration:none;display:inline-flex;align-items:center;gap:6px;
   box-shadow:0 0 20px rgba(0,212,255,0.2);
+  white-space:nowrap;flex-shrink:0;
 }
 .btn-nav-primary:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(0,212,255,0.35)}
 
@@ -187,8 +252,8 @@ nav{
 .trust-badge svg{width:14px;height:14px}
 
 /* ─── SECTION BASE ─── */
-.section{position:relative;z-index:1;padding:100px 0}
-.container{max-width:1180px;margin:0 auto;padding:0 40px}
+.section{position:relative;z-index:1;padding:clamp(56px,8vw,100px) 0}
+.container{max-width:1180px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem)}
 .section-label{
   display:inline-flex;align-items:center;gap:6px;
   font-family:'JetBrains Mono',monospace;font-size:0.72rem;
@@ -311,13 +376,7 @@ h2.section-title{
   box-shadow:var(--shadow-lg);
 }
 .how-visual-title{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--c-text3);letter-spacing:0.06em;margin-bottom:24px;text-transform:uppercase;font-weight:400}
-.code-display{
-  background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.12);
-  border-radius:10px;padding:20px 24px;margin-bottom:20px;
-  display:flex;align-items:center;gap:12px;
-}
 .code-label{font-size:0.78rem;color:var(--c-text3);min-width:80px}
-.code-digits{display:flex;gap:8px}
 .cd{
   width:40px;height:50px;border-radius:8px;
   background:var(--c-surface2);border:1px solid var(--c-border2);
@@ -356,19 +415,19 @@ h2.section-title{
 .mp-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#00c853;animation:pulse-dot 1.5s infinite}
 .mp-body{padding:0}
 .log-entry{
-  display:grid;grid-template-columns:48px 90px 1fr auto;
-  align-items:center;gap:12px;padding:11px 18px;
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
   border-bottom:1px solid rgba(255,255,255,0.04);
-  transition:background 0.15s;font-size:0.8rem;
+  transition:background 0.15s;font-size:0.8rem;flex-wrap:nowrap;
+  overflow:hidden;
 }
 .log-entry:last-child{border-bottom:none}
 .log-entry:hover{background:rgba(255,255,255,0.02)}
-.le-time{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--c-text3)}
-.le-app{font-weight:600;font-size:0.78rem}
-.le-msg{color:var(--c-text2)}
+.le-time{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--c-text3);white-space:nowrap;flex-shrink:0;min-width:38px}
+.le-app{font-weight:600;font-size:0.78rem;white-space:nowrap;flex-shrink:0;min-width:60px}
+.le-msg{color:var(--c-text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .le-tag{
   font-family:'JetBrains Mono',monospace;font-size:0.62rem;
-  padding:2px 7px;border-radius:3px;white-space:nowrap;font-weight:500;
+  padding:2px 6px;border-radius:3px;white-space:nowrap;font-weight:500;flex-shrink:0;
 }
 .lt-alert{background:rgba(255,171,0,0.12);color:#ffcc40}
 .lt-log{background:rgba(33,150,243,0.1);color:#64b5f6}
@@ -482,20 +541,10 @@ h2.section-title{
 }
 .ps-text{font-size:0.85rem;color:var(--c-text2);line-height:1.5}
 .ps-text strong{color:var(--c-text)}
-.mini-code{
-  display:flex;gap:5px;margin-top:10px;
-}
-.mc-d{
-  width:32px;height:38px;border-radius:6px;
-  background:var(--c-bg);border:1px solid rgba(0,212,255,0.2);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--c-cyan);
-  animation:code-pulse 2s ease infinite;
-}
-.mc-d:nth-child(2){animation-delay:0.1s}.mc-d:nth-child(3){animation-delay:0.2s}
-.mc-d:nth-child(4){animation-delay:0.3s}.mc-d:nth-child(5){animation-delay:0.4s}
-.mc-d:nth-child(6){animation-delay:0.5s}
-@keyframes code-pulse{0%,100%{border-color:rgba(0,212,255,0.2)}50%{border-color:rgba(0,212,255,0.5);box-shadow:0 0 8px rgba(0,212,255,0.15)}}
+
+
+
+50%{border-color:rgba(0,212,255,0.5);box-shadow:0 0 8px rgba(0,212,255,0.15)}}
 
 /* ─── FOOTER ─── */
 footer{
@@ -525,6 +574,7 @@ footer{
   padding:4px 10px;border-radius:100px;
   background:rgba(0,200,83,0.08);border:1px solid rgba(0,200,83,0.15);
   font-size:0.72rem;color:#4caf82;font-weight:500;
+  white-space:nowrap;flex-shrink:0;
 }
 
 /* ─── ANIMATIONS ─── */
@@ -603,6 +653,242 @@ body{
 h2.section-title{
   word-break:normal;
   overflow-wrap:normal;
+}
+
+
+/* ─── HOW VISUAL SIMPLE ─── */
+.how-visual-simple{display:flex;flex-direction:column;gap:4px}
+.hvs-item{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 20px;background:var(--c-surface);
+  border:1px solid var(--c-border);border-radius:12px;
+  transition:all 0.2s;
+}
+.hvs-item:hover{border-color:var(--c-border2);background:var(--c-surface2)}
+.hvs-num{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  color:var(--c-text3);font-weight:500;min-width:24px;flex-shrink:0;
+}
+.hvs-icon{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.hvs-title{font-size:0.9rem;font-weight:600;color:var(--c-text);margin-bottom:2px}
+.hvs-desc{font-size:0.8rem;color:var(--c-text3);line-height:1.4}
+
+/* ─── FULL RESPONSIVE ─── */
+/* ═══════════════════════════════════════════
+   RESPONSIVE SYSTEM - fluid rem-based scaling
+   html root = clamp(13px, 1.8vw+8px, 16px)
+   So ALL rem values scale automatically.
+   ═══════════════════════════════════════════ */
+
+/* ── NAV ── */
+@media(max-width:900px){
+  .nav-center{display:none}
+  .btn-nav-outline{display:none}
+}
+@media(max-width:600px){
+  nav{padding:0 1rem;height:52px}
+  .nav-brand img{width:28px;height:28px}
+  .nav-brand-name{font-size:1rem}
+  .btn-nav-primary{padding:7px 14px;font-size:0.8rem}
+  .android-only-chip{display:none}
+}
+
+/* ── HERO ── */
+@media(max-width:900px){
+  .hero{padding:90px 1.5rem 60px}
+  .hero-title{font-size:clamp(2rem, 8vw, 3.5rem) !important}
+  .hero-subtitle{font-size:0.95rem}
+  .hero-ctas{gap:0.75rem}
+  .trust-badges{gap:0.5rem}
+  .trust-badge{font-size:0.72rem;padding:4px 10px}
+}
+@media(max-width:480px){
+  .hero{padding:80px 1rem 48px}
+  .hero-title{font-size:clamp(1.8rem, 9vw, 2.5rem) !important;line-height:1.05 !important}
+  .hero-ctas{flex-direction:column;align-items:stretch}
+  .btn-primary-lg,.btn-ghost-lg{justify-content:center;width:100%}
+  .hero-trust{margin-top:32px}
+  .trust-badges{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .eyebrow-text{font-size:0.72rem}
+}
+
+/* ── SECTION TITLES ── */
+h2.section-title{font-size:clamp(1.6rem, 4vw, 2.8rem) !important;letter-spacing:-0.015em !important}
+@media(max-width:480px){
+  h2.section-title{font-size:clamp(1.5rem, 6vw, 2rem) !important}
+  .section-desc{font-size:0.875rem}
+}
+
+/* ── STATS STRIP ── */
+@media(max-width:900px){
+  .stats-strip{grid-template-columns:repeat(3,1fr)}
+  .stat-val{font-size:1.5rem}
+}
+@media(max-width:600px){
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .stat-cell{padding:16px 12px;border-right:none;border-bottom:1px solid var(--c-border)}
+  .stat-cell:nth-child(even){border-right:none}
+  .stat-val{font-size:1.4rem}
+  .stat-key{font-size:0.7rem}
+}
+@media(max-width:380px){
+  .stats-strip{grid-template-columns:1fr 1fr}
+}
+
+/* ── FEATURES GRID ── */
+@media(max-width:1100px){
+  .features-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .fc{padding:20px 16px}
+  .fc-name{font-size:0.82rem}
+  .fc-desc{font-size:0.76rem}
+}
+@media(max-width:400px){
+  .features-grid{grid-template-columns:1fr}
+}
+
+/* ── HOW IT WORKS ── */
+@media(max-width:1000px){
+  .how-grid{grid-template-columns:1fr;gap:32px}
+  .how-visual-simple{max-width:600px}
+}
+@media(max-width:600px){
+  .how-steps .how-step{padding:20px 0;gap:12px}
+  .hs-num{font-size:0.68rem;min-width:20px}
+  .hs-title{font-size:0.9rem}
+  .hs-desc{font-size:0.82rem}
+  .hvs-item{padding:12px 14px;gap:10px}
+  .hvs-icon{width:34px;height:34px}
+  .hvs-title{font-size:0.85rem}
+  .hvs-desc{font-size:0.75rem}
+}
+
+/* ── DASHBOARD / MONITOR ── */
+@media(max-width:1100px){
+  .monitor-layout{grid-template-columns:1fr}
+  .monitor-aside{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+}
+@media(max-width:640px){
+  .monitor-layout{grid-template-columns:1fr}
+  .monitor-aside{grid-template-columns:1fr}
+  .log-entry{
+    grid-template-columns:40px 1fr auto;
+    gap:8px;padding:8px 12px;font-size:0.72rem
+  }
+  .le-app{display:none}
+  .mp-title{font-size:0.65rem}
+  .le-tag{font-size:0.58rem;padding:2px 5px}
+}
+@media(max-width:400px){
+  .log-entry{grid-template-columns:36px 1fr auto;gap:5px;font-size:0.68rem}
+  .le-time{font-size:0.62rem;min-width:34px}
+}
+
+/* ── PRICING ── */
+@media(max-width:1100px){
+  .pricing-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .pricing-grid{grid-template-columns:1fr}
+  .pricing-header{flex-direction:column;gap:10px}
+  .pc{padding:24px 20px}
+  .pc-amount{font-size:1.9rem !important}
+  .pc-ribbon{font-size:0.6rem;padding:3px 12px}
+}
+@media(max-width:400px){
+  .pc-amount{font-size:1.7rem !important}
+  .pc-perks li{font-size:0.8rem}
+}
+
+/* ── DOWNLOAD ── */
+@media(max-width:1000px){
+  .download-layout{grid-template-columns:1fr;gap:40px}
+}
+@media(max-width:600px){
+  .dl-left p{font-size:0.875rem}
+  .dl-card{padding:14px 16px;gap:12px}
+  .dlc-name{font-size:0.85rem}
+  .dlc-sub{font-size:0.72rem}
+  .dlc-badge{font-size:0.58rem;padding:2px 7px}
+  .dl-right{padding:20px 16px}
+  .ps-text{font-size:0.82rem}
+}
+
+/* ── FOOTER ── */
+@media(max-width:900px){
+  .footer-top{grid-template-columns:1fr 1fr;gap:28px}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr;gap:20px}
+  footer{padding:40px 0 20px}
+  .footer-bottom{flex-direction:column;align-items:center;gap:8px;text-align:center}
+  .footer-copy{font-size:0.75rem}
+}
+
+/* ── PRICING BUTTONS TEXT ── */
+.pc-btn{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* ── GLOBAL FONT SAFETY ── */
+*{
+  font-synthesis:none;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+h1,h2,h3,h4,h5,h6,
+.nav-brand-name,
+.pc-amount,
+.stat-val,
+.hero-title,
+.btn-primary-lg,
+.btn-ghost-lg,
+.btn-nav-primary,
+.pc-btn{
+  font-stretch:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  white-space:nowrap;
+}
+/* Exception - paragraphs and list items can wrap */
+p,.section-desc,.hs-desc,.fc-desc,.ma-desc,
+.pc-perks li,.ps-text,.dlc-sub,.ft-brand-desc{
+  white-space:normal;
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+.pc-price{
+  display:flex;
+  align-items:baseline;
+  gap:3px;
+  flex-wrap:nowrap;
+}
+.pc-amount{
+  display:block;
+  white-space:nowrap;
+}
+.pc-price,.pc-amount{
+  display:flex !important;
+  align-items:baseline !important;
+  flex-wrap:nowrap !important;
+  gap:4px !important;
+}
+
+
+/* Hide old code elements if any remain */
+.code-display,.code-digits,.cd,.mc-d,@media(max-width:768px){
+  .pricing-grid{grid-template-columns:1fr!important}
+  .features-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:480px){
+  .features-grid{grid-template-columns:1fr!important}
 }
 
 </style>
@@ -928,54 +1214,48 @@ h2.section-title{
           </div>
         </div>
       </div>
-      <div class="how-visual reveal">
-        <div class="how-visual-title">Pairing Interface</div>
-        <div class="code-display">
-          <span class="code-label">Your Code</span>
-          <div class="code-digits">
-            <div class="cd active" id="cd0">4</div>
-            <div class="cd active" id="cd1">8</div>
-            <div class="cd active" id="cd2">2</div>
-            <div class="cd active" id="cd3">9</div>
-            <div class="cd active" id="cd4">1</div>
-            <div class="cd active" id="cd5">7</div>
+      <div class="how-visual-simple reveal">
+        <div class="hvs-item">
+          <div class="hvs-num">01</div>
+          <div class="hvs-icon" style="background:rgba(0,200,83,0.1);border:1px solid rgba(0,200,83,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4caf82" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div>
+            <div class="hvs-title">Install Kids APK</div>
+            <div class="hvs-desc">On child's Android device — runs completely hidden</div>
           </div>
         </div>
-        <div class="status-row">
-          <div class="sr-left">
-            <div class="sr-icon" style="background:rgba(0,200,83,0.1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4caf82" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <span class="sr-label">Encryption</span>
+        <div class="hvs-item">
+          <div class="hvs-num">02</div>
+          <div class="hvs-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5" stroke-linecap="round"/><path d="M9 7h6M9 11h4"/></svg>
           </div>
-          <span class="sr-status ss-ok">AES-256</span>
-        </div>
-        <div class="status-row">
-          <div class="sr-left">
-            <div class="sr-icon" style="background:rgba(0,212,255,0.1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
-            <span class="sr-label">Ghost Mode</span>
+          <div>
+            <div class="hvs-title">Get 6-Digit Code</div>
+            <div class="hvs-desc">Kids App shows a unique 6-digit pairing code once</div>
           </div>
-          <span class="sr-status ss-active">ACTIVE</span>
         </div>
-        <div class="status-row">
-          <div class="sr-left">
-            <div class="sr-icon" style="background:rgba(156,92,246,0.1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b57cf8" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-            <span class="sr-label">Sync Interval</span>
+        <div class="hvs-item">
+          <div class="hvs-num">03</div>
+          <div class="hvs-icon" style="background:rgba(156,92,246,0.1);border:1px solid rgba(156,92,246,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b57cf8" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           </div>
-          <span class="sr-status ss-active">REAL-TIME</span>
-        </div>
-        <div class="status-row">
-          <div class="sr-left">
-            <div class="sr-icon" style="background:rgba(255,171,0,0.1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffcc40" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-            <span class="sr-label">Push Alerts</span>
+          <div>
+            <div class="hvs-title">Pair with Parent App</div>
+            <div class="hvs-desc">Enter the code in your Parent App — instantly linked</div>
           </div>
-          <span class="sr-status ss-active">ENABLED</span>
         </div>
-        <div class="status-row">
-          <div class="sr-left">
-            <div class="sr-icon" style="background:rgba(0,200,83,0.1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4caf82" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.35 12"/><path d="M1 1l22 22"/></svg></div>
-            <span class="sr-label">Call Recording</span>
+        <div class="hvs-item">
+          <div class="hvs-num">04</div>
+          <div class="hvs-icon" style="background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffcc40" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
-          <span class="sr-status ss-ok">READY</span>
+          <div>
+            <div class="hvs-title">Live Monitoring Starts</div>
+            <div class="hvs-desc">All 30+ features active — location, calls, social media</div>
+          </div>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -1068,7 +1348,7 @@ h2.section-title{
           <li><svg class="perk-n" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span class="perk-n-text">Free trial</span></li>
           <li><svg class="perk-n" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span class="perk-n-text">Social media monitor</span></li>
         </ul>
-        <button class="pc-btn pcb-outline">Get Weekly</button>
+        <button class="pc-btn pcb-outline" onclick="guardScroll('pricing')">Get Weekly</button>
       </div>
 
       <div class="pc pc-popular">
@@ -1083,7 +1363,7 @@ h2.section-title{
           <li><svg class="perk-y" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>3-day free trial</li>
           <li><svg class="perk-y" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Social media monitor</li>
         </ul>
-        <button class="pc-btn pcb-cyan">Start Free Trial →</button>
+        <button class="pc-btn pcb-cyan" onclick="guardScroll('download')">Start Free Trial →</button>
       </div>
 
       <div class="pc">
@@ -1097,7 +1377,7 @@ h2.section-title{
           <li><svg class="perk-y" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Social media monitor</li>
           <li><svg class="perk-n" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span class="perk-n-text">Free trial</span></li>
         </ul>
-        <button class="pc-btn pcb-outline">Get Semi-Annual</button>
+        <button class="pc-btn pcb-outline" onclick="guardScroll('pricing')">Get Semi-Annual</button>
       </div>
 
       <div class="pc pc-best">
@@ -1112,7 +1392,7 @@ h2.section-title{
           <li><svg class="perk-y" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>7-day free trial</li>
           <li><svg class="perk-y" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
         </ul>
-        <button class="pc-btn pcb-amber">Start Free Trial →</button>
+        <button class="pc-btn pcb-amber" onclick="guardScroll('download')">Start Free Trial →</button>
       </div>
 
     </div>
@@ -1128,7 +1408,7 @@ h2.section-title{
         <h2 class="section-title">Get Guard X<br>for Android</h2>
         <p>Install the Kids APK on your child's device, then install the Parent App on yours. Pair with the 6-digit code and you're live in minutes.</p>
         <div class="dl-cards">
-          <a href="#" class="dl-card">
+          <a href="#download" class="dl-card" onclick="guardScroll('download')">
             <div class="dl-card-icon"><svg viewBox="0 0 24 24" fill="#4caf82"><path d="M17.523 15.341a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm-11.046 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zM3.609 7.5h16.782C19.1 4.67 15.85 2.75 12 2.75S4.9 4.67 3.609 7.5zM2 12c0 5.523 4.477 10 10 10s10-4.477 10-10v-1a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v1z"/></svg></div>
             <div>
               <div class="dlc-name">Kids App — Android</div>
@@ -1136,7 +1416,7 @@ h2.section-title{
             </div>
             <span class="dlc-badge">APK · v4.1.2</span>
           </a>
-          <a href="#" class="dl-card">
+          <a href="#download" class="dl-card" onclick="guardScroll('download')">
             <div class="dl-card-icon"><svg viewBox="0 0 24 24" fill="#00d4ff"><path d="M17.523 15.341a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm-11.046 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zM3.609 7.5h16.782C19.1 4.67 15.85 2.75 12 2.75S4.9 4.67 3.609 7.5zM2 12c0 5.523 4.477 10 10 10s10-4.477 10-10v-1a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v1z"/></svg></div>
             <div>
               <div class="dlc-name">Parent App — Android</div>
@@ -1153,10 +1433,7 @@ h2.section-title{
           <div class="ps">
             <div class="ps-n">2</div>
             <div class="ps-text">
-              Open the Kids App — it shows a <strong>6-digit pairing code</strong>.
-              <div class="mini-code">
-                <div class="mc-d">4</div><div class="mc-d">8</div><div class="mc-d">2</div><div class="mc-d">9</div><div class="mc-d">1</div><div class="mc-d">7</div>
-              </div>
+              Open the Kids App — it shows a <strong>6-digit pairing code</strong>. Note it down.</div>
             </div>
           </div>
           <div class="ps"><div class="ps-n">3</div><div class="ps-text">Install <strong>Parent App</strong> on your Android and tap "Add Device".</div></div>
@@ -1218,7 +1495,7 @@ h2.section-title{
 </footer>
 
 <script>
-// Scroll reveal
+// ── Scroll reveal
 const ro = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -1233,11 +1510,11 @@ document.querySelectorAll('.reveal').forEach((el, i) => {
   ro.observe(el);
 });
 
-// Stagger feature cards
+// ── Stagger feature cards
 document.querySelectorAll('.fc').forEach((el, i) => {
   el.style.opacity = '0';
   el.style.transform = 'translateY(16px)';
-  el.style.transition = `opacity 0.4s ${i*0.025}s ease, transform 0.4s ${i*0.025}s ease`;
+  el.style.transition = `opacity 0.4s ${i * 0.025}s ease, transform 0.4s ${i * 0.025}s ease`;
 });
 const fro = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -1249,34 +1526,34 @@ const fro = new IntersectionObserver((entries) => {
 }, { threshold: 0.05 });
 document.querySelectorAll('.fc').forEach(el => fro.observe(el));
 
-// Nav scroll effect
+// ── Nav scroll effect
+const navEl = document.getElementById('nav');
+if (navEl) {
+  window.addEventListener('scroll', () => {
+    navEl.style.background =
+      window.scrollY > 40 ? 'rgba(8,9,10,0.95)' : 'rgba(8,9,10,0.7)';
+  }, { passive: true });
+}
+
+// ── Smooth scroll (global helper used by onclick attributes)
+window.guardScroll = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+};
+
+// ── Nav active highlight
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id]');
 window.addEventListener('scroll', () => {
-  document.getElementById('nav').style.background =
-    window.scrollY > 40 ? 'rgba(8,9,10,0.95)' : 'rgba(8,9,10,0.7)';
-});
-
-// Animated pairing code digits
-const digits = document.querySelectorAll('.cd');
-let code = [4,8,2,9,1,7];
-setInterval(() => {
-  const i = Math.floor(Math.random() * 6);
-  const n = Math.floor(Math.random() * 10);
-  code[i] = n;
-  digits[i].textContent = n;
-  digits[i].style.color = '#00d4ff';
-  digits[i].style.borderColor = 'rgba(0,212,255,0.6)';
-  setTimeout(() => {
-    digits[i].style.color = '';
-    digits[i].style.borderColor = '';
-  }, 400);
-}, 1200);
-
-// Mini code also animates
-const mcd = document.querySelectorAll('.mc-d');
-setInterval(() => {
-  const i = Math.floor(Math.random() * 6);
-  mcd[i].textContent = Math.floor(Math.random() * 10);
-}, 900);
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    const href = a.getAttribute('href');
+    a.style.color = href === '#' + current ? 'var(--c-text)' : '';
+  });
+}, { passive: true });
 </script>
 </body>
 </html>
