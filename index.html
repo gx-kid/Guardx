@@ -6,7 +6,8 @@
 <title>Guard X – Android Parental Control</title>
 <meta name="description" content="The most powerful Android parental monitoring app. Real-time GPS, call recording, social media surveillance. Ghost mode — invisible to your child.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -81,8 +82,8 @@ nav{
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-brand img{width:32px;height:32px;object-fit:contain;border-radius:7px}
 .nav-brand-name{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;
-  letter-spacing:0.04em;color:var(--c-text);
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;
+  letter-spacing:0.06em;color:var(--c-text);white-space:nowrap;
 }
 .nav-brand-name span{color:var(--c-cyan)}
 .nav-center{display:flex;align-items:center;gap:4px}
@@ -133,8 +134,8 @@ nav{
 .eyebrow-text{font-size:0.8rem;font-weight:500;color:#4caf82;letter-spacing:0.02em}
 .hero-title{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:clamp(3rem,9vw,6.5rem);line-height:0.95;
-  letter-spacing:-0.03em;margin-bottom:8px;
+  font-size:clamp(2.6rem,8vw,6rem);line-height:1.0;
+  letter-spacing:-0.02em;margin-bottom:8px;
   animation:fadeSlideUp 0.7s 0.05s ease both;
 }
 .hero-title-line2{
@@ -197,8 +198,8 @@ nav{
 .section-label::before{content:'//';opacity:0.5}
 h2.section-title{
   font-family:'Syne',sans-serif;font-weight:800;
-  font-size:clamp(2rem,4vw,3rem);letter-spacing:-0.025em;
-  line-height:1.1;margin-bottom:16px;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:-0.015em;
+  line-height:1.15;margin-bottom:16px;
 }
 .section-desc{font-size:1.05rem;color:var(--c-text2);max-width:500px;line-height:1.7}
 
@@ -226,8 +227,8 @@ h2.section-title{
 }
 .stat-cell:hover::after{opacity:1}
 .stat-val{
-  font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1.8rem;color:var(--c-text);letter-spacing:-0.02em;
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:1.7rem;color:var(--c-text);letter-spacing:-0.01em;
   margin-bottom:4px;
 }
 .stat-val span{color:var(--c-cyan)}
@@ -272,7 +273,7 @@ h2.section-title{
   border:1px solid var(--fc-border,rgba(0,212,255,0.15));
 }
 .fc-icon svg{width:20px;height:20px}
-.fc-name{font-size:0.88rem;font-weight:600;color:var(--c-text);margin-bottom:5px;letter-spacing:-0.01em}
+.fc-name{font-size:0.875rem;font-weight:600;color:var(--c-text);margin-bottom:5px;letter-spacing:0em;line-height:1.3}
 .fc-desc{font-size:0.8rem;color:var(--c-text3);line-height:1.5}
 .fc-tag{
   display:inline-flex;align-items:center;margin-top:10px;
@@ -309,7 +310,7 @@ h2.section-title{
   border-radius:16px;padding:32px;
   box-shadow:var(--shadow-lg);
 }
-.how-visual-title{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--c-text3);letter-spacing:0.08em;margin-bottom:24px;text-transform:uppercase}
+.how-visual-title{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--c-text3);letter-spacing:0.06em;margin-bottom:24px;text-transform:uppercase;font-weight:400}
 .code-display{
   background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.12);
   border-radius:10px;padding:20px 24px;margin-bottom:20px;
@@ -318,10 +319,10 @@ h2.section-title{
 .code-label{font-size:0.78rem;color:var(--c-text3);min-width:80px}
 .code-digits{display:flex;gap:8px}
 .cd{
-  width:42px;height:52px;border-radius:8px;
+  width:40px;height:50px;border-radius:8px;
   background:var(--c-surface2);border:1px solid var(--c-border2);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;
+  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;
   color:var(--c-cyan);
   box-shadow:inset 0 1px 0 rgba(255,255,255,0.05),0 0 12px rgba(0,212,255,0.1);
   transition:all 0.15s;
@@ -416,7 +417,7 @@ h2.section-title{
 .r-best{background:rgba(255,171,0,0.15);color:var(--c-amber);border:1px solid rgba(255,171,0,0.25);border-top:none}
 .pc-plan{font-size:0.78rem;font-weight:600;color:var(--c-text3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:16px}
 .pc-price{margin-bottom:4px;display:flex;align-items:baseline;gap:4px}
-.pc-amount{font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;letter-spacing:-0.03em}
+.pc-amount{font-family:'Syne',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-0.01em;line-height:1}
 .pc-amount.clr-cyan{color:var(--c-cyan)}
 .pc-amount.clr-amber{color:var(--c-amber)}
 .pc-period{font-size:0.85rem;color:var(--c-text3)}
@@ -504,7 +505,7 @@ footer{
   padding:60px 0 32px;
 }
 .footer-top{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.ft-brand .nav-brand{margin-bottom:14px;display:inline-flex}
+.ft-brand .nav-brand{margin-bottom:14px;display:inline-flex;gap:10px;align-items:center}
 .ft-brand-desc{font-size:0.84rem;color:var(--c-text3);line-height:1.6;max-width:220px}
 .ft-col-title{font-size:0.78rem;font-weight:600;color:var(--c-text2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:16px}
 .ft-links{display:flex;flex-direction:column;gap:10px}
@@ -549,19 +550,61 @@ footer{
   .features-intro{grid-template-columns:1fr;gap:32px}
 }
 @media(max-width:768px){
-  nav{padding:0 20px}
+  nav{padding:0 18px}
   .nav-center,.btn-nav-outline{display:none}
   .hamburger{display:flex}
-  .container{padding:0 20px}
-  .section{padding:64px 0}
+  .container{padding:0 18px}
+  .section{padding:60px 0}
   .features-grid{grid-template-columns:repeat(2,1fr)}
   .pricing-grid{grid-template-columns:1fr}
   .stats-strip{grid-template-columns:repeat(2,1fr)}
   .stat-cell:last-child{grid-column:span 2}
-  h2.section-title{font-size:1.8rem}
-  .hero-title{font-size:2.8rem}
+  h2.section-title{font-size:1.7rem;letter-spacing:-0.01em}
+  .hero-title{font-size:2.5rem;letter-spacing:-0.01em;line-height:1.05}
   .footer-top{grid-template-columns:1fr}
+  .pc-amount{font-size:2rem}
+  .nav-brand-name{font-size:1.1rem}
 }
+
+/* ─── FONT RENDERING FIX ─── */
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+body{
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+/* Prevent font squishing */
+*{
+  min-width:0;
+  font-synthesis:none;
+}
+/* Guard X nav logo fix */
+.nav-brand-name{
+  font-stretch:normal !important;
+}
+/* Pricing amount - prevent overflow squish */
+.pc-price{
+  white-space:nowrap;
+  overflow:visible;
+}
+.pc-amount{
+  display:inline-block;
+  white-space:nowrap;
+}
+/* Hero title no squish */
+.hero-title{
+  word-break:keep-all;
+  overflow-wrap:normal;
+}
+/* Section titles clean */
+h2.section-title{
+  word-break:normal;
+  overflow-wrap:normal;
+}
+
 </style>
 </head>
 <body>
