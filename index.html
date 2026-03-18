@@ -3,199 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuardX | Professional Parental Monitoring System</title>
+    <title>GuardX | Advanced Parental Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
         
-        :root {
-            --primary-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
-            --dark-bg: #050a10;
-        }
-
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #05070a;
             color: #ffffff;
-            overflow-x: hidden;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px rgba(255, 255, 255, 0.1) solid;
-            border-radius: 16px;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-card:hover {
+            background: rgba(0, 210, 255, 0.05);
+            border-color: #00d2ff;
+            transform: scale(1.05);
+        }
+
+        .pricing-card {
             transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: #3a7bd5;
-        }
-
-        .hero-gradient {
-            background: radial-gradient(circle at center, #1a2a44 0%, #050a10 100%);
+        .pricing-card.popular {
+            border: 2px solid #3b82f6;
         }
 
         .text-gradient {
-            background: var(--primary-gradient);
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .btn-primary {
-            background: var(--primary-gradient);
-            transition: opacity 0.3s;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
-
-        nav {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .bg-gradient-main {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
         }
     </style>
 </head>
 <body>
 
-    <nav class="fixed w-full z-50 bg-opacity-90 backdrop-blur-md bg-[#050a10]">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav class="fixed w-full z-50 glass-effect bg-black/50 py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-shield-halved text-2xl text-cyan-400"></i>
-                <span class="text-2xl font-bold tracking-tighter">Guard<span class="text-cyan-400">X</span></span>
+                <span class="text-2xl font-bold tracking-tighter italic">GuardX</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
-                <a href="#features" class="hover:text-white transition">Features</a>
-                <a href="#security" class="hover:text-white transition">Security</a>
-                <a href="#pricing" class="hover:text-white transition">Pricing</a>
-                <a href="#faq" class="hover:text-white transition">Support</a>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold uppercase tracking-widest text-gray-400">
+                <a href="#features" class="hover:text-cyan-400 transition">Features</a>
+                <a href="#pricing" class="hover:text-cyan-400 transition">Pricing</a>
+                <a href="#security" class="hover:text-white transition">Privacy</a>
             </div>
-            <button class="btn-primary px-6 py-2 rounded-full text-sm font-semibold">Download Now</button>
+            <a href="#download-top" class="bg-gradient-main px-6 py-2 rounded-lg text-sm font-bold shadow-lg shadow-cyan-500/20">GET STARTED</a>
         </div>
     </nav>
 
-    <section class="hero-gradient pt-32 pb-20 px-6">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="inline-flex items-center space-x-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                </span>
-                <span class="text-xs font-semibold tracking-wide text-gray-300 uppercase">Now supporting Android 2026</span>
+    <section id="download-top" class="pt-40 pb-20 px-6 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent -z-10"></div>
+        
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block bg-white/5 border border-white/10 px-4 py-1 rounded-full mb-6">
+                <span class="text-xs font-bold tracking-widest text-cyan-400 uppercase">30+ Monitoring Features · Android 2026</span>
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-                Know Everything. <br>
-                <span class="text-gradient">Protect Everyone.</span>
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-6 tracking-tighter">
+                Know Everything.<br><span class="text-gradient">Protect Everyone.</span>
             </h1>
-            <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                The most advanced Android parental monitoring system. Real-time GPS tracking, 
-                encrypted communication logs, and complete social media surveillance — 
-                all operating in 100% invisible mode.
+            <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                The most advanced Android parental monitoring system. Real-time GPS, encrypted logs, and total social media surveillance — all invisible to your child.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#" class="btn-primary px-8 py-4 rounded-xl font-bold flex items-center justify-center">
-                    <i class="fas fa-download mr-2"></i> Download Kids APK
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button class="bg-gradient-main w-full sm:w-auto px-10 py-5 rounded-2xl font-bold text-lg flex items-center justify-center shadow-xl shadow-cyan-500/30">
+                    <i class="fas fa-download mr-3"></i> Download Kids APK
+                </button>
+                <a href="#pricing" class="w-full sm:w-auto bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white/10 transition">
+                    View Plans
                 </a>
-                <a href="#pricing" class="bg-white/5 border border-white/10 hover:bg-white/10 px-8 py-4 rounded-xl font-bold transition">
-                    View Enterprise Plans
-                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-4xl font-bold mb-4 italic">Core Capabilities</h2>
+                <div class="h-1 w-20 bg-cyan-500"></div>
             </div>
 
-            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 opacity-60 grayscale hover:grayscale-0 transition duration-500">
-                <div class="flex items-center justify-center space-x-2">
-                    <i class="fas fa-lock text-sm"></i>
-                    <span class="text-xs font-mono">AES-256 ENCRYPTION</span>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-location-crosshairs text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Live Location</h4>
                 </div>
-                <div class="flex items-center justify-center space-x-2">
-                    <i class="fas fa-eye-slash text-sm"></i>
-                    <span class="text-xs font-mono">100% STEALTH MODE</span>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-phone-volume text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Call Logs</h4>
                 </div>
-                <div class="flex items-center justify-center space-x-2">
-                    <i class="fas fa-bolt text-sm"></i>
-                    <span class="text-xs font-mono">REAL-TIME UPDATES</span>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-envelope text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Messages</h4>
                 </div>
-                <div class="flex items-center justify-center space-x-2">
-                    <i class="fas fa-microchip text-sm"></i>
-                    <span class="text-xs font-mono">NO ROOT REQUIRED</span>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fab fa-whatsapp text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">WhatsApp Monitor</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-address-book text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Contacts</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-images text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Gallery</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fab fa-facebook-messenger text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Messenger Monitor</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-chart-pie text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">App Usage</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-video text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Live Camera</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-microphone-lines text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Live Audio</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-display text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Screen Mirroring</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-camera-retro text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Remote Screenshot</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-ghost text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Ghost Photo</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-route text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Location History</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fab fa-instagram text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Instagram Monitor</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-comment-slash text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Deleted Messages</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-keyboard text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Keylogger</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-draw-polygon text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Geofencing</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-ban text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">App Blocker</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-history text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Browser History</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-microphone text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Call Recording</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-bell text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Keyword Alerts</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fab fa-tiktok text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">TikTok Tracker</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fab fa-telegram text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Telegram Logs</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-battery-half text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Battery Status</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-folder-open text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">File Manager</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-sim-card text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">SIM Change Alert</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-lock text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Remote Lock</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-wifi text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Wi-Fi History</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-microphone-alt text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Mic Recorder</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-sliders text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Device Control</h4>
+                </div>
+                <div class="feature-card p-6 rounded-2xl text-center">
+                    <i class="fas fa-eraser text-cyan-400 text-2xl mb-4"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-tighter leading-tight">Remote Data Wipe</h4>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="features" class="py-24 px-6 bg-[#03070b]">
+    <section id="pricing" class="py-24 px-6 bg-[#030508]">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Comprehensive Monitoring Suite</h2>
-                <div class="h-1 w-20 bg-cyan-500 mx-auto"></div>
+                <h2 class="text-4xl font-bold mb-4">Choose Your Shield</h2>
+                <p class="text-gray-500">Professional surveillance tailored to your needs.</p>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-location-dot text-cyan-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Live GPS Tracking</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Track precise location history and set Geofencing alerts to get notified when your child enters or leaves specific zones.</p>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="pricing-card glass-effect p-8 rounded-3xl border border-white/5">
+                    <h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Weekly</h3>
+                    <div class="text-4xl font-bold mb-6">$1.49 <span class="text-sm font-normal text-gray-500">/ week</span></div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-400">
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i> No Ads</li>
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i> 2 Devices</li>
+                        <li><i class="fas fa-times text-gray-600 mr-2"></i> No Free Trial</li>
+                    </ul>
+                    <a href="#download-top" class="block text-center border border-white/10 py-3 rounded-xl font-bold hover:bg-white/5 transition">Choose Plan</a>
                 </div>
 
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-comment-nodes text-blue-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Social Media Surveillance</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Full access to WhatsApp, Messenger, Instagram, and TikTok logs without the user ever knowing.</p>
+                <div class="pricing-card popular glass-effect p-8 rounded-3xl border-blue-500/50 shadow-2xl shadow-blue-500/10">
+                    <div class="absolute top-4 right-4 bg-green-500 text-[10px] font-black px-2 py-1 rounded">POPULAR</div>
+                    <h3 class="text-blue-400 font-bold uppercase text-xs tracking-widest mb-4">Monthly</h3>
+                    <div class="text-4xl font-bold mb-6">$5.89 <span class="text-sm font-normal text-gray-500">/ month</span></div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> No Ads</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> 5 Devices</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> 3-Day Free Trial</li>
+                    </ul>
+                    <a href="#download-top" class="block text-center bg-blue-600 py-3 rounded-xl font-bold shadow-lg shadow-blue-600/20">Choose Plan</a>
                 </div>
 
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-microphone-lines text-purple-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Remote Audio/Video</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Remotely activate the microphone or camera to monitor the surroundings in real-time with high-fidelity streaming.</p>
+                <div class="pricing-card glass-effect p-8 rounded-3xl border border-white/5">
+                    <h3 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-4">Semi-Annual</h3>
+                    <div class="text-4xl font-bold mb-6">$29.99 <span class="text-sm font-normal text-gray-500">/ 6 mo</span></div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-400">
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i> No Ads</li>
+                        <li><i class="fas fa-check text-cyan-400 mr-2"></i> 10 Devices</li>
+                        <li><i class="fas fa-times text-gray-600 mr-2"></i> No Free Trial</li>
+                    </ul>
+                    <a href="#download-top" class="block text-center border border-white/10 py-3 rounded-xl font-bold hover:bg-white/5 transition">Choose Plan</a>
                 </div>
 
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-keyboard text-orange-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Advanced Keylogger</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Capture every single keystroke, including passwords, deleted messages, and private browser searches.</p>
-                </div>
-
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-phone-volume text-red-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Call Recording</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Automatically record all incoming and outgoing calls with timestamped logs and contact details.</p>
-                </div>
-
-                <div class="glass-card p-8">
-                    <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-mobile-screen text-green-400 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Screen Mirroring</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">View the live screen of the target device remotely to see exactly what is being viewed at any moment.</p>
+                <div class="pricing-card glass-effect p-8 rounded-3xl border border-white/5">
+                    <div class="absolute top-4 right-4 bg-orange-500 text-[10px] font-black px-2 py-1 rounded">BEST VALUE</div>
+                    <h3 class="text-orange-400 font-bold uppercase text-xs tracking-widest mb-4">Yearly</h3>
+                    <div class="text-4xl font-bold mb-6">$58.99 <span class="text-sm font-normal text-gray-500">/ year</span></div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-400">
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i> No Ads</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i> 10 Devices</li>
+                        <li><i class="fas fa-check text-orange-400 mr-2"></i> 7-Day Free Trial</li>
+                    </ul>
+                    <a href="#download-top" class="block text-center border border-white/10 py-3 rounded-xl font-bold hover:bg-white/5 transition">Choose Plan</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 border-t border-white/10 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-6 md:mb-0">
-                <div class="flex items-center space-x-2 opacity-80">
-                    <i class="fas fa-shield-halved text-lg text-cyan-400"></i>
-                    <span class="font-bold tracking-tighter">GuardX System</span>
+    <footer class="py-12 border-t border-white/5 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start space-x-2 mb-2">
+                    <i class="fas fa-shield-halved text-cyan-400"></i>
+                    <span class="font-bold italic">GuardX</span>
                 </div>
-                <p class="text-xs text-gray-500 mt-2">© 2026 GuardX Inc. All Rights Reserved.</p>
+                <p class="text-xs text-gray-500">Encryption: AES-256 Bit System. All data is wiped upon remote command.</p>
             </div>
-            <div class="flex space-x-6 text-xs font-mono text-gray-400">
-                <a href="#" class="hover:text-white transition">PRIVACY POLICY</a>
-                <a href="#" class="hover:text-white transition">TERMS OF SERVICE</a>
-                <a href="#" class="hover:text-white transition">END USER LICENSE</a>
+            <div class="flex space-x-6 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                <a href="#" class="hover:text-white transition">Privacy</a>
+                <a href="#" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Admin Panel</a>
             </div>
         </div>
     </footer>
