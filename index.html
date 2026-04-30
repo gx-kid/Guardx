@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GX Parent Control | Professional Monitoring System</title>
+    
+    <!-- Browser tab එකේ ලෝගෝ එක (Favicon) පේන්න මේක ඇතුළත් කළා -->
+    <link rel="icon" type="image/png" href="logo.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -23,7 +27,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* ලෝගෝ එක කොටුවක් වගේ පේන්නේ නැති වෙන්න හදපු Glass Effect එක */
+        /* ලෝගෝ එක ලස්සනට පේන්න හදපු Glass container එක */
         .logo-container {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -81,8 +85,8 @@
     <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-lg border-b border-white/5 py-4">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- ලෝගෝ එක ලස්සනට පේන්න මෙතැන වෙනස් කළා -->
                 <div class="w-12 h-12 logo-container rounded-2xl flex items-center justify-center overflow-hidden logo-glow">
+                    <!-- ඔබගේ logo.png ලස්සනට පේන්න මෙතැන සැකසුවා -->
                     <img src="logo.png" alt="GX Logo" class="w-10 h-10 object-contain">
                 </div>
                 <span class="text-2xl font-black tracking-tighter italic">GX Parent Control</span>
@@ -113,7 +117,6 @@
         </div>
     </section>
 
-    <!-- ඉතිරි කොටස් සියල්ල index.html එකට අනුව GX Parent Control ලෙස යාවත්කාලීන කර ඇත -->
     <section class="py-16 border-y border-white/5 bg-white/[0.01]">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div><div class="text-4xl font-black mb-1">99.9%</div><div class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Uptime</div></div>
@@ -228,7 +231,7 @@
     </section>
 
     <div class="py-8 text-center opacity-40 hover:opacity-100 transition">
-        <!-- Pretty URL සඳහා .html ඉවත් කළා -->
+        <!-- Pretty URL සඳහා .html ඉවත් කර privacy පමණක් යෙදුවා -->
         <a href="privacy" class="text-[10px] font-black uppercase tracking-[0.2em] hover:text-cyan-400">Privacy Policy</a>
     </div>
 
