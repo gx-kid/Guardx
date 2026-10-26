@@ -83,7 +83,7 @@ ol.steps li{margin-bottom:.5em}
 .pill.approved{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
 .pill.rejected{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
 .tbl{overflow-x:auto;margin-top:14px}
-table{border-collapse:collapse;width:100%;min-width:420px}
+table{border-collapse:collapse;width:100%;min-width:520px}
 th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:.95rem}
 /* faq */
 details{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
@@ -123,7 +123,7 @@ footer a{color:var(--hero-ink)}
     <div class="ticket" aria-hidden="true">
       <small>Your free trial code</small>
       <div class="code">GX-••••-••••</div>
-      <div class="row"><span>3 days → 6 months</span><span class="stars">★★★★★</span></div>
+      <div class="row"><span>2 days → 6 months</span><span class="stars">★★★★★</span></div>
     </div>
   </div>
 </header>
@@ -134,7 +134,7 @@ footer a{color:var(--hero-ink)}
     <h2>Two ways to earn a free trial</h2>
     <p class="sub">You can use both methods: leave a 5-star review and also post a promotion video to earn more free trial time.</p>
     <div class="grid2">
-      <div class="card"><span class="badge">3-day trial</span><h3>Method 1 · 5-star review</h3>
+      <div class="card"><span class="badge">2-day trial</span><h3>Method 1 · 5-star review</h3>
         <ol class="steps"><li>Open the app on Google Play.</li><li>Leave a 5-star review with a few honest words.</li><li>Take a screenshot of your review.</li><li>Upload it below with your Gmail address.</li></ol></div>
       <div class="card"><span class="badge">2 weeks → 6 months</span><h3>Method 2 · Promotion video</h3>
         <ol class="steps"><li>Make a video about GX on TikTok, YouTube or Facebook.</li><li>Post it publicly (a video, not just a text post).</li><li>Paste the link below with your Gmail address.</li><li>Better quality, views and likes earn a longer trial.</li></ol></div>
@@ -147,7 +147,7 @@ footer a{color:var(--hero-ink)}
     <div class="card">
       <span class="badge">Method 1</span>
       <h2>Redeem with a 5-star review</h2>
-      <p class="sub">Leave a <span class="stars" aria-label="5 stars">★★★★★</span> review, then send us a screenshot. You’ll receive a <b>3-day free trial</b> promo code.</p>
+      <p class="sub">Leave a <span class="stars" aria-label="5 stars">★★★★★</span> review, then send us a screenshot. You’ll receive a <b>2-day free trial</b> promo code.</p>
       <form id="reviewForm" novalidate>
         <label>Your Gmail address
           <input type="email" id="rEmail" placeholder="you@gmail.com" autocomplete="email" required>
@@ -223,7 +223,7 @@ footer a{color:var(--hero-ink)}
     <h2>Frequently asked questions</h2>
     <details><summary>How long until I get my code?</summary><p>Please check your email 2–3 hours after you submit. Our team reviews your submission and sends the promo code to the Gmail address you entered.</p></details>
     <details><summary>How do I redeem the promo code in the app?</summary><p>Open GX Parental Controller, go to Settings → Redeem code, paste your code and tap Apply. Your free trial starts straight away.</p></details>
-    <details><summary>Can I use both methods?</summary><p>Yes! According to our rules you can use both methods. Leave a 5-star review for a 3-day trial and also post a promotion video to earn a longer trial.</p></details>
+    <details><summary>Can I use both methods?</summary><p>Yes! According to our rules you can use both methods. Leave a 5-star review for a 2-day trial and also post a promotion video to earn a longer trial.</p></details>
     <details><summary>What makes a video earn a longer trial?</summary><p>We look at how clear and helpful the video is, then at views and likes. Honest, well-made videos about keeping kids safe online do best.</p></details>
     <details><summary>Why was my submission rejected?</summary><p>Common reasons: the screenshot is not a 5-star review, the video is private or unrelated, or the submission looks fake or duplicated.</p></details>
   </div>
@@ -247,8 +247,8 @@ footer a{color:var(--hero-ink)}
 <script>
 /* ===== SETTINGS: edit these lines ===== */
 const CONFIG = {
-  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwq56aqMUrM3CkW-drXVwmRqsr9vZSBGxxhARRj3PBn5ywuqkD6YV6EJvJgw947g-roPw/exec",                       // Paste your Google Apps Script Web App URL here (see setup notes at the bottom of this file)
-  ADMIN_EMAIL: "youradmin@gmail.com",   // Your Gmail
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycby_M1kScu6DZ8IWI0vIreqZZZzBelY1ZdEWVt2lXQi9bZTOpCa9MZdj8OIAiVuHNS46PQ/exec",                       // Paste your Google Apps Script Web App URL here (see setup notes at the bottom of this file)
+  ADMIN_EMAIL: "guardx.support@gmail.com",   // Your Gmail
   PLAY_STORE_URL: "https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share",
   KIDS_APP_URL: "https://guardx.site"
 };
@@ -308,7 +308,7 @@ $("reviewForm").addEventListener("submit", async e => {
   try {
     const shot = await fileToDataUrl(file);
     await send({ type:"review", email, screenshot: shot, submittedAt: new Date().toISOString() });
-    const list = load(); list.push({ email, type:"5-star review", reward:"3 days", status:"Pending", at: Date.now() }); save(list);
+    const list = load(); list.push({ email, type:"5-star review", reward:"2 days", status:"Pending", at: Date.now() }); save(list);
     show(msg, "ok", "Thank you! Please check your email in 2–3 hours. Our team will review your screenshot and send your promo code to " + email + ". You can also use the video method (Method 2) to earn a longer trial.");
     e.target.reset(); $("rPrev").style.display = "none";
   } catch(err){ show(msg, "err", "Something went wrong. Check your connection and try again."); }
@@ -344,8 +344,14 @@ $("sBtn").addEventListener("click", async () => {
   if (!rows.length) return show(msg, "err", "No submission found for this email yet.");
   msg.className = "msg";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  tbl.innerHTML = "<table><thead><tr><th>Method</th><th>Reward</th><th>Status</th></tr></thead><tbody>" +
-    rows.map(r => `<tr><td>${esc(r.type)}</td><td>${esc(r.reward||"")}</td><td><span class="pill ${esc(String(r.status).toLowerCase())}">${esc(r.status)}</span></td></tr>`).join("") + "</tbody></table>";
+  const note = r => {
+    const st = String(r.status).toLowerCase();
+    if (st === "approved") return "Approved. Please check your email for your promo code.";
+    if (st === "rejected") return r.reason ? "Rejected: " + r.reason : "Rejected.";
+    return "We are reviewing it (2–3 hours).";
+  };
+  tbl.innerHTML = "<table><thead><tr><th>Method</th><th>Reward</th><th>Status</th><th>Details</th></tr></thead><tbody>" +
+    rows.map(r => `<tr><td>${esc(r.type)}</td><td>${esc(r.reward||"")}</td><td><span class="pill ${esc(String(r.status).toLowerCase())}">${esc(r.status)}</span></td><td>${esc(note(r))}</td></tr>`).join("") + "</tbody></table>";
 });
 </script>
 
@@ -359,7 +365,7 @@ $("sBtn").addEventListener("click", async () => {
 4. Copy the Web app URL and paste it into CONFIG.SCRIPT_URL above.
 5. Put your own Gmail in CONFIG.ADMIN_EMAIL.
 
-var ADMIN = "youradmin@gmail.com";
+var ADMIN = "guardx.support@gmail.com";
 var FOLDER_NAME = "GX Review Screenshots";
 
 function doPost(e) {
@@ -372,7 +378,7 @@ function doPost(e) {
       return out({ ok:false, error:"duplicate" });          // one review per email (video method is separate)
     }
   }
-  var shotUrl = "", reward = d.type === "review" ? "3 days" : "Check views/likes";
+  var shotUrl = "", reward = d.type === "review" ? "2 days" : "Check views/likes";
   if (d.screenshot) {
     var f = DriveApp.getFoldersByName(FOLDER_NAME);
     var folder = f.hasNext() ? f.next() : DriveApp.createFolder(FOLDER_NAME);
@@ -393,7 +399,7 @@ function doGet(e) {
   var res = [];
   for (var i = 1; i < rows.length; i++) {
     if (String(rows[i][1]).toLowerCase() === email)
-      res.push({ type: rows[i][2] === "review" ? "5-star review" : "Promotion video", reward: rows[i][3], status: rows[i][4] });
+      res.push({ type: rows[i][2] === "review" ? "5-star review" : "Promotion video", reward: rows[i][3], status: rows[i][4], reason: rows[i][7] || "" });
   }
   return out({ rows: res });
 }
