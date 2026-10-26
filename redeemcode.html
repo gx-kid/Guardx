@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redeem code | Guardx</title>
+<style>
+  :root {
+    --bg: #f6f4f2;
+    --card: #ffffff;
+    --text: #1d1a19;
+    --muted: #6b6461;
+    --line: #e2dcd8;
+    --brand: #d3342b;
+    --brand-dark: #a92720;
+    --ok: #1d7a46;
+    --ok-bg: #e5f4ec;
+    --err: #b3261e;
+    --err-bg: #fbe9e7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161312;
+      --card: #211d1c;
+      --text: #f3eeeb;
+      --muted: #a69e9a;
+      --line: #3a3330;
+      --brand: #ee5148;
+      --brand-dark: #d3342b;
+      --ok: #6fd69b;
+      --ok-bg: #16301f;
+      --err: #ff8a80;
+      --err-bg: #3a1c19;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  }
+  main {
+    width: 100%;
+    max-width: 440px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .brand img { width: 36px; height: 36px; border-radius: 8px; }
+  .brand span { font-weight: 700; font-size: 1.15rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 8px; }
+  p.lead { margin: 0 0 24px; color: var(--muted); line-height: 1.55; }
+  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: .95rem; }
+  input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1.05rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--text);
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+  }
+  button {
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--brand);
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  button:hover { background: var(--brand-dark); }
+  #result {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    line-height: 1.45;
+    font-size: .95rem;
+  }
+  #result.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+  #result.err { display: block; background: var(--err-bg); color: var(--err); }
+  .foot { margin-top: 24px; font-size: .9rem; color: var(--muted); }
+  .foot a { color: var(--brand); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <img src="logo.png" alt="" onerror="this.style.display='none'">
+    <span>Guardx</span>
+  </div>
+
+  <h1>Redeem your code</h1>
+  <p class="lead">Enter the code you received to activate your plan on this device.</p>
+
+  <label for="code">Redeem code</label>
+  <input id="code" type="text" inputmode="text" autocomplete="off" maxlength="19" placeholder="GUARDX-TEST-1234">
+  <button id="btn" type="button">Redeem code</button>
+
+  <div id="result" role="status" aria-live="polite"></div>
+
+  <p class="foot">Don't have a code? <a href="nopaiddevice.html">See your device status</a></p>
+</main>
+
+<script>
+  // SAMPLE codes for testing only. Real validation must happen on a server.
+  var validCodes = ["GUARDX-TEST-1234", "GUARDX-DEMO-0001"];
+
+  var input = document.getElementById("code");
+  var btn = document.getElementById("btn");
+  var result = document.getElementById("result");
+
+  function redeem() {
+    var code = input.value.trim().toUpperCase();
+    result.className = "";
+    if (!code) {
+      result.className = "err";
+      result.textContent = "Enter a redeem code first.";
+      return;
+    }
+    if (validCodes.indexOf(code) !== -1) {
+      result.className = "ok";
+      result.textContent = "Code accepted. Your plan is now active on this device.";
+    } else {
+      result.className = "err";
+      result.textContent = "This code isn't valid. Check for typos and try again.";
+    }
+  }
+
+  btn.addEventListener("click", redeem);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") redeem();
+  });
+</script>
+</body>
+</html>

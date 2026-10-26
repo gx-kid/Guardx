@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No paid device | Guardx</title>
+<style>
+  :root {
+    --bg: #f6f4f2;
+    --card: #ffffff;
+    --text: #1d1a19;
+    --muted: #6b6461;
+    --line: #e2dcd8;
+    --brand: #d3342b;
+    --brand-dark: #a92720;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161312;
+      --card: #211d1c;
+      --text: #f3eeeb;
+      --muted: #a69e9a;
+      --line: #3a3330;
+      --brand: #ee5148;
+      --brand-dark: #d3342b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  }
+  main {
+    width: 100%;
+    max-width: 440px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px 28px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .brand img { width: 36px; height: 36px; border-radius: 8px; }
+  .brand span { font-weight: 700; font-size: 1.15rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 8px; }
+  p.lead { margin: 0 0 20px; color: var(--muted); line-height: 1.55; }
+  .status {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 4px 16px;
+    margin-bottom: 24px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: .95rem;
+  }
+  .row:last-child { border-bottom: 0; }
+  .row dt { color: var(--muted); }
+  .row dd { margin: 0; font-weight: 600; text-align: right; }
+  .none { color: var(--brand); }
+  dl { margin: 0; }
+  .btn {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 10px;
+  }
+  .primary { background: var(--brand); color: #fff; }
+  .primary:hover { background: var(--brand-dark); }
+  .secondary { margin-top: 12px; color: var(--text); border: 1.5px solid var(--line); }
+  .btn:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <img src="logo.png" alt="" onerror="this.style.display='none'">
+    <span>Guardx</span>
+  </div>
+
+  <h1>No paid device</h1>
+  <p class="lead">This device doesn't have an active paid plan, so protected features are turned off.</p>
+
+  <div class="status">
+    <dl>
+      <div class="row"><dt>Plan</dt><dd class="none">Free</dd></div>
+      <div class="row"><dt>Paid devices</dt><dd class="none">0 of 1</dd></div>
+      <div class="row"><dt>Protection</dt><dd class="none">Off</dd></div>
+    </dl>
+  </div>
+
+  <a class="btn primary" href="redeemcode.html">Redeem a code</a>
+  <a class="btn secondary" href="index.html">Back to home</a>
+</main>
+</body>
+</html>
