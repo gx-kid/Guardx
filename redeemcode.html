@@ -1,154 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Redeem code | Guardx</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GX Parental Controller – Redeem a Free Trial Code</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;700&display=swap">
 <style>
-  :root {
-    --bg: #f6f4f2;
-    --card: #ffffff;
-    --text: #1d1a19;
-    --muted: #6b6461;
-    --line: #e2dcd8;
-    --brand: #d3342b;
-    --brand-dark: #a92720;
-    --ok: #1d7a46;
-    --ok-bg: #e5f4ec;
-    --err: #b3261e;
-    --err-bg: #fbe9e7;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161312;
-      --card: #211d1c;
-      --text: #f3eeeb;
-      --muted: #a69e9a;
-      --line: #3a3330;
-      --brand: #ee5148;
-      --brand-dark: #d3342b;
-      --ok: #6fd69b;
-      --ok-bg: #16301f;
-      --err: #ff8a80;
-      --err-bg: #3a1c19;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-  }
-  main {
-    width: 100%;
-    max-width: 440px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 32px 28px;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
-  .brand img { width: 36px; height: 36px; border-radius: 8px; }
-  .brand span { font-weight: 700; font-size: 1.15rem; }
-  h1 { font-size: 1.5rem; margin: 0 0 8px; }
-  p.lead { margin: 0 0 24px; color: var(--muted); line-height: 1.55; }
-  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: .95rem; }
-  input {
-    width: 100%;
-    padding: 14px 16px;
-    font-size: 1.05rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
-    background: var(--bg);
-    color: var(--text);
-  }
-  input:focus-visible, button:focus-visible, a:focus-visible {
-    outline: 3px solid var(--brand);
-    outline-offset: 2px;
-  }
-  button {
-    width: 100%;
-    margin-top: 16px;
-    padding: 14px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    background: var(--brand);
-    border: 0;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  button:hover { background: var(--brand-dark); }
-  #result {
-    display: none;
-    margin-top: 18px;
-    padding: 14px 16px;
-    border-radius: 10px;
-    line-height: 1.45;
-    font-size: .95rem;
-  }
-  #result.ok { display: block; background: var(--ok-bg); color: var(--ok); }
-  #result.err { display: block; background: var(--err-bg); color: var(--err); }
-  .foot { margin-top: 24px; font-size: .9rem; color: var(--muted); }
-  .foot a { color: var(--brand); }
+:root{--bg:#f3f7f6;--surf:#fff;--ink:#10262b;--mute:#4f6a6f;--line:#d3e0de;--brand:#0f766e;--brand-ink:#fff;--warm:#b45309;--warm-bg:#fff1dc;--ok:#166534;--bad:#b91c1c;--hero:#0c2b30;--hero-ink:#eafaf7;--hero-mute:#9fc7c1;--glow:#5eead4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1517;--surf:#112226;--ink:#e6f4f2;--mute:#92b2ae;--line:#223c40;--brand:#2dd4bf;--brand-ink:#04211e;--warm:#fbbf24;--warm-bg:#2b2210;--ok:#4ade80;--bad:#f87171;--hero:#061012;}}
+:root[data-theme="dark"]{--bg:#0a1517;--surf:#112226;--ink:#e6f4f2;--mute:#92b2ae;--line:#223c40;--brand:#2dd4bf;--brand-ink:#04211e;--warm:#fbbf24;--warm-bg:#2b2210;--ok:#4ade80;--bad:#f87171;--hero:#061012}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 "Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:"Bricolage Grotesque","Hanken Grotesk",system-ui,sans-serif;line-height:1.1;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(2.2rem,7vw,4rem);font-weight:800}
+h2{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0 0 1em}
+a{color:var(--brand)}
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 20px}
+section{padding:64px 0}
+:focus-visible{outline:3px solid var(--glow);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border:0;border-radius:12px;background:var(--brand);color:var(--brand-ink);font:700 1rem "Hanken Grotesk",sans-serif;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:inherit;border:2px solid currentColor}
+.btn[disabled]{opacity:.6;cursor:wait}
+/* nav */
+header.top{background:var(--hero);color:var(--hero-ink)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.15rem "Bricolage Grotesque",sans-serif;text-decoration:none;color:inherit}
+.logo i{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--glow);color:#06302b;font-style:normal;font-weight:800}
+.nav nav{display:flex;gap:18px;flex-wrap:wrap;font-weight:500}
+.nav nav a{color:var(--hero-mute);text-decoration:none}
+.nav nav a:hover{color:var(--hero-ink)}
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-top:40px;padding-bottom:72px}
+.hero p.lead{color:var(--hero-mute);font-size:1.15rem;max-width:34em}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.hero .btn.ghost{color:var(--hero-ink)}
+.ticket{position:relative;background:var(--surf);color:var(--ink);border-radius:20px;padding:28px;transform:rotate(2deg);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.ticket::before,.ticket::after{content:"";position:absolute;top:50%;width:26px;height:26px;border-radius:50%;background:var(--hero);transform:translateY(-50%)}
+.ticket::before{left:-13px}.ticket::after{right:-13px}
+.ticket small{color:var(--mute)}
+.ticket .code{font:800 clamp(1.5rem,4.5vw,2.1rem) "Bricolage Grotesque",monospace;letter-spacing:.08em;padding:16px 0;border-top:2px dashed var(--line);border-bottom:2px dashed var(--line);margin:14px 0;text-align:center;color:var(--brand)}
+.ticket .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:700}
+/* trust */
+.trust{display:flex;flex-wrap:wrap;gap:10px 28px;color:var(--hero-mute);font-size:.95rem;margin-top:28px}
+.trust span::before{content:"✓ ";color:var(--glow);font-weight:700}
+/* cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:28px}
+.badge{display:inline-block;padding:4px 12px;border-radius:99px;background:var(--warm-bg);color:var(--warm);font-weight:700;font-size:.9rem;margin-bottom:12px}
+.sub{color:var(--mute);max-width:42em}
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0 8px}
+.tier{border:1px solid var(--line);border-radius:14px;padding:16px;background:var(--bg)}
+.tier b{display:block;font:800 1.5rem "Bricolage Grotesque",sans-serif;color:var(--brand)}
+.tier span{font-size:.9rem;color:var(--mute)}
+/* forms */
+form{display:grid;gap:16px;margin-top:20px}
+label{display:grid;gap:6px;font-weight:700;font-size:.95rem}
+input[type=email],input[type=url],input[type=file],select{width:100%;min-height:48px;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:400 1rem "Hanken Grotesk",sans-serif}
+input[type=file]{padding:10px}
+.hint{font-weight:400;font-size:.85rem;color:var(--mute)}
+.stars{color:var(--warm);letter-spacing:3px;font-size:1.3rem}
+.msg{display:none;padding:14px 16px;border-radius:12px;font-weight:500}
+.msg.ok{display:block;background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok);border:1px solid var(--ok)}
+.msg.err{display:block;background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad);border:1px solid var(--bad)}
+.preview{max-height:160px;max-width:100%;border-radius:10px;display:none;border:1px solid var(--line)}
+/* steps */
+ol.steps{margin:0;padding-left:1.2em}
+ol.steps li{margin-bottom:.5em}
+/* warning */
+.warn{background:var(--warm-bg);border:2px solid var(--warm);border-radius:18px;padding:24px 28px;color:var(--ink)}
+.warn h3{color:var(--warm)}
+/* status */
+.status{display:flex;gap:10px;flex-wrap:wrap}
+.status input{flex:1 1 220px}
+.pill{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:700;font-size:.9rem}
+.pill.pending{background:var(--warm-bg);color:var(--warm)}
+.pill.approved{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.pill.rejected{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.tbl{overflow-x:auto;margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:420px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);font-size:.95rem}
+/* faq */
+details{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700}
+details p{margin:10px 0 0;color:var(--mute)}
+/* download */
+.dl{display:flex;gap:14px;flex-wrap:wrap}
+.dl a{display:flex;flex-direction:column;min-width:190px;padding:12px 20px;border-radius:14px;background:var(--hero);color:var(--hero-ink);text-decoration:none;font-weight:700}
+.dl a small{font-weight:400;color:var(--hero-mute)}
+footer{background:var(--hero);color:var(--hero-mute);padding:32px 0;font-size:.9rem}
+footer a{color:var(--hero-ink)}
+.demo{font-size:.85rem;color:var(--mute);margin-top:8px}
+@media (max-width:860px){.hero,.grid2{grid-template-columns:1fr}.tiers{grid-template-columns:1fr 1fr}.ticket{transform:none;max-width:460px}section{padding:48px 0}}
+@media (max-width:420px){.tiers{grid-template-columns:1fr}.btn{width:100%}.card{padding:22px 18px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<main>
-  <div class="brand">
-    <img src="logo.png" alt="" onerror="this.style.display='none'">
-    <span>Guardx</span>
+
+<header class="top">
+  <div class="wrap nav">
+    <a class="logo" href="#top"><i>GX</i> GX Parental Controller</a>
+    <nav aria-label="Main">
+      <a href="#review">Review trial</a><a href="#video">Video trial</a><a href="#status">Check status</a><a href="#faq">FAQ</a>
+    </nav>
   </div>
+  <div class="wrap hero" id="top">
+    <div>
+      <h1>Try GX Parental Controller free.</h1>
+      <p class="lead">Keep your children safe online. Post a 5-star review or make a short video about the app and we’ll send you a free trial code for up to 6 months.</p>
+      <div class="cta">
+        <a class="btn" href="#review">Redeem a promo code</a>
+        <a class="btn ghost" href="#how">How it works</a>
+      </div>
+      <div class="trust"><span>Safe screen-time limits</span><span>Web &amp; app filtering</span><span>Use both methods</span></div>
+    </div>
+    <div class="ticket" aria-hidden="true">
+      <small>Your free trial code</small>
+      <div class="code">GX-••••-••••</div>
+      <div class="row"><span>3 days → 6 months</span><span class="stars">★★★★★</span></div>
+    </div>
+  </div>
+</header>
 
-  <h1>Redeem your code</h1>
-  <p class="lead">Enter the code you received to activate your plan on this device.</p>
+<main>
+<section id="how">
+  <div class="wrap">
+    <h2>Two ways to earn a free trial</h2>
+    <p class="sub">You can use both methods: leave a 5-star review and also post a promotion video to earn more free trial time.</p>
+    <div class="grid2">
+      <div class="card"><span class="badge">3-day trial</span><h3>Method 1 · 5-star review</h3>
+        <ol class="steps"><li>Open the app on Google Play.</li><li>Leave a 5-star review with a few honest words.</li><li>Take a screenshot of your review.</li><li>Upload it below with your Gmail address.</li></ol></div>
+      <div class="card"><span class="badge">2 weeks → 6 months</span><h3>Method 2 · Promotion video</h3>
+        <ol class="steps"><li>Make a video about GX on TikTok, YouTube or Facebook.</li><li>Post it publicly (a video, not just a text post).</li><li>Paste the link below with your Gmail address.</li><li>Better quality, views and likes earn a longer trial.</li></ol></div>
+    </div>
+  </div>
+</section>
 
-  <label for="code">Redeem code</label>
-  <input id="code" type="text" inputmode="text" autocomplete="off" maxlength="19" placeholder="GUARDX-TEST-1234">
-  <button id="btn" type="button">Redeem code</button>
+<section id="review" style="padding-top:0">
+  <div class="wrap">
+    <div class="card">
+      <span class="badge">Method 1</span>
+      <h2>Redeem with a 5-star review</h2>
+      <p class="sub">Leave a <span class="stars" aria-label="5 stars">★★★★★</span> review, then send us a screenshot. You’ll receive a <b>3-day free trial</b> promo code.</p>
+      <form id="reviewForm" novalidate>
+        <label>Your Gmail address
+          <input type="email" id="rEmail" placeholder="you@gmail.com" autocomplete="email" required>
+        </label>
+        <label>Screenshot of your 5-star review
+          <input type="file" id="rFile" accept="image/*" required>
+          <span class="hint">PNG or JPG. The screenshot must show your star rating and review text.</span>
+        </label>
+        <img id="rPrev" class="preview" alt="Screenshot preview">
+        <button class="btn" type="submit" id="rBtn">Submit review</button>
+        <div class="msg" id="rMsg" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
 
-  <div id="result" role="status" aria-live="polite"></div>
+<section id="video" style="padding-top:0">
+  <div class="wrap">
+    <div class="card">
+      <span class="badge">Method 2</span>
+      <h2>Earn up to 6 months with a video</h2>
+      <p class="sub">Post a promotion video about GX Parental Controller. We review the video quality, views and likes to decide your trial length.</p>
+      <div class="tiers">
+        <div class="tier"><b>2 weeks</b><span>Basic creator: good quality video</span></div>
+        <div class="tier"><b>1 month</b><span>Medium engagement</span></div>
+        <div class="tier"><b>3 months</b><span>High views or a viral video</span></div>
+        <div class="tier"><b>6 months</b><span>Top tier partner</span></div>
+      </div>
+      <p class="hint">Your trial can grow later: if your video gets more views and likes, send the link again from the same email and we’ll extend it.</p>
+      <form id="videoForm" novalidate>
+        <label>Your Gmail address
+          <input type="email" id="vEmail" placeholder="you@gmail.com" autocomplete="email" required>
+        </label>
+        <label>Platform
+          <select id="vPlat"><option>TikTok</option><option>YouTube</option><option>Facebook</option><option>Other</option></select>
+        </label>
+        <label>Video link
+          <input type="url" id="vLink" placeholder="https://www.tiktok.com/@you/video/…" required>
+        </label>
+        <button class="btn" type="submit" id="vBtn">Submit video</button>
+        <div class="msg" id="vMsg" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
 
-  <p class="foot">Don't have a code? <a href="nopaiddevice.html">See your device status</a></p>
+<section id="rules" style="padding-top:0">
+  <div class="wrap">
+    <div class="warn">
+      <h3>You can use both methods</h3>
+      <p style="margin:0">You are allowed to use both the 5-star review and the promotion video to earn free trial time. If we detect fake submissions, your active promo code is deactivated and the account is blocked.</p>
+    </div>
+  </div>
+</section>
+
+<section id="status" style="padding-top:0">
+  <div class="wrap">
+    <div class="card">
+      <h2>Check your submission status</h2>
+      <p class="sub">Enter your email to see whether your submission is pending or approved. Reviews usually take 2–3 hours.</p>
+      <div class="status">
+        <input type="email" id="sEmail" placeholder="you@gmail.com" aria-label="Email address">
+        <button class="btn" id="sBtn" type="button">Check status</button>
+      </div>
+      <div class="msg" id="sMsg" role="status"></div>
+      <div class="tbl" id="sTbl"></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <h2>Frequently asked questions</h2>
+    <details><summary>How long until I get my code?</summary><p>Please check your email 2–3 hours after you submit. Our team reviews your submission and sends the promo code to the Gmail address you entered.</p></details>
+    <details><summary>How do I redeem the promo code in the app?</summary><p>Open GX Parental Controller, go to Settings → Redeem code, paste your code and tap Apply. Your free trial starts straight away.</p></details>
+    <details><summary>Can I use both methods?</summary><p>Yes! According to our rules you can use both methods. Leave a 5-star review for a 3-day trial and also post a promotion video to earn a longer trial.</p></details>
+    <details><summary>What makes a video earn a longer trial?</summary><p>We look at how clear and helpful the video is, then at views and likes. Honest, well-made videos about keeping kids safe online do best.</p></details>
+    <details><summary>Why was my submission rejected?</summary><p>Common reasons: the screenshot is not a 5-star review, the video is private or unrelated, or the submission looks fake or duplicated.</p></details>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Get the app</h2>
+    <div class="dl">
+      <a href="#" id="playStore"><small>Get it on</small>Google Play</a>
+      <a href="#" id="kidsApp"><small>Download the</small>Kids App</a>
+    </div>
+  </div>
+</section>
 </main>
 
+<footer>
+  <div class="wrap">© <span id="yr">2026</span> GX Parental Controller. Questions? <a id="mailLink" href="mailto:youradmin@gmail.com">youradmin@gmail.com</a></div>
+</footer>
+
 <script>
-  // SAMPLE codes for testing only. Real validation must happen on a server.
-  var validCodes = ["GUARDX-TEST-1234", "GUARDX-DEMO-0001"];
+/* ===== SETTINGS: edit these lines ===== */
+const CONFIG = {
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxlwSPkjF8LT4l1BjGPzHCvQNRkZFJyrZwMJ-9QF1CUio9FNtiViOU6b_-mUqCsBbqw/exec",                       // Paste your Google Apps Script Web App URL here (see setup notes at the bottom of this file)
+  ADMIN_EMAIL: "youradmin@gmail.com",   // Your Gmail
+  PLAY_STORE_URL: "https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share",
+  KIDS_APP_URL: "https://guardx.site"
+};
 
-  var input = document.getElementById("code");
-  var btn = document.getElementById("btn");
-  var result = document.getElementById("result");
+const $ = id => document.getElementById(id);
+$("playStore").href = CONFIG.PLAY_STORE_URL; $("kidsApp").href = CONFIG.KIDS_APP_URL;
+$("mailLink").href = "mailto:" + CONFIG.ADMIN_EMAIL; $("mailLink").textContent = CONFIG.ADMIN_EMAIL;
+$("yr").textContent = new Date().getFullYear();
 
-  function redeem() {
-    var code = input.value.trim().toUpperCase();
-    result.className = "";
-    if (!code) {
-      result.className = "err";
-      result.textContent = "Enter a redeem code first.";
-      return;
-    }
-    if (validCodes.indexOf(code) !== -1) {
-      result.className = "ok";
-      result.textContent = "Code accepted. Your plan is now active on this device.";
-    } else {
-      result.className = "err";
-      result.textContent = "This code isn't valid. Check for typos and try again.";
+const KEY = "gx_submissions";
+function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ return []; } }
+function save(list){ try { localStorage.setItem(KEY, JSON.stringify(list)); } catch(e){} }
+const isGmail = v => /^[^\s@]+@(gmail|googlemail)\.com$/i.test(v.trim());
+function show(el, type, text){ el.className = "msg " + type; el.textContent = text; }
+
+function fileToDataUrl(file){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onerror = () => rej(new Error("read"));
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = () => rej(new Error("img"));
+      img.onload = () => {
+        const max = 1400, s = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        res(c.toDataURL("image/jpeg", 0.8));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+async function send(payload){
+  if (!CONFIG.SCRIPT_URL) return "demo";
+  await fetch(CONFIG.SCRIPT_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+  return "sent";
+}
+
+function duplicate(email){ return load().some(s => s.email === email && s.type === "5-star review"); }
+
+$("rFile").addEventListener("change", e => {
+  const f = e.target.files[0], p = $("rPrev");
+  if (f) { p.src = URL.createObjectURL(f); p.style.display = "block"; } else p.style.display = "none";
+});
+
+$("reviewForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("rEmail").value.trim().toLowerCase(), file = $("rFile").files[0], msg = $("rMsg"), btn = $("rBtn");
+  if (!isGmail(email)) return show(msg, "err", "Enter a valid Gmail address (example@gmail.com).");
+  if (!file) return show(msg, "err", "Upload a screenshot of your 5-star review.");
+  if (!file.type.startsWith("image/")) return show(msg, "err", "The file must be an image (PNG or JPG).");
+  if (duplicate(email)) return show(msg, "err", "You already submitted a review with this email. You can still submit a promotion video.");
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const shot = await fileToDataUrl(file);
+    await send({ type:"review", email, screenshot: shot, submittedAt: new Date().toISOString() });
+    const list = load(); list.push({ email, type:"5-star review", reward:"3 days", status:"Pending", at: Date.now() }); save(list);
+    show(msg, "ok", "Thank you! Please check your email in 2–3 hours. Our team will review your screenshot and send your promo code to " + email + ". You can also use the video method (Method 2) to earn a longer trial.");
+    e.target.reset(); $("rPrev").style.display = "none";
+  } catch(err){ show(msg, "err", "Something went wrong. Check your connection and try again."); }
+  btn.disabled = false; btn.textContent = "Submit review";
+});
+
+$("videoForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("vEmail").value.trim().toLowerCase(), link = $("vLink").value.trim(), plat = $("vPlat").value, msg = $("vMsg"), btn = $("vBtn");
+  if (!isGmail(email)) return show(msg, "err", "Enter a valid Gmail address (example@gmail.com).");
+  if (!/^https?:\/\/.+\..+/i.test(link)) return show(msg, "err", "Paste the full link to your video (starting with https://).");
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    await send({ type:"video", email, platform: plat, link, submittedAt: new Date().toISOString() });
+    const list = load().filter(s => !(s.email === email && s.type === "Promotion video")); list.push({ email, type:"Promotion video", reward:"Based on views & quality", status:"Pending", at: Date.now() }); save(list);
+    show(msg, "ok", "Thank you! We will review your video quality, views and likes. Please check your email in 2–3 hours for your promo code. You can also use the 5-star review method (Method 1) as well.");
+    e.target.reset();
+  } catch(err){ show(msg, "err", "Something went wrong. Check your connection and try again."); }
+  btn.disabled = false; btn.textContent = "Submit video";
+});
+
+$("sBtn").addEventListener("click", async () => {
+  const email = $("sEmail").value.trim().toLowerCase(), msg = $("sMsg"), tbl = $("sTbl");
+  tbl.innerHTML = "";
+  if (!isGmail(email)) return show(msg, "err", "Enter the Gmail address you submitted with.");
+  let rows = load().filter(s => s.email === email);
+  if (CONFIG.SCRIPT_URL) {
+    try {
+      const r = await fetch(CONFIG.SCRIPT_URL + "?action=status&email=" + encodeURIComponent(email));
+      const j = await r.json(); if (j && j.rows) rows = j.rows;
+    } catch(e){}
+  }
+  if (!rows.length) return show(msg, "err", "No submission found for this email yet.");
+  msg.className = "msg";
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  tbl.innerHTML = "<table><thead><tr><th>Method</th><th>Reward</th><th>Status</th></tr></thead><tbody>" +
+    rows.map(r => `<tr><td>${esc(r.type)}</td><td>${esc(r.reward||"")}</td><td><span class="pill ${esc(String(r.status).toLowerCase())}">${esc(r.status)}</span></td></tr>`).join("") + "</tbody></table>";
+});
+</script>
+
+<!--
+=========== GOOGLE APPS SCRIPT SETUP (free, 5 minutes) ===========
+1. Create a Google Sheet. Rename the first tab to "Submissions" and add headers in row 1:
+   Time | Email | Type | Reward | Status | Link/Platform | Screenshot
+   (Status column: you change Pending → Approved / Rejected by hand.)
+2. Sheet menu: Extensions → Apps Script. Delete the old code, paste the code below, set ADMIN and FOLDER_NAME.
+3. Deploy → New deployment → Type: Web app → Execute as: Me → Who has access: Anyone → Deploy. Authorize.
+4. Copy the Web app URL and paste it into CONFIG.SCRIPT_URL above.
+5. Put your own Gmail in CONFIG.ADMIN_EMAIL.
+
+var ADMIN = "youradmin@gmail.com";
+var FOLDER_NAME = "GX Review Screenshots";
+
+function doPost(e) {
+  var d = JSON.parse(e.postData.contents);
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions");
+  var email = String(d.email).toLowerCase();
+  var rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][1]).toLowerCase() === email && rows[i][2] === "review" ) {
+      return out({ ok:false, error:"duplicate" });          // one review per email (video method is separate)
     }
   }
+  var shotUrl = "", reward = d.type === "review" ? "3 days" : "Check views/likes";
+  if (d.screenshot) {
+    var f = DriveApp.getFoldersByName(FOLDER_NAME);
+    var folder = f.hasNext() ? f.next() : DriveApp.createFolder(FOLDER_NAME);
+    var bytes = Utilities.base64Decode(d.screenshot.split(",")[1]);
+    var file = folder.createFile(Utilities.newBlob(bytes, "image/jpeg", email + "-" + Date.now() + ".jpg"));
+    shotUrl = file.getUrl();
+  }
+  sh.appendRow([new Date(), email, d.type, reward, "Pending", d.link || d.platform || "", shotUrl]);
+  MailApp.sendEmail(ADMIN, "New GX promo submission: " + d.type,
+    "Email: " + email + "\nType: " + d.type + "\nLink: " + (d.link || "") + "\nScreenshot: " + shotUrl +
+    "\n\nOpen your sheet to approve and send the code.");
+  return out({ ok:true });
+}
 
-  btn.addEventListener("click", redeem);
-  input.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") redeem();
-  });
-</script>
+function doGet(e) {
+  var email = String(e.parameter.email || "").toLowerCase();
+  var rows = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Submissions").getDataRange().getValues();
+  var res = [];
+  for (var i = 1; i < rows.length; i++) {
+    if (String(rows[i][1]).toLowerCase() === email)
+      res.push({ type: rows[i][2] === "review" ? "5-star review" : "Promotion video", reward: rows[i][3], status: rows[i][4] });
+  }
+  return out({ rows: res });
+}
+
+function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+-->
 </body>
 </html>
