@@ -1,109 +1,496 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>No paid device | Guardx</title>
-<style>
-  :root {
-    --bg: #f6f4f2;
-    --card: #ffffff;
-    --text: #1d1a19;
-    --muted: #6b6461;
-    --line: #e2dcd8;
-    --brand: #d3342b;
-    --brand-dark: #a92720;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161312;
-      --card: #211d1c;
-      --text: #f3eeeb;
-      --muted: #a69e9a;
-      --line: #3a3330;
-      --brand: #ee5148;
-      --brand-dark: #d3342b;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-  }
-  main {
-    width: 100%;
-    max-width: 440px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 32px 28px;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
-  .brand img { width: 36px; height: 36px; border-radius: 8px; }
-  .brand span { font-weight: 700; font-size: 1.15rem; }
-  h1 { font-size: 1.5rem; margin: 0 0 8px; }
-  p.lead { margin: 0 0 20px; color: var(--muted); line-height: 1.55; }
-  .status {
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 4px 16px;
-    margin-bottom: 24px;
-  }
-  .row {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: .95rem;
-  }
-  .row:last-child { border-bottom: 0; }
-  .row dt { color: var(--muted); }
-  .row dd { margin: 0; font-weight: 600; text-align: right; }
-  .none { color: var(--brand); }
-  dl { margin: 0; }
-  .btn {
-    display: block;
-    text-align: center;
-    padding: 14px;
-    font-size: 1rem;
-    font-weight: 700;
-    text-decoration: none;
-    border-radius: 10px;
-  }
-  .primary { background: var(--brand); color: #fff; }
-  .primary:hover { background: var(--brand-dark); }
-  .secondary { margin-top: 12px; color: var(--text); border: 1.5px solid var(--line); }
-  .btn:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids App Not Showing? Fix It Now | GX Parent Control</title>
+
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
+
+        /* Cyber grid background */
+        .bg-cyber-grid {
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(0, 210, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 80% 50%, rgba(58, 123, 213, 0.10) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.08) 0%, transparent 50%),
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 50%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-warn {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            background: rgba(0, 210, 255, 0.08);
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            color: #00d2ff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Step card */
+        .step-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            border-radius: 1.5rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,210,255,0.08), transparent);
+            transition: 0.6s;
+        }
+        .step-card:hover::before { left: 100%; }
+        .step-card:hover {
+            border-color: rgba(0, 210, 255, 0.35);
+            box-shadow: 0 12px 40px -8px rgba(0, 210, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        /* Step number circle */
+        .step-num {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0,210,255,0.15), rgba(58,123,213,0.1));
+            border: 2px solid rgba(0, 210, 255, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem; font-weight: 700;
+            color: #00d2ff;
+            flex-shrink: 0;
+        }
+
+        /* Screenshot image placeholder/frame */
+        .screenshot-frame {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0,210,255,0.08);
+            background: #0a0f1a;
+            position: relative;
+        }
+        .screenshot-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Connector line between steps */
+        .step-connector {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(0,210,255,0.4), rgba(0,210,255,0.05));
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* Warning box */
+        .warn-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(239, 68, 68, 0.04));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 1.25rem;
+        }
+
+        /* Live dot */
+        .live-dot {
+            width: 8px; height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+        }
+        .live-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: ping 1.5s cubic-bezier(0,0,0.2,1) infinite;
+        }
+
+        /* Logo pulse */
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 12px rgba(0,210,255,0.6)); }
+        }
+        .logo-glow { animation: pulse-soft 3.5s infinite ease-in-out; }
+
+        /* Reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+
+        /* Btn shine */
+        .btn-shine {
+            position: relative; overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: rotate(30deg);
+            animation: shine 4s infinite linear;
+        }
+        @keyframes shine {
+            0%  { transform: translate(-100%,-100%) rotate(30deg); }
+            100%{ transform: translate(100%,100%)  rotate(30deg); }
+        }
+
+        /* Particle canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed; bottom: 30px; right: 30px;
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            z-index: 1000;
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+    </style>
 </head>
-<body>
-<main>
-  <div class="brand">
-    <img src="logo.png" alt="" onerror="this.style.display='none'">
-    <span>Guardx</span>
-  </div>
+<body class="bg-cyber-grid min-h-screen">
 
-  <h1>No paid device</h1>
-  <p class="lead">This device doesn't have an active paid plan, so protected features are turned off.</p>
+    <!-- Particles -->
+    <canvas id="particles-canvas"></canvas>
 
-  <div class="status">
-    <dl>
-      <div class="row"><dt>Plan</dt><dd class="none">Free</dd></div>
-      <div class="row"><dt>Paid devices</dt><dd class="none">0 of 1</dd></div>
-      <div class="row"><dt>Protection</dt><dd class="none">Off</dd></div>
-    </dl>
-  </div>
+    <!-- Toast -->
+    <div id="toast" class="glass-panel px-5 py-3 rounded-2xl border border-cyan-500/50 shadow-2xl flex items-center gap-3 text-sm text-cyan-400 font-bold">
+        <i class="fas fa-circle-check text-emerald-400 text-lg"></i>
+        <span>Copied!</span>
+    </div>
 
-  <a class="btn primary" href="redeemcode.html">Redeem a code</a>
-  <a class="btn secondary" href="index.html">Back to home</a>
-</main>
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 shadow-2xl">
+        <div class="max-w-5xl mx-auto px-6 h-18 py-4 flex justify-between items-center">
+            <a href="index_fixed.html" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 border border-cyan-400/30 flex items-center justify-center overflow-hidden logo-glow shadow-lg shadow-cyan-500/20">
+                    <img src="logo.png" alt="GX Logo" class="w-7 h-7 object-contain">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-base font-extrabold tracking-tight italic text-white group-hover:text-cyan-400 transition-colors">GX Parent Control</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="live-dot"></span>
+                        <span class="text-[9px] uppercase tracking-widest text-emerald-400 font-semibold font-mono">v9.5 Stable</span>
+                    </div>
+                </div>
+            </a>
+            <a href="index_fixed.html" class="text-xs font-bold text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-2 border border-white/10 px-4 py-2 rounded-full hover:border-cyan-400/40">
+                <i class="fas fa-arrow-left text-[10px]"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="pt-36 pb-16 px-6 text-center relative z-10">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-5 reveal">
+                <span class="badge-pill">
+                    <i class="fas fa-wrench text-[10px]"></i>
+                    Troubleshooting Guide
+                </span>
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-tight mb-5 reveal delay-100">
+                Kids Device<br>
+                <span class="text-gradient">Not Showing?</span>
+            </h1>
+
+            <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto leading-relaxed font-medium reveal delay-200">
+                If the Kids device isn't appearing on your Parent app after pairing, follow these simple steps to fix it and get back online.
+            </p>
+
+            <!-- Version warning pill -->
+            <div class="mt-6 reveal delay-300">
+                <span class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    For versions below v10.6 only
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- STEPS -->
+    <section class="pb-20 px-6 relative z-10">
+        <div class="max-w-2xl mx-auto">
+
+            <!-- ── STEP 1 ── -->
+            <div class="step-card p-6 sm:p-8 reveal delay-100">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="step-num">01</div>
+                    <div>
+                        <h2 class="text-xl font-black text-white mb-1">Go to Settings → Apps → Find "System Service" &amp; Tap Uninstall</h2>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            On the <strong class="text-cyan-400">Kids device</strong>, open
+                            <span class="font-mono bg-white/5 px-1.5 py-0.5 rounded text-cyan-300 text-xs">Settings</span>, tap
+                            <span class="font-mono bg-white/5 px-1.5 py-0.5 rounded text-cyan-300 text-xs">Apps</span>, search for
+                            <span class="font-mono bg-cyan-500/15 border border-cyan-500/30 px-2 py-0.5 rounded text-cyan-400 text-xs font-bold">System Service</span>,
+                            select it from the list, and tap the
+                            <span class="font-mono bg-red-500/15 border border-red-500/30 px-2 py-0.5 rounded text-red-400 text-xs font-bold">Uninstall</span>
+                            button at the bottom.
+                        </p>
+                    </div>
+                </div>
+                <!-- Screenshot (Combined 3-panel guide) -->
+                <div class="screenshot-frame">
+                    <img src="images/step1-system-services.png" alt="Settings > Apps > System Service > Uninstall Guide" class="w-full h-auto object-cover rounded-xl" onerror="this.parentElement.innerHTML='<div class=\'flex flex-col items-center justify-center py-12 text-gray-500\'><i class=\'fas fa-image text-3xl mb-3 text-cyan-400/50\'></i><span class=\'text-xs font-mono\'>images/step1-system-services.png</span></div>'">
+                </div>
+            </div>
+
+            <div class="step-connector my-3"></div>
+
+            <!-- ── STEP 2 ── -->
+            <div class="step-card p-6 sm:p-8 reveal delay-200">
+                <div class="flex items-start gap-4 mb-3">
+                    <div class="step-num">02</div>
+                    <div>
+                        <h2 class="text-xl font-black text-white mb-1">Tap "Deactivate Device Admin"</h2>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            A system prompt will appear. Tap
+                            <span class="font-mono bg-orange-500/15 border border-orange-500/30 px-2 py-0.5 rounded text-orange-400 text-xs font-bold">Deactivate Device</span>
+                            to confirm. The app will then be completely uninstalled from the phone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-connector my-3"></div>
+
+            <!-- ── STEP 3 ── -->
+            <div class="step-card p-6 sm:p-8 reveal delay-300">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="step-num">03</div>
+                    <div>
+                        <h2 class="text-xl font-black text-white mb-1">Download the Latest Kids APK</h2>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Once uninstalled, open the browser on the Kids phone, visit
+                            <a href="https://guardex.site" target="_blank" class="text-cyan-400 font-bold hover:underline">guardex.site</a>,
+                            and tap the <strong class="text-white">Download</strong> button to get the updated Kids APK.
+                        </p>
+                    </div>
+                </div>
+                <a href="https://guardex.site" target="_blank"
+                   class="btn-shine flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 text-black font-extrabold text-base shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/50 hover:scale-[1.02] transition-all">
+                    <i class="fas fa-download text-lg"></i>
+                    Go to guardex.site &amp; Download
+                </a>
+            </div>
+
+            <div class="step-connector my-3"></div>
+
+            <!-- ── STEP 4 ── -->
+            <div class="step-card p-6 sm:p-8 reveal delay-400">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="step-num">04</div>
+                    <div>
+                        <h2 class="text-xl font-black text-white mb-1">Set Up Using the Video Guide</h2>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Install the downloaded APK and follow the step-by-step setup video below to grant permissions and pair with your Parent account.
+                        </p>
+                    </div>
+                </div>
+                <!-- YouTube Embed -->
+                <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-cyan-500/20 shadow-2xl bg-black/80">
+                    <iframe
+                        class="w-full h-full"
+                        src="https://www.youtube.com/embed/UCyWDaj7cUI"
+                        title="GX Kids App Setup Tutorial"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- VERSION WARNING BOX -->
+    <section class="pb-16 px-6 relative z-10">
+        <div class="max-w-2xl mx-auto">
+            <div class="warn-box p-6 sm:p-8 reveal">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center flex-shrink-0 text-amber-400 text-xl">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-amber-400 mb-2 uppercase tracking-tight">
+                            Important — Check Your Version First
+                        </h3>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            <strong class="text-white">Only use this method if your Kids app version is below v10.6.</strong>
+                            If your version is <span class="text-amber-400 font-bold">v10.6 or above</span>, this guide does not apply.
+                            Please reach out to our support team directly for personalised assistance.
+                        </p>
+
+                        <!-- Contact support -->
+                        <div class="mt-5 flex flex-col sm:flex-row gap-3">
+                            <a href="mailto:gx.support@gmail.com"
+                               class="inline-flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-xl font-black text-sm hover:bg-cyan-400 transition-all hover:scale-105 shadow-lg">
+                                <i class="fas fa-envelope"></i>
+                                gx.support@gmail.com
+                            </a>
+                            <button onclick="copyEmail()"
+                               class="inline-flex items-center justify-center gap-2 glass-panel border border-white/15 px-5 py-3 rounded-xl font-bold text-sm text-gray-300 hover:text-cyan-400 hover:border-cyan-400/40 transition-all">
+                                <i class="fas fa-copy"></i>
+                                Copy Email
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-10 border-t border-white/10 text-center glass-panel relative z-10">
+        <div class="mb-3 flex justify-center items-center gap-5">
+            <a href="index_fixed.html" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-cyan-400 transition-colors">Home</a>
+            <span class="text-gray-700">•</span>
+            <a href="index_fixed.html#faq" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-cyan-400 transition-colors">FAQ</a>
+            <span class="text-gray-700">•</span>
+            <a href="mailto:gx.support@gmail.com" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 hover:text-cyan-400 transition-colors">Support</a>
+        </div>
+        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-600 font-mono">
+            © 2026 GX Parent Control Systems • Military Encrypted Monitoring
+        </p>
+    </footer>
+
+    <script>
+        // Copy email
+        function copyEmail() {
+            navigator.clipboard.writeText('gx.support@gmail.com').then(() => {
+                const t = document.getElementById('toast');
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2200);
+            });
+        }
+
+        // Scroll reveal
+        document.addEventListener('DOMContentLoaded', () => {
+            const obs = new IntersectionObserver((entries, observer) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('active'); observer.unobserve(e.target); }
+                });
+            }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        });
+
+        // Particles
+        const canvas = document.getElementById('particles-canvas');
+        const ctx    = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size   = Math.random() * 1.8 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.35;
+                this.speedY = (Math.random() - 0.5) * 0.35;
+                this.opacity = Math.random() * 0.4 + 0.15;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width)  this.x = 0;
+                if (this.x < 0)             this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0)             this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
