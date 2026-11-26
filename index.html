@@ -1,1059 +1,412 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GX Parent Control | Military-Grade Stealth Monitoring Suite</title>
-    
-    <link rel="icon" type="image/png" href="logo.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GX Parental Control – Kids Safety App for Android</title>
+<meta name="description" content="GX Parental Control lets you set screen-time limits, lock apps and keep an eye on your child's phone with 32+ live features and end-to-end AES-256 encryption. Download free.">
+<meta name="keywords" content="GX Parental Control, GuardX, parental control app, kids safety app, screen time, app lock, Android">
+<link rel="canonical" href="https://guardx.site/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GX Parental Control – Kids Safety App for Android">
+<meta property="og:description" content="Screen-time limits, app locking and 32+ live features, protected by end-to-end AES-256 encryption.">
+<meta property="og:url" content="https://guardx.site/">
+<meta name="theme-color" content="#1F1F1D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2333332F'/%3E%3Cpath d='M50 16 78 28v22c0 18-12 30-28 36C34 80 22 68 22 50V28z' fill='%23FFB547'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"GX Parental Control","operatingSystem":"Android","applicationCategory":"UtilitiesApplication","url":"https://guardx.site/","description":"Parental control app with screen-time limits, app locking and live monitoring features."}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1F1F1D;--paper:#262624;--raise:#2E2E2B;--line:#3D3D39;--text:#F2F1EC;--muted:#A9A8A0;--amber:#FFB547;--amber-d:#F29B1E;--mint:#5BD6A4;--r:14px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font:400 17px/1.65 "DM Sans",system-ui,sans-serif;color:var(--text);background-color:var(--bg);background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1.6px);background-size:14px 14px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,6vw,4rem);font-weight:800}
+h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700}
+h3{font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+section{padding:84px 0}
+.lead{color:var(--muted);max-width:60ch;margin-top:14px}
+.alt{background:var(--paper);background-image:none}
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons 6.5.0 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+header{position:sticky;top:0;z-index:20;background:rgba(31,31,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.15rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo svg{width:30px;height:30px}
+nav{display:flex;gap:26px;font-size:.95rem;font-weight:500}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--text)}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:999px;font:700 1rem "DM Sans",sans-serif;text-decoration:none;border:2px solid var(--amber);transition:transform .15s,background .15s;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:var(--amber);color:#1F1F1D}
+.btn-main:hover{background:var(--amber-d);border-color:var(--amber-d)}
+.btn-alt{background:transparent;color:var(--text);border-color:#5A5A54}
+.btn-alt:hover{background:var(--text);color:#1F1F1D;border-color:var(--text)}
+.btn svg{width:20px;height:20px;flex:none}
 
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #030712;
-            color: #f3f4f6;
-            overflow-x: hidden;
-            position: relative;
-        }
+.hero{padding:56px 0 72px;text-align:center}
+.hero p{color:var(--muted);max-width:56ch;margin:18px auto 0;font-size:1.1rem}
+.video{margin:38px auto 0;max-width:900px;aspect-ratio:16/9;border-radius:20px;overflow:hidden;background:#000;box-shadow:12px 12px 0 var(--amber)}
+.video iframe{width:100%;height:100%;border:0;display:block}
+.video-note{margin-top:30px;font-size:.92rem;color:var(--muted)}
+.dl{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px}
 
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
+.stats{background:#161614;border-block:1px solid var(--line);padding:54px 0}
+.stats ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;text-align:center}
+.stats b{display:block;font:800 clamp(2rem,4.5vw,3rem) "Bricolage Grotesque",sans-serif;color:var(--amber);letter-spacing:-.02em}
+.stats span{color:var(--muted);font-size:.95rem}
 
-        /* Custom Modern Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #030712;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00d2ff;
-        }
+.ft{list-style:none;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:40px}
+.ft li{flex:0 0 calc((100% - 48px)/4);background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px 14px 20px;text-align:center;font-weight:700;font-size:.95rem;line-height:1.3}
+.ic{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 14px;border-radius:16px;background:rgba(255,181,71,.14)}
+.ic svg{width:28px;height:28px;fill:var(--amber)}
 
-        /* Top Reading Progress Bar */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #00d2ff, #3b82f6, #a855f7);
-            z-index: 100;
-            width: 0%;
-            transition: width 0.1s ease-out;
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
-        }
+.pk{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px;align-items:stretch}
+.pkg{background:var(--bg);border:2px solid var(--line);border-radius:var(--r);padding:26px 22px;display:flex;flex-direction:column;position:relative}
+.pkg.best{border-color:var(--amber);box-shadow:7px 7px 0 var(--amber)}
+.pkg .tag{position:absolute;top:-13px;right:16px;font-size:.78rem;font-weight:700;padding:3px 12px;border-radius:999px;background:#3D3D39;color:var(--text)}
+.pkg.best .tag{background:var(--amber);color:#1F1F1D}
+.pkg:nth-child(3) .tag{background:#2F7BFF;color:#fff}
+.pkg:nth-child(4) .tag{background:#A855F7;color:#fff}
+.sub{color:var(--muted);font-size:.95rem}
+.chip{align-self:flex-start;font-size:.82rem;font-weight:700;background:var(--raise);border:1px solid var(--line);padding:2px 10px;border-radius:8px;margin-top:10px}
+.off{margin-top:18px;font-size:.9rem;color:var(--muted)}
+.off b{color:#FF8A80;background:rgba(255,90,80,.16);border:1px solid rgba(255,90,80,.4);padding:1px 8px;border-radius:6px;margin-right:6px;font-size:.78rem}
+.pkg .price{font:800 2.2rem "Bricolage Grotesque",sans-serif;margin:2px 0 0}
+.pkg .price small{font:500 .95rem "DM Sans",sans-serif;color:var(--muted)}
+.pkg ul{list-style:none;padding:0;margin:16px 0 22px;color:var(--muted);font-size:.92rem;flex:1}
+.pkg li{padding:5px 0 5px 24px;position:relative}
+.pkg li::before{content:"";position:absolute;left:0;top:11px;width:11px;height:6px;border:solid var(--mint);border-width:0 0 3px 3px;transform:rotate(-45deg)}
 
-        /* Ambient Glowing Background & Cyber Grid */
-        .bg-cyber-grid {
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 210, 255, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 80% 30%, rgba(58, 123, 213, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 20% 70%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-        }
+.steps{list-style:none;padding:0;margin-top:40px;display:grid;gap:18px;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start;background:var(--paper);border-radius:var(--r);padding:24px;border:1px solid var(--line)}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--amber);color:#1F1F1D;font:800 1.5rem "Bricolage Grotesque",sans-serif}
+.steps p{color:var(--muted);margin-top:4px}
 
-        /* Particle Canvas Behind */
-        #particles-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.6;
-        }
+.trouble{background:var(--paper);border:2px dashed var(--amber);border-radius:var(--r);padding:30px;margin-top:40px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.trouble p{color:var(--muted);max-width:52ch;margin-top:4px}
 
-        /* Gradient Typography */
-        .text-gradient {
-            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 50%, #60a5fa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+details{border-top:1px solid var(--line);padding:20px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 1.6rem/1 "DM Sans",sans-serif;color:var(--amber);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--muted);margin-top:12px;max-width:68ch}
+.faq{margin-top:36px}
 
-        .text-gradient-purple {
-            background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.support{background:var(--amber);background-image:none;color:#1F1F1D}
+.support .lead,.support #email-text{color:rgba(31,31,29,.8)}
+.support .btn{border-color:#1F1F1D}
+.support .btn-main{background:#1F1F1D;color:var(--text)}
+.support .btn-main:hover{background:#000;border-color:#000}
+.support .btn-alt{color:#1F1F1D;border-color:#1F1F1D}
+.support .btn-alt:hover{background:#1F1F1D;color:var(--text)}
+.support .dl{justify-content:flex-start}
 
-        /* Glassmorphic Components */
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.65);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+footer{background:#141413;color:var(--muted);padding:34px 0;font-size:.92rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{text-decoration:none}
+footer a:hover{color:var(--text);text-decoration:underline}
 
-        .glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+@media(max-width:1000px) and (min-width:821px){.pk{grid-template-columns:repeat(2,1fr)}.ft li{flex-basis:calc((100% - 32px)/3)}}
+@media(max-width:820px){
+ nav{display:none}
+ section{padding:60px 0}
+ .stats ul{grid-template-columns:1fr 1fr}
+ .ft li{flex-basis:calc((100% - 16px)/2)}
+ .pk{grid-template-columns:1fr}
+ .video{box-shadow:7px 7px 0 var(--amber)}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
-        .glass-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            border-color: rgba(0, 210, 255, 0.4);
-            box-shadow: 0 20px 45px -10px rgba(0, 210, 255, 0.2);
-        }
-
-        /* Feature Card Interactive Hover */
-        .feature-card {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.15), transparent);
-            transition: 0.5s;
-        }
-
-        .feature-card:hover::before {
-            left: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-6px);
-            background: rgba(15, 23, 42, 0.9);
-            border-color: rgba(0, 210, 255, 0.45);
-            box-shadow: 0 12px 30px -5px rgba(0, 210, 255, 0.25);
-        }
-
-        .feature-card:hover i {
-            transform: scale(1.25);
-            filter: drop-shadow(0 0 12px currentColor);
-        }
-
-        /* Glowing Video Container */
-        .video-glow-box {
-            position: relative;
-            border-radius: 1.5rem;
-            padding: 2px;
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.5), rgba(58, 123, 213, 0.2), rgba(168, 85, 247, 0.4));
-            box-shadow: 0 15px 50px -10px rgba(0, 210, 255, 0.3);
-            transition: all 0.4s ease;
-        }
-
-        .video-glow-box:hover {
-            box-shadow: 0 25px 70px -5px rgba(0, 210, 255, 0.45);
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.8), rgba(58, 123, 213, 0.4), rgba(168, 85, 247, 0.6));
-        }
-
-        /* Shimmer Button Effect */
-        .btn-shine {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .btn-shine::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                60deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.25) 50%,
-                transparent 70%
-            );
-            transform: rotate(30deg);
-            animation: shine-animation 4s infinite linear;
-        }
-
-        @keyframes shine-animation {
-            0% { transform: translate(-100%, -100%) rotate(30deg); }
-            100% { transform: translate(100%, 100%) rotate(30deg); }
-        }
-
-        /* Pulse Animations */
-        @keyframes pulse-soft {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.6)); }
-        }
-
-        .logo-glow {
-            animation: pulse-soft 3.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse-border {
-            0%, 100% { border-color: rgba(0, 210, 255, 0.2); box-shadow: 0 0 0px rgba(0, 210, 255, 0); }
-            50% { border-color: rgba(0, 210, 255, 0.5); box-shadow: 0 0 25px rgba(0, 210, 255, 0.2); }
-        }
-
-        .special-quote {
-            animation: pulse-border 3s infinite ease-in-out;
-        }
-
-        .badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 1rem;
-            border-radius: 9999px;
-            background: rgba(0, 210, 255, 0.08);
-            border: 1px solid rgba(0, 210, 255, 0.25);
-            color: #00d2ff;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        /* Notification Toast popup for Copy */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 1000;
-        }
-        #toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Floating Back To Top Button */
-        #back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 90;
-        }
-        #back-to-top.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Accordion Smooth Transition */
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
-        }
-        .faq-item.active .faq-content {
-            max-height: 500px;
-            transition: max-height 0.5s ease-in-out;
-        }
-        .faq-item.active .faq-icon {
-            transform: rotate(180deg);
-            color: #00d2ff;
-        }
-
-        /* Live Activity Indicator */
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            position: relative;
-        }
-        .live-dot::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background-color: #10b981;
-            border-radius: 50%;
-            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-
-        /* Scroll Reveal (Fade Up on Scroll) */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .delay-50 { transition-delay: 0.05s; }
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-150 { transition-delay: 0.15s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-250 { transition-delay: 0.25s; }
-        .delay-300 { transition-delay: 0.3s; }
-        .delay-350 { transition-delay: 0.35s; }
-        .delay-400 { transition-delay: 0.4s; }
-    </style>
+/* ===== extra polish ===== */
+::selection{background:var(--amber);color:#1F1F1D}
+html{scrollbar-color:#4A4A45 var(--bg)}
+#prog{position:fixed;inset:0 auto auto 0;height:3px;width:0;background:var(--amber);z-index:50}
+header{transition:box-shadow .25s,background .25s}
+header.scrolled{box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.hero{position:relative;isolation:isolate}
+.hero::before{content:"";position:absolute;z-index:-1;left:50%;top:38%;width:min(900px,120%);aspect-ratio:1.6;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,181,71,.16),transparent);pointer-events:none}
+.btn-main{background-image:linear-gradient(180deg,#FFC565,#FFB547);box-shadow:0 8px 22px rgba(255,181,71,.25)}
+.btn-main:hover{box-shadow:0 12px 28px rgba(255,181,71,.38)}
+.support .btn-main{background-image:none;box-shadow:none}
+.stats li+li{border-left:1px solid var(--line)}
+.ft li,.pkg,.steps li{transition:transform .25s,border-color .25s,box-shadow .25s}
+.ft li:hover{transform:translateY(-5px);border-color:var(--amber);box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.ft li:hover .ic{background:rgba(255,181,71,.26)}
+.ic{transition:background .25s}
+.pkg:hover{transform:translateY(-6px);border-color:#6B6B64}
+.pkg.best:hover{border-color:var(--amber)}
+.steps li:hover{border-color:var(--amber)}
+.trouble{transition:background .25s}
+.trouble:hover{background:var(--raise)}
+details{transition:background .2s}
+details[open]{background:linear-gradient(90deg,rgba(255,181,71,.06),transparent)}
+footer a,nav a{transition:color .2s}
+#top-btn{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:2px solid var(--amber);background:var(--bg);color:var(--amber);display:grid;place-items:center;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s;z-index:30}
+#top-btn.show{opacity:1;pointer-events:auto;transform:none}
+#top-btn:hover{background:var(--amber);color:#1F1F1D}
+#top-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none;transition:transform .25s,border-color .25s,box-shadow .25s,background .25s;transition-delay:0s}
+.js .pkg.rv.in:hover{transform:translateY(-6px)}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none}}
+</style>
 </head>
-<body class="bg-cyber-grid min-h-screen">
+<body>
+<div id="prog"></div>
 
-    <!-- READING PROGRESS BAR -->
-    <div id="scroll-progress"></div>
+<header>
+ <div class="wrap bar">
+  <a class="logo" href="#top" aria-label="GX Parental Control home">
+   <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="24" fill="#33332F"/><path d="M50 16 78 28v22c0 18-12 30-28 36C34 80 22 68 22 50V28z" fill="#FFB547"/></svg>
+   GX Parental Control
+  </a>
+  <nav aria-label="Main">
+   <a href="#features">Features</a>
+   <a href="#packages">Packages</a>
+   <a href="#install">Install guide</a>
+   <a href="#faq">FAQ</a>
+   <a href="#support">Support</a>
+  </nav>
+ </div>
+</header>
 
-    <!-- CANVAS PARTICLES (Interactive Background) -->
-    <canvas id="particles-canvas"></canvas>
+<main id="top">
 
-    <!-- FLOATING BACK TO TOP BUTTON -->
-    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-12 h-12 rounded-full glass-panel border border-cyan-400/40 text-cyan-400 flex items-center justify-center hover:bg-cyan-500 hover:text-black hover:scale-110 shadow-2xl transition-all">
-        <i class="fas fa-chevron-up"></i>
-    </button>
+<!-- 1. Tutorial video + downloads -->
+<section class="hero">
+ <div class="wrap">
+  <h1>Know your child's phone is in safe hands.</h1>
+  <p>GX Parental Control helps you set healthy screen-time limits, lock distracting apps and stay connected with your child's device. Watch the two-minute tutorial to see how it works.</p>
 
-    <!-- COPY NOTIFICATION TOAST -->
-    <div id="toast" class="glass-panel px-5 py-3 rounded-2xl border border-cyan-500/50 shadow-2xl flex items-center gap-3 text-sm text-cyan-400 font-bold">
-        <i class="fas fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toast-text">Copied to clipboard!</span>
-    </div>
+  <div class="video">
+   <iframe id="tutorial" title="GX Parental Control tutorial video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
 
-    <!-- NAVIGATION BAR -->
-    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 shadow-2xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex justify-between items-center">
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center space-x-2.5 sm:space-x-3.5 group min-w-0">
-                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 border border-cyan-400/30 flex items-center justify-center overflow-hidden logo-glow shadow-lg shadow-cyan-500/20 shrink-0">
-                    <img src="logo.png" alt="GX Logo" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
-                </div>
-                <div class="flex flex-col min-w-0">
-                    <span class="text-base sm:text-xl font-extrabold tracking-tight italic text-white group-hover:text-cyan-400 transition-colors whitespace-nowrap">GX Parent Control</span>
-                    <div class="flex items-center gap-1.5">
-                        <span class="live-dot"></span>
-                        <span class="text-[8px] sm:text-[9px] uppercase tracking-widest text-emerald-400 font-semibold font-mono">v9.5 Stable</span>
-                    </div>
-                </div>
-            </a>
+  <div class="dl">
+   <a class="btn btn-main" data-link="github" href="#" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+    Download now
+    <span style="font-weight:500;opacity:.8">GitHub</span>
+   </a>
+   <a class="btn btn-alt" data-link="mediafire" href="#" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 20h16"/></svg>
+    Download now
+    <span style="font-weight:500;opacity:.8">MediaFire</span>
+   </a>
+  </div>
+  <p class="video-note">Android 8.0 or newer. Free to install, with optional premium packages.</p>
+ </div>
+</section>
 
-            <!-- Nav Links (Desktop) -->
-            <div class="hidden lg:flex items-center space-x-7 text-xs font-bold uppercase tracking-widest text-gray-400">
-                <a href="#features" class="hover:text-cyan-400 transition-colors py-1">Features</a>
-                <a href="#tutorial" class="hover:text-cyan-400 transition-colors py-1">Tutorial</a>
-                <a href="#setup" class="hover:text-cyan-400 transition-colors py-1">Setup</a>
-                <a href="#live-stats" class="hover:text-cyan-400 transition-colors py-1">Live Status</a>
-                <a href="#pricing" class="hover:text-cyan-400 transition-colors py-1">Pricing</a>
-                <a href="#faq" class="hover:text-cyan-400 transition-colors py-1">FAQ</a>
-                <a href="#support" class="hover:text-cyan-400 transition-colors py-1">Support</a>
-            </div>
+<!-- Stats -->
+<div class="stats">
+ <div class="wrap">
+  <ul>
+   <li><b data-count="uptime">99.9%</b><span>System uptime</span></li>
+   <li><b id="users">0</b><span>Active users</span></li>
+   <li><b>32+</b><span>Live features</span></li>
+   <li><b>AES-256</b><span>End-to-end encryption</span></li>
+  </ul>
+ </div>
+</div>
 
-            <!-- Top Action Buttons & Mobile Menu Trigger -->
-            <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
-                <!-- Troubleshooting Guide Button (visible on tablet and desktop, mobile has banner + drawer menu) -->
-                <a href="no_paring_devices_sowing.html" class="hidden sm:inline-flex border border-amber-500/40 bg-amber-500/10 text-amber-300 px-3.5 py-2 rounded-full text-xs font-bold hover:bg-amber-500/20 hover:text-white transition-all items-center gap-1.5 shadow-sm">
-                    <i class="fas fa-wrench text-amber-400 text-[11px]"></i>
-                    <span>Device Not Showing?</span>
-                </a>
-                <a href="https://github.com/gx-kid/Guardx/releases/download/10.8/kids.apk" class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs hover:shadow-lg hover:shadow-cyan-500/30 transition-all flex items-center gap-1.5 shrink-0">
-                    <i class="fas fa-download text-[10px] sm:text-[11px]"></i> <span>Download</span>
-                </a>
-                <a href="https://github.com/gx-kid/Guardx/releases/download/10.8/kids.apk" target="_blank" class="hidden md:inline-flex border border-white/15 bg-white/5 text-gray-200 px-4 py-2.5 rounded-full text-xs font-bold hover:bg-white/10 hover:border-cyan-400/50 hover:text-cyan-400 transition-all items-center gap-1.5">
-                    <i class="fas fa-fire text-red-400"></i> Mirror
-                </a>
-                <button onclick="toggleMobileMenu()" class="lg:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:text-white shrink-0">
-                    <i class="fas fa-bars text-sm sm:text-base"></i>
-                </button>
-            </div>
-        </div>
+<!-- 2. Features -->
+<section id="features">
+ <div class="wrap">
+  <h2>What's inside the app</h2>
+  <ul class="ft"><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span>Time Locking</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8z"/></svg></span>App Blocker</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8.2a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4z"/></svg></span>Live Camera</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg></span>Live Mic</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></span>Live Screen</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></span>Live Location</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5-4-4V4h8v3.5l-4 4z"/></svg></span>Screen Time</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg></span>Web Filter</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></span>Remote Lock</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 1.01 7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></span>Device Status</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>Multiple Children</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></span>Call Logs</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg></span>Messages</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 0H4v2h16V0zM4 24h16v-2H4v2zM20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2.75c1.24 0 2.25 1.01 2.25 2.25s-1.01 2.25-2.25 2.25S9.75 10.24 9.75 9 10.76 6.75 12 6.75zM17 17H7v-1.5c0-1.67 3.33-2.5 5-2.5s5 .83 5 2.5V17z"/></svg></span>Contacts</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></span>App Usage Tracking</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></span>Web History</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg></span>Geofencing</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 20v-5.5H9L13 7v5.5h2L11 20z"/></svg></span>Battery State</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>File Manager</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.99 4c0-1.1-.89-2-1.99-2h-8L4 8v12c0 1.1.9 2 2 2h12.01c1.1 0 1.99-.9 1.99-2l-.01-16zM9 19H7v-2h2v2zm8 0h-2v-2h2v2zm-8-4H7v-4h2v4zm4 4h-2v-4h2v4zm0-6h-2v-2h2v2zm4 2h-2v-4h2v4z"/></svg></span>SIM Alert</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 0 0-6 0zm-4-4l2 2a7.074 7.074 0 0 1 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg></span>Wi-Fi Logs</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.25.7-1.44 1.34-1.99 1.42-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.69-.63-2.97-1.28-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.07 0-1.46.77-2.18 1.04-2.48.27-.3.6-.37.8-.37h.58c.19 0 .44-.07.69.53.25.6.86 2.1.93 2.25.08.15.13.33.03.53-.1.2-.15.33-.3.5-.15.17-.31.38-.45.51-.15.15-.3.31-.13.61.17.3.77 1.27 1.65 2.05 1.13 1.01 2.09 1.32 2.39 1.47.3.15.47.13.65-.08.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.74.82 2.04.97.3.15.5.22.57.35.08.12.08.72-.17 1.42z"/></svg></span>WhatsApp</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4 2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/></svg></span>Gallery</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.14 2 11.25c0 2.91 1.45 5.51 3.72 7.2V22l3.4-1.87c.91.25 1.88.39 2.88.39 5.52 0 10-4.14 10-9.27C22 6.14 17.52 2 12 2zm1.03 12.46-2.55-2.72-4.97 2.72 5.47-5.81 2.61 2.72 4.91-2.72-5.47 5.81z"/></svg></span>Messenger</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-7-2.5c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM7 7h2v2H7V7z"/></svg></span>Remote Screen</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7.58 2 4 5.58 4 10v10.5c0 .65.74 1.02 1.26.63L7.5 19.5l2.24 1.68c.45.34 1.07.34 1.52 0L12 20.6l.74.58c.45.34 1.07.34 1.52 0L16.5 19.5l2.24 1.63c.52.39 1.26.02 1.26-.63V10c0-4.42-3.58-8-8-8zm-2.5 9c-.83 0-1.5-.67-1.5-1.5S8.67 8 9.5 8s1.5.67 1.5 1.5S10.33 11 9.5 11zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 8 14.5 8s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>Ghost Photo</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 15.18V7c0-2.21-1.79-4-4-4s-4 1.79-4 4v10c0 1.1-.9 2-2 2s-2-.9-2-2V8.82C8.16 8.4 9 7.3 9 6c0-1.66-1.34-3-3-3S3 4.34 3 6c0 1.3.84 2.4 2 2.82V17c0 2.21 1.79 4 4 4s4-1.79 4-4V7c0-1.1.9-2 2-2s2 .9 2 2v8.18c-1.16.41-2 1.51-2 2.82 0 1.66 1.34 3 3 3s3-1.34 3-3c0-1.3-.84-2.4-2-2.82z"/></svg></span>Location Trail</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6zm9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></span>Instagram</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></span>Deleted Messages</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg></span>Keylogger</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.5 6C15.46 6 13 8.46 13 11.5c0 1.33.47 2.55 1.26 3.5H9.74c.79-.95 1.26-2.17 1.26-3.5C11 8.46 8.54 6 5.5 6S0 8.46 0 11.5 2.46 17 5.5 17h13c3.04 0 5.5-2.46 5.5-5.5S21.54 6 18.5 6zm-13 9C3.57 15 2 13.43 2 11.5S3.57 8 5.5 8 9 9.57 9 11.5 7.43 15 5.5 15zm13 0c-1.93 0-3.5-1.57-3.5-3.5S16.57 8 18.5 8 22 9.57 22 11.5 20.43 15 18.5 15z"/></svg></span>Call Record</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></span>Alert Words</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z"/></svg></span>TikTok Tracker</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.74 6.65-2.89 7.99-3.45 3.8-1.58 4.59-1.86 5.1-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.07.01.24 0 .38z"/></svg></span>Telegram</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V20h2v-2.28c3.28-.49 6-3.31 6-6.72h-1.7zM7 22h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg></span>Mic Record</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg></span>Control Hub</li><li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8A5.87 5.87 0 0 1 6 12c0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg></span>Remote Wipe</li></ul>
+ </div>
+</section>
 
-        <!-- Mobile Drawer Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden px-6 pb-6 pt-2 border-t border-white/10 bg-gray-950/95 flex flex-col gap-4 text-sm font-bold uppercase tracking-wider text-gray-400">
-            <a href="no_paring_devices_sowing.html" onclick="toggleMobileMenu()" class="text-amber-400 hover:text-white py-1 flex items-center gap-2">
-                <i class="fas fa-wrench text-xs"></i> Kids Device Not Showing? (Fix Guide)
-            </a>
-            <a href="#features" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">Features</a>
-            <a href="#tutorial" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">Tutorial</a>
-            <a href="#setup" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">Setup</a>
-            <a href="#pricing" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">Pricing</a>
-            <a href="#faq" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">FAQ</a>
-            <a href="#support" onclick="toggleMobileMenu()" class="hover:text-cyan-400 py-1">Support</a>
-        </div>
-    </nav>
+<!-- 3. Packages -->
+<section id="packages" class="alt">
+ <div class="wrap">
+  <h2>Choose your package</h2>
+  <p class="lead">Pick a package and the app opens in Google Play, where you finish buying securely.</p>
+  <div class="pk">
+   <article class="pkg"><span class="tag">Best value</span>
+    <h3>Yearly VIP</h3><span class="sub">12 Months Access</span>
+    <span class="chip">Up to 10 Devices</span>
+    <div class="off"><b>60% OFF</b><s style="opacity:.75">$149.99</s></div>
+    <div class="price">$58.99<small> / year</small></div>
+    <ul><li>Link and manage up to 10 child devices</li><li>12 months of full access to all Pro features</li><li>Fast setup with 1-tap cancellation in Google Play</li></ul>
+    <a class="btn btn-alt" data-link="playstore" href="#" rel="noopener">Buy now</a>
+   </article>
+   <article class="pkg best"><span class="tag">Popular choice</span>
+    <h3>6 Months Pass</h3><span class="sub">Billed Every 6 Months</span>
+    <span class="chip">Up to 5 Devices</span>
+    <div class="off"><b>60% OFF</b><s style="opacity:.75">$74.99</s></div>
+    <div class="price">$29.99<small> / 6 mos</small></div>
+    <ul><li>Link and manage up to 5 child devices</li><li>6 months of full access to all Pro features</li><li>Fast setup with 1-tap cancellation in Google Play</li></ul>
+    <a class="btn btn-main" data-link="playstore" href="#" rel="noopener">Buy now</a>
+   </article>
+   <article class="pkg"><span class="tag">Flexible</span>
+    <h3>Monthly Pass</h3><span class="sub">Billed Monthly</span>
+    <span class="chip">Up to 3 Devices</span>
+    <div class="off"><b>60% OFF</b><s style="opacity:.75">$14.99</s></div>
+    <div class="price">$5.89<small> / month</small></div>
+    <ul><li>Link and manage up to 3 child devices</li><li>30-day full access to all Pro features</li><li>Fast setup with 1-tap cancellation in Google Play</li></ul>
+    <a class="btn btn-alt" data-link="playstore" href="#" rel="noopener">Buy now</a>
+   </article>
+   <article class="pkg"><span class="tag">Starter</span>
+    <h3>Weekly Pass</h3><span class="sub">Billed Weekly</span>
+    <span class="chip">Up to 2 Devices</span>
+    <div class="off"><b>60% OFF</b><s style="opacity:.75">$3.79</s></div>
+    <div class="price">$1.49<small> / week</small></div>
+    <ul><li>Link and manage up to 2 child devices</li><li>7-day full access to all Pro features</li><li>Fast setup with 1-tap cancellation in Google Play</li></ul>
+    <a class="btn btn-alt" data-link="playstore" href="#" rel="noopener">Buy now</a>
+   </article>
+  </div>
+ </div>
+</section>
 
-    <!-- HERO SECTION -->
-    <section class="pt-24 sm:pt-40 pb-16 sm:pb-20 px-4 sm:px-6 text-center relative z-10">
-        <div class="max-w-4xl mx-auto">
-            
-            <!-- Troubleshooting Alert Banner (Kids device not showing) -->
-            <div class="mb-4 reveal">
-                <a href="no_paring_devices_sowing.html" class="inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/15 via-cyan-500/15 to-blue-500/15 border border-amber-500/40 hover:border-cyan-400 text-amber-300 hover:text-white text-xs sm:text-sm font-bold shadow-lg shadow-amber-500/10 hover:shadow-cyan-500/20 hover:scale-[1.02] transition-all group max-w-full">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
-                    <span class="text-white text-[11px] sm:text-sm font-semibold truncate">Kids device not showing?</span>
-                    <span class="text-cyan-400 group-hover:underline flex items-center gap-1 font-extrabold text-[11px] sm:text-sm shrink-0">
-                        Fix Guide <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
-                    </span>
-                </a>
-            </div>
+<!-- 4. Installation guide -->
+<section id="install">
+ <div class="wrap">
+  <h2>Set up in three steps</h2>
+  <p class="lead">It takes about five minutes, and you only need both phones nearby once.</p>
+  <ol class="steps">
+   <li><div><h3>Download the GX Parental Kids app</h3><p>Install it on your child's phone using either download button above.</p></div></li>
+   <li><div><h3>Set it up</h3><p>Open the kids app and follow the on-screen setup, including the permissions it asks for.</p></div></li>
+   <li><div><h3>Enter the 8-digit code in the parent app</h3><p>The kids app shows an 8-digit code. Type it into the GX Parental Control app on your phone to pair the devices.</p></div></li>
+  </ol>
 
-            <!-- Online Status Pill -->
-            <div class="mb-5 sm:mb-6 reveal">
-                <span class="badge-pill shadow-lg shadow-cyan-500/10 text-[10px] sm:text-xs py-1 sm:py-1.5 px-3 sm:px-4">
-                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-ping"></span>
-                    <span>GX Suite v9.5</span> <span class="hidden sm:inline">• Parent Control</span> • Online &amp; Stealth Ready
-                </span>
-            </div>
+  <div class="trouble">
+   <div>
+    <h3>Having trouble?</h3>
+    <p>Does the app show your child's device as offline, or is an old device still listed? Follow these quick fixes to get it connected again.</p>
+   </div>
+   <a class="btn btn-main" data-link="trouble" href="#" rel="noopener">See the fixes</a>
+  </div>
+ </div>
+</section>
 
-            <!-- Hero Main Heading -->
-            <h1 class="text-4xl sm:text-7xl md:text-8xl font-black mb-4 sm:mb-6 tracking-tighter leading-tight sm:leading-none reveal delay-100">
-                Stealth. Power. <br><span class="text-gradient">Control.</span>
-            </h1>
+<!-- 5. FAQ -->
+<section id="faq" class="alt">
+ <div class="wrap">
+  <h2>Questions parents ask us</h2>
+  <div class="faq">
+   <details><summary>Do you sell my child's data?</summary><p>No. We never sell your child's data or share it with anyone.</p></details>
+   <details><summary>Is the data encrypted?</summary><p>Yes. Everything is protected with end-to-end AES-256 encryption.</p></details>
+   <details><summary>Is anything stored on your servers?</summary><p>No. Information is live only. It passes through our servers between the two devices and is not saved anywhere on our side.</p></details>
+   <details><summary>What happens if the app is modified?</summary><p>Accounts using a modified or cracked version of the app are banned automatically.</p></details>
+   <details><summary>The kids' device shows as offline. What should I do?</summary><p>Open the troubleshooting guide above. It walks you through the steps that fix this in most cases.</p></details>
+   <details><summary>How do I get help?</summary><p>Our support team is available 24 hours a day by email or Telegram. Details are in the Support section below.</p></details>
+  </div>
+ </div>
+</section>
 
-            <p class="text-gray-300 text-sm sm:text-lg md:text-xl mb-8 sm:mb-12 max-w-2xl mx-auto font-normal leading-relaxed reveal delay-150">
-                Military-grade surveillance for GX Parent Control. Completely invisible, fully encrypted, and 100% reliable.
-            </p>
+<!-- Support -->
+<section id="support" class="support">
+ <div class="wrap">
+  <h2>We're here 24 hours a day</h2>
+  <p class="lead">Questions about setup, billing or a device that won't connect? Message us and a real person will reply.</p>
+  <div class="dl">
+   <a class="btn btn-main" data-link="email" href="#">Email support</a>
+   <a class="btn btn-alt" data-link="telegram" href="#" rel="noopener">Message on Telegram</a>
+  </div>
+  <p style="margin-top:18px" id="email-text"></p>
+ </div>
+</section>
 
-            <!-- YOUTUBE VIDEO TUTORIAL EMBED -->
-            <div id="tutorial" class="mb-12 max-w-2xl mx-auto reveal delay-200">
-                <div class="flex items-center justify-between px-3 mb-3">
-                    <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-2">
-                        <i class="fab fa-youtube text-red-500 text-lg"></i> How to Set Up Kids App
-                    </span>
-                    <span class="text-[11px] text-gray-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/10 font-medium">Video Guide</span>
-                </div>
-                
-                <div class="video-glow-box">
-                    <div class="relative w-full aspect-video rounded-[1.4rem] overflow-hidden bg-black/90 shadow-2xl">
-                        <iframe 
-                            class="w-full h-full" 
-                            src="https://www.youtube.com/embed/UCyWDaj7cUI" 
-                            title="How to Set Up Kids App" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
-            </div>
+</main>
 
-            <!-- DOWNLOAD BUTTONS -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 reveal delay-250">
-                <!-- Kids App v10.8 Update -->
-                <a href="https://github.com/gx-kid/Guardx/releases/download/10.8/kids.apk" class="btn-shine w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-600 text-black font-extrabold px-10 py-4 rounded-2xl text-lg shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/50 hover:scale-105 transition-all flex items-center justify-center gap-3">
-                    <i class="fas fa-download text-xl"></i>
-                    <span>Download Kids APK v10.8</span>
-                </a>
-                <!-- MediaFire Link v10.8 -->
-                <a href="https://www.mediafire.com/file/ey12cnyolgwszku/kids-release.apk/file" target="_blank" class="w-full sm:w-auto glass-panel border border-white/15 px-9 py-4 rounded-2xl font-bold text-lg text-white hover:bg-white/10 hover:border-cyan-400/50 hover:scale-105 transition-all flex items-center justify-center gap-3">
-                    <i class="fas fa-fire text-red-500 text-xl"></i>
-                    <span>MediaFire Mirror v10.8</span>
-                </a>
-            </div>
+<footer>
+ <div class="wrap">
+  <span>© <span id="yr"></span> GX Parental Control. All rights reserved.</span>
+  <a data-link="privacy" href="#" rel="noopener">Privacy policy</a>
+ </div>
+</footer>
+<button id="top-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
 
-            <!-- Quick Download URL Copy Utility -->
-            <div class="mt-8 flex items-center justify-center gap-3 reveal delay-300">
-                <div class="glass-panel px-4 py-2 rounded-xl border border-white/10 text-xs font-mono text-gray-400 flex items-center gap-3 max-w-md overflow-hidden">
-                    <i class="fas fa-link text-cyan-400"></i>
-                    <span class="truncate">https://www.mediafire.com/file/ey12cnyolgwszku/kids-release.apk/file</span>
-                    <button onclick="copyToClipboard('https://github.com/gx-kid/Guardx/releases/download/10.8/kids.apk')" class="hover:text-cyan-400 text-gray-300 transition-colors ml-auto pl-2">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-            </div>
+<script>
+/* ===== Edit all links and numbers here. Every button on the page reads from this block. ===== */
+var CONFIG = {
+  youtubeVideoId: "UCyWDaj7cUI",
+  links: {
+    github:    "https://github.com/gx-kid/Guardx/releases/download/10.8/kids.apk",
+    mediafire: "https://www.mediafire.com/file/ey12cnyolgwszku/kids-release.apk/file",
+    playstore: "https://play.google.com/store/apps/details?id=com.monitor.guardx.parent",
+    trouble:   "https://guardx.site/no_paring_devices_sowing.html",
+    telegram:  "https://t.me/Guard_X0",
+    privacy:   "https://guardx.site/privacy",
+    email:     "mailto:guardx.support@gmail.com"
+  },
+  emailAddress: "guardx.support@gmail.com",
+  users: { base: 12400, startDate: "2026-01-01", perDay: 40 }
+};
+/* ======================================================================================= */
 
-        </div>
-    </section>
+(function () {
+  // links
+  document.querySelectorAll("[data-link]").forEach(function (a) {
+    a.href = CONFIG.links[a.getAttribute("data-link")] || "#";
+  });
+  document.getElementById("email-text").textContent = CONFIG.emailAddress;
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
-    <!-- LIVE STATS COUNTER -->
-    <section id="live-stats" class="py-16 border-y border-white/10 glass-panel relative z-10">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div class="p-4 reveal delay-100">
-                <div class="text-4xl md:text-5xl font-extrabold mb-1.5 text-white tracking-tight font-mono">99.9%</div>
-                <div class="text-[11px] text-cyan-400 uppercase font-bold tracking-widest">Uptime System</div>
-            </div>
-            <div class="p-4 reveal delay-150">
-                <div id="active-devices-counter" class="text-4xl md:text-5xl font-extrabold mb-1.5 text-white tracking-tight font-mono">15,420+</div>
-                <div class="text-[11px] text-cyan-400 uppercase font-bold tracking-widest flex items-center justify-center gap-1.5">
-                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    Active Devices
-                </div>
-            </div>
-            <div class="p-4 reveal delay-200">
-                <div class="text-4xl md:text-5xl font-extrabold mb-1.5 text-white tracking-tight font-mono">32+</div>
-                <div class="text-[11px] text-cyan-400 uppercase font-bold tracking-widest">Live Sensors</div>
-            </div>
-            <div class="p-4 reveal delay-250">
-                <div class="text-4xl md:text-5xl font-extrabold mb-1.5 text-white tracking-tight font-mono">AES-256</div>
-                <div class="text-[11px] text-cyan-400 uppercase font-bold tracking-widest">End-to-End Encryption</div>
-            </div>
-        </div>
-    </section>
+  // tutorial video plays inside the page
+  document.getElementById("tutorial").src =
+    "https://www.youtube-nocookie.com/embed/" + CONFIG.youtubeVideoId + "?rel=0&modestbranding=1";
 
-    <!-- FEATURES MONITORING SUITE -->
-    <section id="features" class="py-24 px-6 relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-4 reveal">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-black italic border-l-4 border-cyan-500 pl-6 uppercase tracking-tighter text-white">
-                        Full Monitoring Suite
-                    </h2>
-                    <p class="text-gray-400 text-sm mt-2 pl-6 font-medium">32 Advanced Real-Time Monitoring & Stealth Telemetry Features</p>
-                </div>
-                <span class="badge-pill self-start sm:self-auto">All Included Free</span>
-            </div>
+  // active users: grows on its own over time, no backend needed
+  var el = document.getElementById("users"), shown = 0;
+  function target() {
+    var days = (Date.now() - new Date(CONFIG.users.startDate).getTime()) / 864e5;
+    return Math.floor(CONFIG.users.base + Math.max(0, days) * CONFIG.users.perDay);
+  }
+  function render(n) { el.textContent = n.toLocaleString("en-US") + "+"; }
+  function animate() {
+    var end = target(), t0 = performance.now(), dur = 1400;
+    function step(t) {
+      var p = Math.min(1, (t - t0) / dur);
+      shown = Math.round(end * (1 - Math.pow(1 - p, 3)));
+      render(shown);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var played = false;
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e, o) {
+      if (e[0].isIntersecting && !played) { played = true; animate(); o.disconnect(); }
+    }, { threshold: 0.4 }).observe(el);
+  } else { render(target()); }
+  setInterval(function () { if (played) render(target()); }, 60000);
 
-            <!-- Features Grid with Smooth Stagger Reveal -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-50">
-                    <i class="fas fa-location-dot text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Live Location</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-100">
-                    <i class="fas fa-phone text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Call Logs</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-150">
-                    <i class="fas fa-comment text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Messages</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-200">
-                    <i class="fab fa-whatsapp text-emerald-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">WhatsApp</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-250">
-                    <i class="fas fa-address-book text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Contacts</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-300">
-                    <i class="fas fa-images text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Gallery</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-50">
-                    <i class="fab fa-facebook-messenger text-blue-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Messenger</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-100">
-                    <i class="fas fa-chart-pie text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">App Usage</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-150">
-                    <i class="fas fa-video text-rose-500 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Live Camera</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-200">
-                    <i class="fas fa-microphone text-purple-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Live Audio</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-250">
-                    <i class="fas fa-display text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Screen Mirror</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-300">
-                    <i class="fas fa-camera text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Remote Screen</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-50">
-                    <i class="fas fa-ghost text-slate-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Ghost Photo</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-100">
-                    <i class="fas fa-route text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Location Trail</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-150">
-                    <i class="fab fa-instagram text-pink-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Instagram</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-200">
-                    <i class="fas fa-trash-can text-red-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Deleted Msg</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-250">
-                    <i class="fas fa-keyboard text-amber-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Keylogger</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-300">
-                    <i class="fas fa-draw-polygon text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Geofencing</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-50">
-                    <i class="fas fa-ban text-red-500 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">App Blocker</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-100">
-                    <i class="fas fa-history text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Web History</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-150">
-                    <i class="fas fa-tape text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Call Record</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-200">
-                    <i class="fas fa-bell text-yellow-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Alert Words</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-250">
-                    <i class="fab fa-tiktok text-slate-200 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">TikTok Tracker</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-300">
-                    <i class="fab fa-telegram text-sky-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Telegram</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-50">
-                    <i class="fas fa-battery-full text-emerald-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Battery State</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-100">
-                    <i class="fas fa-folder-tree text-amber-500 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">File Manager</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-150">
-                    <i class="fas fa-sim-card text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">SIM Alert</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-200">
-                    <i class="fas fa-lock text-rose-500 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Remote Lock</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-250">
-                    <i class="fas fa-wifi text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Wi-Fi Logs</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-300">
-                    <i class="fas fa-microphone-lines text-purple-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Mic Record</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-350">
-                    <i class="fas fa-sliders text-cyan-400 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Control Hub</span>
-                </div>
-                <div class="feature-card p-5 rounded-2xl flex flex-col items-center justify-center text-center group reveal delay-400">
-                    <i class="fas fa-rotate text-red-500 mb-3 text-2xl transition-all duration-300"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-gray-300">Remote Wipe</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- INSTALLATION GUIDE -->
-    <section id="setup" class="py-24 px-6 relative z-10">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="reveal mb-16">
-                <h2 class="text-3xl md:text-4xl font-black italic mb-4 uppercase tracking-tighter text-white">Installation Guide</h2>
-                <p class="text-gray-400 text-sm max-w-xl mx-auto font-medium">Simple 3-step deployment to get fully activated in under 60 seconds.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group reveal delay-100">
-                    <div class="text-6xl font-black text-cyan-400/20 group-hover:text-cyan-400 transition-colors mb-4 font-mono">01</div>
-                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4 text-cyan-400 text-xl">
-                        <i class="fas fa-cloud-arrow-down"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 text-white">Download</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Download and install GX Kids APK on the target device.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group reveal delay-200">
-                    <div class="text-6xl font-black text-cyan-400/20 group-hover:text-cyan-400 transition-colors mb-4 font-mono">02</div>
-                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4 text-cyan-400 text-xl">
-                        <i class="fas fa-user-shield"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 text-white">Configure</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Grant accessibility permissions and stealthily hide the application icon.</p>
-                </div>
-
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group reveal delay-300">
-                    <div class="text-6xl font-black text-cyan-400/20 group-hover:text-cyan-400 transition-colors mb-4 font-mono">03</div>
-                    <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-4 text-cyan-400 text-xl">
-                        <i class="fas fa-satellite-dish"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2 text-white">Monitor</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Access real-time live feeds and logs from your parent dashboard.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PRICING PLANS -->
-    <section id="pricing" class="py-24 px-6 relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="reveal mb-16 text-center">
-                <h2 class="text-3xl md:text-4xl font-black italic mb-4 uppercase tracking-tighter text-white">Membership Plans</h2>
-                <p class="text-gray-400 text-sm max-w-xl mx-auto font-medium">Choose a flexible plan that matches your monitoring needs.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Weekly Plan -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col reveal delay-100">
-                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">Weekly Pass</span>
-                    <div class="text-4xl font-extrabold text-white mb-2 font-mono">$1.49</div>
-                    <p class="text-xs text-gray-400 mb-8">Short term access for quick checks.</p>
-                    <a href="https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share" target="_blank" class="mt-auto w-full py-3.5 border border-white/15 rounded-2xl hover:bg-white/10 hover:border-cyan-400 text-center font-bold text-sm transition-all">
-                        Subscribe Now
-                    </a>
-                </div>
-
-                <!-- Monthly Plan (POPULAR) -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col relative border-cyan-400/60 bg-gradient-to-b from-cyan-950/30 to-gray-900/40 shadow-2xl shadow-cyan-500/15 reveal delay-200">
-                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-400 to-blue-500 text-black text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
-                        🔥 MOST POPULAR
-                    </div>
-                    <span class="text-[11px] font-bold text-cyan-400 uppercase tracking-widest mb-3">Monthly Pass</span>
-                    <div class="text-4xl font-extrabold text-white mb-2 font-mono">$5.89</div>
-                    <p class="text-xs text-gray-400 mb-8">Best balance of flexibility & power.</p>
-                    <a href="https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share" target="_blank" class="mt-auto w-full py-3.5 bg-gradient-to-r from-cyan-400 to-blue-600 text-black hover:opacity-90 rounded-2xl text-center font-black text-sm transition-all shadow-lg shadow-cyan-500/30">
-                        Subscribe Now
-                    </a>
-                </div>
-
-                <!-- 6 Months Plan -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col reveal delay-300">
-                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">6 Months Pass</span>
-                    <div class="text-4xl font-extrabold text-white mb-2 font-mono">$29.99</div>
-                    <p class="text-xs text-gray-400 mb-8">Semi-annual extended surveillance.</p>
-                    <a href="https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share" target="_blank" class="mt-auto w-full py-3.5 border border-white/15 rounded-2xl hover:bg-white/10 hover:border-cyan-400 text-center font-bold text-sm transition-all">
-                        Subscribe Now
-                    </a>
-                </div>
-
-                <!-- Yearly Plan -->
-                <div class="glass-card p-8 rounded-3xl flex flex-col relative border-amber-500/40 reveal delay-400">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        BEST VALUE
-                    </div>
-                    <span class="text-[11px] font-bold text-amber-400 uppercase tracking-widest mb-3">Yearly VIP</span>
-                    <div class="text-4xl font-extrabold text-white mb-2 font-mono">$58.99</div>
-                    <p class="text-xs text-gray-400 mb-8">Complete 365 days unlimited power.</p>
-                    <a href="https://play.google.com/store/apps/details?id=com.monitor.guardx.parent&pcampaignid=web_share" target="_blank" class="mt-auto w-full py-3.5 border border-amber-500/40 hover:bg-amber-500/10 text-amber-300 rounded-2xl text-center font-bold text-sm transition-all">
-                        Subscribe Now
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ (FREQUENTLY ASKED QUESTIONS) ACCORDION -->
-    <section id="faq" class="py-24 px-6 relative z-10">
-        <div class="max-w-4xl mx-auto">
-            <div class="reveal mb-16 text-center">
-                <h2 class="text-3xl md:text-4xl font-black italic mb-4 uppercase tracking-tighter text-white">Frequently Asked Questions</h2>
-                <p class="text-gray-400 text-sm max-w-xl mx-auto font-medium">Clear answers to help you configure and use the GX suite effectively.</p>
-            </div>
-
-            <div class="space-y-4">
-                <!-- FAQ Item 1 -->
-                <div class="faq-item glass-card rounded-2xl p-6 cursor-pointer reveal delay-100" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center gap-4">
-                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-3">
-                            <i class="fas fa-eye-slash text-cyan-400"></i> Is GX Parent Control completely stealth and invisible?
-                        </h3>
-                        <i class="fas fa-chevron-down text-gray-400 faq-icon transition-transform duration-300"></i>
-                    </div>
-                    <div class="faq-content text-gray-400 text-sm leading-relaxed mt-3 pt-3 border-t border-white/5">
-                        Yes. After granting initial permissions, the app icon can be automatically hidden from the app drawer and home screen. It operates completely silently in the background without popups or battery drain alerts.
-                    </div>
-                </div>
-
-                <!-- FAQ Item 2 -->
-                <div class="faq-item glass-card rounded-2xl p-6 cursor-pointer reveal delay-150" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center gap-4">
-                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-3">
-                            <i class="fas fa-mobile-screen-button text-cyan-400"></i> Which Android versions are supported?
-                        </h3>
-                        <i class="fas fa-chevron-down text-gray-400 faq-icon transition-transform duration-300"></i>
-                    </div>
-                    <div class="faq-content text-gray-400 text-sm leading-relaxed mt-3 pt-3 border-t border-white/5">
-                        GX Parent Control supports Android 5.0 Lollipop all the way up to the latest Android 14 and Android 15 releases with full compatibility for Samsung, Xiaomi, Oppo, Vivo, and Google Pixel devices.
-                    </div>
-                </div>
-
-                <!-- FAQ Item 3 -->
-                <div class="faq-item glass-card rounded-2xl p-6 cursor-pointer reveal delay-200" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center gap-4">
-                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-3">
-                            <i class="fas fa-lock text-cyan-400"></i> How secure is the monitored telemetry data?
-                        </h3>
-                        <i class="fas fa-chevron-down text-gray-400 faq-icon transition-transform duration-300"></i>
-                    </div>
-                    <div class="faq-content text-gray-400 text-sm leading-relaxed mt-3 pt-3 border-t border-white/5">
-                        All telemetry, coordinates, and media payloads are encrypted with 256-bit AES cryptographic protocols before transmission. Only your authenticated parent account holds the decryption keys.
-                    </div>
-                </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="faq-item glass-card rounded-2xl p-6 cursor-pointer reveal delay-250" onclick="toggleFaq(this)">
-                    <div class="flex justify-between items-center gap-4">
-                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-3">
-                            <i class="fas fa-shield-virus text-cyan-400"></i> Does the target phone need Root or special modding?
-                        </h3>
-                        <i class="fas fa-chevron-down text-gray-400 faq-icon transition-transform duration-300"></i>
-                    </div>
-                    <div class="faq-content text-gray-400 text-sm leading-relaxed mt-3 pt-3 border-t border-white/5">
-                        No root is required! All features, including WhatsApp logs, live location, microphone recording, and screen capture, work seamlessly on standard stock Android devices.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SUPPORT & SECURITY -->
-    <section id="support" class="py-24 px-6 relative z-10">
-        <div class="max-w-3xl mx-auto glass-card p-8 sm:p-14 rounded-[36px] text-center border-cyan-500/30 shadow-2xl reveal">
-            <div class="w-16 h-16 rounded-3xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center mx-auto mb-6 text-cyan-400 text-2xl">
-                <i class="fas fa-headset"></i>
-            </div>
-
-            <h2 class="text-3xl font-black mb-4 italic uppercase tracking-tighter text-white">24/7 Priority Support</h2>
-            <p class="text-gray-400 text-sm mb-8 font-medium">Need setup assistance or custom inquiries? Reach our technical engineers directly.</p>
-
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="mailto:guardx.support@gmail.com" class="inline-flex items-center justify-center space-x-3 bg-white text-black px-8 py-4 rounded-2xl hover:bg-cyan-400 transition-all w-full sm:w-auto font-black shadow-lg shadow-white/10 hover:scale-105">
-                    <i class="fas fa-envelope text-lg"></i>
-                    <span class="text-base tracking-tight email-display">guardx.support@gmail.com</span>
-                </a>
-                <button onclick="copyToClipboard('guardx.support@gmail.com')" class="glass-panel border border-white/15 px-6 py-4 rounded-2xl text-sm font-bold text-gray-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-all flex items-center gap-2">
-                    <i class="fas fa-copy"></i> Copy Email
-                </button>
-            </div>
-
-            <!-- Humor / Feature Quote -->
-            <div class="mt-12 p-6 border border-dashed border-cyan-500/40 rounded-2xl bg-cyan-500/[0.03] special-quote">
-                <div class="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center justify-center gap-2">
-                    <i class="fas fa-shield-halved"></i> Stealth Guarantee
-                </div>
-                <p class="text-gray-300 font-medium italic text-sm md:text-base leading-relaxed">
-                    "Don't ever worry about getting caught by your girlfriend's brother! 
-                    GX Parent Control features a Quick Uninstall option for instant invisibility."
-                </p>
-            </div>
-
-            <!-- Payment Icons -->
-            <div class="mt-10 flex justify-center items-center space-x-8 opacity-40 hover:opacity-80 transition-opacity">
-                <i class="fab fa-cc-visa text-3xl hover:text-blue-400 transition-colors"></i>
-                <i class="fab fa-cc-mastercard text-3xl hover:text-red-400 transition-colors"></i>
-                <i class="fab fa-cc-paypal text-3xl hover:text-sky-400 transition-colors"></i>
-                <i class="fab fa-bitcoin text-3xl hover:text-amber-400 transition-colors"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="py-12 border-t border-white/10 text-center glass-panel relative z-10">
-        <div class="mb-4 flex justify-center items-center gap-6">
-            <a href="privacy" class="text-[11px] font-bold uppercase tracking-[0.25em] text-gray-400 hover:text-cyan-400 transition-colors">
-                Privacy Policy
-            </a>
-            <span class="text-gray-700">•</span>
-            <a href="#tutorial" class="text-[11px] font-bold uppercase tracking-[0.25em] text-gray-400 hover:text-cyan-400 transition-colors">
-                Video Guide
-            </a>
-            <span class="text-gray-700">•</span>
-            <a href="#faq" class="text-[11px] font-bold uppercase tracking-[0.25em] text-gray-400 hover:text-cyan-400 transition-colors">
-                FAQ
-            </a>
-        </div>
-        <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500 font-mono">
-            © 2026 GX Parent Control Systems • Military Encrypted Monitoring
-        </p>
-    </footer>
-
-    <!-- INTERACTIVE JAVASCRIPT SYSTEM -->
-    <script>
-        // 1. Reading Progress Bar & Back to Top Toggle
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("scroll-progress").style.width = scrolled + "%";
-
-            const backToTop = document.getElementById("back-to-top");
-            if (winScroll > 400) {
-                backToTop.classList.add("show");
-            } else {
-                backToTop.classList.remove("show");
-            }
-        });
-
-        // 2. Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        // 3. FAQ Accordion Interaction
-        function toggleFaq(element) {
-            const isActive = element.classList.contains('active');
-            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
-            if (!isActive) {
-                element.classList.add('active');
-            }
-        }
-
-        // 4. Copy to Clipboard with Toast Notification
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                const toast = document.getElementById('toast');
-                document.getElementById('toast-text').innerText = 'Copied to clipboard!';
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2500);
-            });
-        }
-
-        // 5. Scroll Reveal System (Intersection Observer)
-        document.addEventListener('DOMContentLoaded', () => {
-            const reveals = document.querySelectorAll('.reveal');
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px 0px -50px 0px',
-                threshold: 0.1
-            };
-
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            reveals.forEach(el => revealObserver.observe(el));
-        });
-
-        // 6. Interactive Floating Cyber Particles (HTML5 Canvas)
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-                this.opacity = Math.random() * 0.5 + 0.2;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 210, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 45; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // 7. Live Active Devices Counter
-        (function() {
-            const BASE_COUNT = 15420;
-            const STORAGE_KEY = 'gx_active_devices';
-            const VISIT_KEY   = 'gx_last_visit';
-
-            // Load or initialise stored count
-            let stored = parseInt(localStorage.getItem(STORAGE_KEY)) || BASE_COUNT;
-
-            // Each new visit (or after 5 min gap) bumps by 1-4 randomly
-            const lastVisit = parseInt(localStorage.getItem(VISIT_KEY)) || 0;
-            const now = Date.now();
-            if (now - lastVisit > 5 * 60 * 1000) {   // 5-minute cooldown
-                stored += Math.floor(Math.random() * 4) + 1;
-                localStorage.setItem(STORAGE_KEY, stored);
-                localStorage.setItem(VISIT_KEY, now);
-            }
-
-            const el = document.getElementById('active-devices-counter');
-
-            // Smooth count-up animation from (stored - 30) to stored on page load
-            function animateCount(from, to, duration) {
-                const start = performance.now();
-                function step(ts) {
-                    const progress = Math.min((ts - start) / duration, 1);
-                    // Ease-out
-                    const ease = 1 - Math.pow(1 - progress, 3);
-                    const val = Math.round(from + (to - from) * ease);
-                    el.textContent = val.toLocaleString() + '+';
-                    if (progress < 1) requestAnimationFrame(step);
-                }
-                requestAnimationFrame(step);
-            }
-
-            // Start animation after a short delay (so the reveal animation plays first)
-            setTimeout(() => {
-                animateCount(stored - 30, stored, 1800);
-            }, 600);
-
-            // Slow live-tick: every 8-18 seconds add 1 device (simulates live activity)
-            function scheduleTick() {
-                const delay = (Math.random() * 10000) + 8000;   // 8-18 s
-                setTimeout(() => {
-                    stored += 1;
-                    localStorage.setItem(STORAGE_KEY, stored);
-                    // Flash the counter cyan for 400ms to draw attention
-                    el.style.color = '#00d2ff';
-                    el.style.textShadow = '0 0 18px rgba(0,210,255,0.8)';
-                    el.textContent = stored.toLocaleString() + '+';
-                    setTimeout(() => {
-                        el.style.color = '';
-                        el.style.textShadow = '';
-                    }, 400);
-                    scheduleTick();
-                }, delay);
-            }
-            scheduleTick();
-        })();
-    </script>
+  // extra polish: scroll progress, header shadow, back-to-top, reveal-on-scroll
+  document.documentElement.classList.add("js");
+  var prog = document.getElementById("prog"), hdr = document.querySelector("header"), up = document.getElementById("top-btn");
+  function onScroll() {
+    var h = document.documentElement, y = h.scrollTop, max = h.scrollHeight - h.clientHeight;
+    prog.style.width = (max > 0 ? y / max * 100 : 0) + "%";
+    hdr.classList.toggle("scrolled", y > 8);
+    up.classList.toggle("show", y > 700);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  var targets = document.querySelectorAll("section h2, .lead, .video, .dl, .stats li, .ft li, .pkg, .steps li, .trouble, details");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    targets.forEach(function (t, i) {
+      t.classList.add("rv");
+      var sib = Array.prototype.indexOf.call(t.parentNode.children, t);
+      t.style.setProperty("--d", Math.min(sib % 4, 3) * 0.07 + "s");
+      io.observe(t);
+    });
+  } else { targets.forEach(function (t) { t.classList.add("in"); }); }
+})();
+</script>
 </body>
 </html>
