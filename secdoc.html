@@ -1,796 +1,827 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GX Parent Control | Security &amp; Architecture Whitepaper</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GX Parent Control | Security &amp; Architecture Whitepaper</title>
+<meta name="description" content="How GX Parental Control protects family data with AES-256-GCM encryption, ephemeral relay architecture, and zero master secrets in the APK.">
+<link rel="canonical" href="https://guardx.site/secdoc">
+<meta name="theme-color" content="#1F1F1D">
+<link rel="icon" type="image/png" href="https://guardx.site/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1F1F1D;--paper:#262624;--raise:#2E2E2B;--line:#3D3D39;--text:#F2F1EC;--muted:#A9A8A0;--amber:#FFB547;--amber-d:#F29B1E;--mint:#5BD6A4;--r:14px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font:400 17px/1.65 "DM Sans",system-ui,sans-serif;color:var(--text);background-color:var(--bg);background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1.6px);background-size:14px 14px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;letter-spacing:-.02em}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
+h2{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+section{padding:72px 0}
+.lead{color:var(--muted);max-width:60ch;margin-top:14px}
+.alt{background:var(--paper);background-image:none}
 
-    <link rel="icon" type="image/png" href="logo.png">
+/* progress bar */
+#prog{position:fixed;inset:0 auto auto 0;height:3px;width:0;background:var(--amber);z-index:50}
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons 6.5.0 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(31,31,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .25s}
+header.scrolled{box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.15rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo img{width:30px;height:30px;object-fit:contain}
+.badge{font:700 .7rem "DM Sans",sans-serif;padding:3px 10px;border-radius:999px;background:rgba(255,181,71,.14);border:1px solid rgba(255,181,71,.3);color:var(--amber);letter-spacing:.06em}
+nav{display:flex;gap:26px;font-size:.95rem;font-weight:500}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--text)}
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #030712;
-            color: #e5e7eb;
-            overflow-x: hidden;
-            line-height: 1.7;
-        }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 22px;border-radius:999px;font:700 .95rem "DM Sans",sans-serif;text-decoration:none;border:2px solid var(--amber);transition:transform .15s,background .15s;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.btn-main{background:linear-gradient(180deg,#FFC565,#FFB547);color:#1F1F1D;box-shadow:0 8px 22px rgba(255,181,71,.25)}
+.btn-main:hover{background:var(--amber-d);border-color:var(--amber-d);box-shadow:0 12px 28px rgba(255,181,71,.38)}
+.btn-alt{background:transparent;color:var(--text);border-color:#5A5A54}
+.btn-alt:hover{background:var(--text);color:#1F1F1D;border-color:var(--text)}
+.btn svg,.btn-icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00d2ff; }
+/* hero */
+.hero{padding:56px 0 60px;border-bottom:1px solid var(--line)}
+.hero .tag-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:999px;background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.25);color:var(--amber);font:.7rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.08em;margin-bottom:20px}
+.hero h1{max-width:18ch}
+.hero p{color:var(--muted);max-width:60ch;margin-top:16px;font-size:1.05rem}
 
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #00d2ff, #3b82f6, #a855f7);
-            z-index: 100;
-            width: 0%;
-            transition: width 0.1s ease-out;
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
-        }
+/* spec pills row */
+.spec-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:36px}
+.spec-pill{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px;transition:border-color .2s,transform .2s}
+.spec-pill:hover{border-color:var(--amber);transform:translateY(-3px)}
+.spec-label{font:.68rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.spec-val{font:700 .95rem "Bricolage Grotesque",sans-serif;color:var(--text)}
+.spec-sub{font:.78rem "DM Sans",sans-serif;color:var(--muted);margin-top:2px}
 
-        .bg-cyber-grid {
-            background-image:
-                radial-gradient(circle at 50% 0%, rgba(0, 210, 255, 0.14) 0%, transparent 55%),
-                radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.10) 0%, transparent 45%),
-                radial-gradient(circle at 15% 75%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
-                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-        }
+/* layout: sidebar + content */
+.doc-wrap{display:grid;grid-template-columns:240px 1fr;gap:48px;padding-top:52px;padding-bottom:72px;align-items:start}
+aside.toc-col{position:sticky;top:84px}
+.toc-box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.toc-title{font:.72rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.toc-link{display:block;padding:7px 10px 7px 12px;border-left:2px solid transparent;border-radius:0 8px 8px 0;font:.88rem "DM Sans",sans-serif;color:var(--muted);text-decoration:none;transition:color .2s,border-color .2s,background .2s;line-height:1.4}
+.toc-link:hover{color:var(--text)}
+.toc-link.active{color:var(--text);border-left-color:var(--amber);background:rgba(255,181,71,.06)}
 
-        .text-gradient {
-            background: linear-gradient(135deg, #00d2ff 0%, #3b82f6 50%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* article sections */
+.article-sections{display:flex;flex-direction:column;gap:60px}
+.sec-header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.sec-num{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--raise);font:700 .88rem "Bricolage Grotesque",sans-serif;color:var(--amber);flex:none}
+.sec-num.star{font-size:1rem}
 
-        .glass-card {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(148, 163, 184, 0.12);
-        }
+/* cards */
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:24px;transition:border-color .2s,transform .2s,box-shadow .2s}
+.card:hover{border-color:rgba(255,181,71,.35);transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.card-grid{display:grid;gap:14px}
+.card-grid.cols-2{grid-template-columns:1fr 1fr}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.card-grid.cols-6{grid-template-columns:repeat(3,1fr)}
+.card-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;margin-bottom:14px;flex:none}
+.card-icon svg{width:22px;height:22px}
+.card-body-row{display:flex;gap:16px;align-items:flex-start}
+.card-body-row .card-icon{margin-bottom:0}
 
-        .glass-card:hover {
-            border-color: rgba(0, 210, 255, 0.3);
-        }
+/* code snippets */
+.code-block{background:#141412;border:1px solid var(--line);border-radius:10px;padding:14px 16px;font:.8rem "DM Sans",monospace;color:var(--muted);line-height:1.8}
+.code-block li{list-style:none;padding-left:0}
+.code-block li::before{content:"• ";color:var(--amber)}
 
-        .toc-link.active {
-            color: #00d2ff;
-            border-left-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.06);
-        }
+/* info callout */
+.callout{border-radius:var(--r);padding:16px 20px;display:flex;gap:14px;font:.9rem "DM Sans",sans-serif;line-height:1.6}
+.callout.amber{background:rgba(255,181,71,.08);border:1px solid rgba(255,181,71,.22);color:#F2F1EC}
+.callout.mint{background:rgba(91,214,164,.08);border:1px solid rgba(91,214,164,.22);color:#F2F1EC}
+.callout.rose{background:rgba(255,100,80,.07);border:1px solid rgba(255,100,80,.2);color:#F2F1EC}
+.callout.purple{background:rgba(168,100,255,.07);border:1px solid rgba(168,100,255,.2);color:#F2F1EC}
+.callout-icon{flex:none;margin-top:1px}
+.callout strong{color:var(--text)}
 
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s ease, opacity 0.3s ease;
-            opacity: 0;
-        }
-        .faq-item.open .faq-answer {
-            max-height: 600px;
-            opacity: 1;
-        }
-        .faq-item.open .faq-chevron {
-            transform: rotate(180deg);
-            color: #00d2ff;
-        }
-    </style>
+/* pipeline steps */
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.pipe-step{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:18px 14px;text-align:center;transition:border-color .2s}
+.pipe-step.highlight{background:rgba(91,214,164,.08);border-color:rgba(91,214,164,.3)}
+.pipe-step svg{width:28px;height:28px;margin:0 auto 10px;display:block;fill:none;stroke:var(--amber);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pipe-step.highlight svg{stroke:var(--mint)}
+.pipe-step strong{display:block;font:700 .88rem "Bricolage Grotesque",sans-serif;color:var(--text);margin-bottom:4px}
+.pipe-step span{font:.8rem "DM Sans",sans-serif;color:var(--muted)}
+
+/* ordered step list */
+.step-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:sl}
+.step-list li{counter-increment:sl;display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start;padding:18px 20px;background:var(--raise);border:1px solid var(--line);border-radius:var(--r)}
+.step-list li::before{content:counter(sl);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--amber);color:#1F1F1D;font:800 1rem "Bricolage Grotesque",sans-serif}
+.step-list li p{color:var(--muted);margin-top:4px;font-size:.92rem}
+
+/* check list */
+.check-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:12px}
+.check-list li{display:flex;gap:12px;align-items:flex-start;font:.92rem "DM Sans",sans-serif;color:var(--muted)}
+.check-list li::before{content:"";display:block;flex:none;width:14px;height:8px;border:solid var(--mint);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg);margin-top:7px}
+.check-list strong{color:var(--text)}
+
+/* comparison table */
+.cmp-wrap{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+thead tr{background:var(--raise);border-bottom:1px solid var(--line)}
+th{padding:14px 18px;text-align:center;font:700 .9rem "Bricolage Grotesque",sans-serif;color:var(--muted)}
+th:first-child{text-align:left}
+th.hl{color:var(--amber)}
+tbody tr{border-bottom:1px solid rgba(61,61,57,.5);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+td{padding:12px 18px;color:var(--muted);vertical-align:middle}
+td:first-child{color:var(--text);font-weight:500}
+td.check{color:var(--mint);font-weight:700;text-align:center}
+td.neutral{text-align:center;font-size:.82rem}
+.table-note{padding:10px 18px;font:.8rem "DM Sans",sans-serif;color:var(--muted);border-top:1px solid var(--line);background:var(--raise)}
+
+/* data rights columns */
+.data-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.data-col-label{font:.72rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.data-col-label.c1{color:var(--amber)}
+.data-col-label.c2{color:#6BAED6}
+.data-col-label.c3{color:var(--mint)}
+.data-col li{list-style:none;font:.82rem "DM Sans",sans-serif;color:var(--muted);padding:4px 0 4px 14px;position:relative}
+.data-col li::before{content:"•";position:absolute;left:0;color:var(--muted)}
+
+/* disclosure steps */
+.disc-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.disc-step{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.disc-step .disc-label{font:.7rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+
+/* FAQ accordion */
+.faq-list{display:flex;flex-direction:column;gap:8px}
+details.faq-item{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+details.faq-item[open]{border-color:rgba(255,181,71,.3)}
+details.faq-item summary{cursor:pointer;list-style:none;padding:18px 22px;font:600 1rem "DM Sans",sans-serif;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:14px}
+details.faq-item summary::-webkit-details-marker{display:none}
+details.faq-item summary::after{content:"+";font:500 1.6rem/1 "DM Sans",sans-serif;color:var(--amber);transition:transform .2s;flex:none}
+details.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-body{padding:0 22px 18px;color:var(--muted);font-size:.93rem;border-top:1px solid var(--line);padding-top:14px}
+
+/* footer */
+footer{background:#141413;color:var(--muted);padding:34px 0;font-size:.88rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+footer a{text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--text)}
+.foot-links{display:flex;flex-wrap:wrap;gap:18px}
+
+/* back to top */
+#top-btn{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:2px solid var(--amber);background:var(--bg);color:var(--amber);display:grid;place-items:center;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s;z-index:30}
+#top-btn.show{opacity:1;pointer-events:auto;transform:none}
+#top-btn:hover{background:var(--amber);color:#1F1F1D}
+#top-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* selection */
+::selection{background:var(--amber);color:#1F1F1D}
+html{scrollbar-color:#4A4A45 var(--bg)}
+
+/* responsive */
+@media(max-width:900px){
+  .doc-wrap{grid-template-columns:1fr}
+  aside.toc-col{display:none}
+  .spec-row{grid-template-columns:repeat(2,1fr)}
+  .spec-row .spec-pill:last-child{grid-column:span 2}
+  .card-grid.cols-2,.card-grid.cols-3,.card-grid.cols-6,.disc-row,.data-cols{grid-template-columns:1fr}
+  .pipeline{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  nav{display:none}
+  .pipeline{grid-template-columns:1fr}
+  .spec-row{grid-template-columns:1fr}
+  .spec-row .spec-pill:last-child{grid-column:span 1}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
-<body class="bg-cyber-grid min-h-screen">
+<body>
+<div id="prog"></div>
 
-    <!-- Top Reading Progress Bar -->
-    <div id="scroll-progress"></div>
+<!-- Header -->
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="GX Parental Control home">
+      <img src="https://guardx.site/logo.png" alt="GX Parental Control logo">
+      GX Parental Control
+      <span class="badge">SECURITY DOCS</span>
+    </a>
+    <nav aria-label="Main">
+      <a href="#encryption">Encryption</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#faq">Technical FAQ</a>
+    </nav>
+    <a class="btn btn-alt" href="index.html" style="padding:10px 18px;font-size:.88rem">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      Back to Home
+    </a>
+  </div>
+</header>
 
-    <!-- Top Navigation -->
-    <header class="sticky top-0 z-50 backdrop-blur-xl bg-slate-950/80 border-b border-slate-800/70">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                    <i class="fa-solid fa-shield-halved text-white text-sm"></i>
-                </div>
-                <div>
-                    <span class="font-extrabold tracking-tight text-white text-base">GX Parent Control</span>
-                    <span class="hidden sm:inline-block ml-2 text-[11px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">SECURITY DOCS</span>
-                </div>
-            </a>
+<main id="top">
 
-            <div class="flex items-center gap-3">
-                <a href="#faq" class="hidden md:inline-flex text-sm text-slate-300 hover:text-cyan-400 transition px-3 py-1.5">Technical FAQ</a>
-                <a href="index.html" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/70 transition">
-                    <i class="fa-solid fa-arrow-left text-cyan-400"></i>
-                    <span>Back to Home</span>
-                </a>
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="tag-pill">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      SECURITY &amp; PRIVACY ARCHITECTURE WHITEPAPER
+    </div>
+    <h1>How GX Parent Control Protects <span style="color:var(--amber);white-space:nowrap">Family Data &amp; Privacy</span></h1>
+    <p>Parental monitoring software handles sensitive family information. Instead of hiding behind vague marketing claims, this document explains our exact cryptographic layers, ephemeral relay design, key provisioning model, application hardening, and the engineering trade-offs behind every architectural decision.</p>
+
+    <!-- Spec Pills -->
+    <div class="spec-row">
+      <div class="spec-pill">
+        <div class="spec-label">Payload Cipher</div>
+        <div class="spec-val">AES-256-GCM</div>
+        <div class="spec-sub">12-byte random IV</div>
+      </div>
+      <div class="spec-pill">
+        <div class="spec-label">Transport</div>
+        <div class="spec-val">HTTPS &amp; MQTTS</div>
+        <div class="spec-sub">TLS Encrypted Channels</div>
+      </div>
+      <div class="spec-pill">
+        <div class="spec-label">Live Streams</div>
+        <div class="spec-val">WebRTC DTLS/SRTP</div>
+        <div class="spec-sub">Encrypted Media P2P</div>
+      </div>
+      <div class="spec-pill">
+        <div class="spec-label">Log Retention</div>
+        <div class="spec-val">Ephemeral Relay</div>
+        <div class="spec-sub">Purged on Delivery</div>
+      </div>
+      <div class="spec-pill">
+        <div class="spec-label">Client Secrets</div>
+        <div class="spec-val">Server-Isolated</div>
+        <div class="spec-sub">Zero Master Keys in APK</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Doc layout -->
+<div class="wrap doc-wrap">
+
+  <!-- TOC Sidebar -->
+  <aside class="toc-col" aria-label="Table of contents">
+    <div class="toc-box">
+      <div class="toc-title">Architecture Sections</div>
+      <nav id="toc-nav">
+        <a href="#trust-badges" class="toc-link">0. Trust Commitments</a>
+        <a href="#encryption" class="toc-link">1. Layered Encryption</a>
+        <a href="#ephemeral-relay" class="toc-link">2. Ephemeral Relay Queue</a>
+        <a href="#key-provisioning" class="toc-link">3. Key Provisioning Broker</a>
+        <a href="#apk-hardening" class="toc-link">4. APK Hardening &amp; Reality</a>
+        <a href="#network-resilience" class="toc-link">5. Certificate Trust &amp; Channels</a>
+        <a href="#tenant-isolation" class="toc-link">6. Tenant &amp; ACL Isolation</a>
+        <a href="#consent-transparency" class="toc-link">7. Consent &amp; Transparency</a>
+        <a href="#comparison" class="toc-link">8. App Comparison</a>
+        <a href="#data-rights" class="toc-link">9. Data Rights &amp; Deletion</a>
+        <a href="#disclosure" class="toc-link">10. Responsible Disclosure</a>
+        <a href="#faq" class="toc-link">11. Technical FAQ</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Article Content -->
+  <div class="article-sections">
+
+    <!-- 0. Trust Commitments -->
+    <section id="trust-badges" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num star">★</span>
+        <h2>Our Core Security Commitments</h2>
+      </div>
+      <div class="card-grid cols-6">
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(91,214,164,.12);border:1px solid rgba(91,214,164,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#5BD6A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9 19.1 19.1"/></svg>
             </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="relative pt-14 pb-12 border-b border-slate-800/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-4xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-xs font-mono mb-5">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>SECURITY &amp; PRIVACY ARCHITECTURE WHITEPAPER</span>
-                </div>
-                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight mb-5">
-                    How GX Parent Control Protects <span class="text-gradient">Family Data &amp; Privacy</span>
-                </h1>
-                <p class="text-base sm:text-lg text-slate-300 leading-relaxed mb-8">
-                    Parental monitoring software handles sensitive family information. Instead of hiding behind vague marketing claims, this document explains our exact cryptographic layers, ephemeral relay design, key provisioning model, application hardening, and the engineering trade-offs behind every architectural decision.
-                </p>
-
-                <!-- Key Spec Pills -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-                    <div class="glass-card rounded-xl p-3.5">
-                        <div class="text-[11px] font-mono text-cyan-400 uppercase">Payload Cipher</div>
-                        <div class="text-sm font-bold text-white mt-0.5">AES-256-GCM</div>
-                        <div class="text-[11px] text-slate-400">12-byte random IV</div>
-                    </div>
-                    <div class="glass-card rounded-xl p-3.5">
-                        <div class="text-[11px] font-mono text-blue-400 uppercase">Transport</div>
-                        <div class="text-sm font-bold text-white mt-0.5">HTTPS &amp; MQTTS</div>
-                        <div class="text-[11px] text-slate-400">TLS Encrypted Channels</div>
-                    </div>
-                    <div class="glass-card rounded-xl p-3.5">
-                        <div class="text-[11px] font-mono text-purple-400 uppercase">Live Streams</div>
-                        <div class="text-sm font-bold text-white mt-0.5">WebRTC DTLS/SRTP</div>
-                        <div class="text-[11px] text-slate-400">Encrypted Media P2P</div>
-                    </div>
-                    <div class="glass-card rounded-xl p-3.5">
-                        <div class="text-[11px] font-mono text-emerald-400 uppercase">Log Retention</div>
-                        <div class="text-sm font-bold text-white mt-0.5">Ephemeral Relay</div>
-                        <div class="text-[11px] text-slate-400">Purged on Delivery</div>
-                    </div>
-                    <div class="glass-card rounded-xl p-3.5 col-span-2 sm:col-span-1">
-                        <div class="text-[11px] font-mono text-amber-400 uppercase">Client Secrets</div>
-                        <div class="text-sm font-bold text-white mt-0.5">Server-Isolated</div>
-                        <div class="text-[11px] text-slate-400">Zero Master Keys in APK</div>
-                    </div>
-                </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">No Third-Party Data Sales</h3>
+              <p style="font-size:.82rem;color:var(--muted)">Family monitoring data is never sold, shared with advertisers, or transferred to third parties under any circumstances.</p>
             </div>
+          </div>
         </div>
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(255,181,71,.12);border:1px solid rgba(255,181,71,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Encrypted Transport Always</h3>
+              <p style="font-size:.82rem;color:var(--muted)">All sensitive data travels over TLS-encrypted channels (HTTPS &amp; MQTTS). Sensitive payloads are additionally encrypted at the client before transmission.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(100,160,255,.12);border:1px solid rgba(100,160,255,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#6BAED6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Auto-Purge on Delivery</h3>
+              <p style="font-size:.82rem;color:var(--muted)">Activity logs are deleted from relay servers immediately after the parent device retrieves them. No permanent log warehouse exists.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(200,130,255,.12);border:1px solid rgba(200,130,255,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#C87EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Visible Monitoring — Always</h3>
+              <p style="font-size:.82rem;color:var(--muted)">The child device displays a permanent system notification while monitoring is active. GX is consent-based family software — not covert spyware.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(255,181,71,.12);border:1px solid rgba(255,181,71,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Strict Family Isolation</h3>
+              <p style="font-size:.82rem;color:var(--muted)">Per-device encryption keys and server-side ACLs ensure no parent or device can access another family's data.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body-row">
+            <div class="card-icon" style="background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FF6060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Zero Master Secrets in APK</h3>
+              <p style="font-size:.82rem;color:var(--muted)">Administrative credentials and signing secrets are server-side only. Decompiling the APK exposes no sensitive master keys.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Main Content + Sticky TOC -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-
-            <!-- Sticky Sidebar TOC -->
-            <aside class="hidden lg:block lg:col-span-3">
-                <div class="sticky top-24 glass-card rounded-2xl p-5">
-                    <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-4">Architecture Sections</div>
-                    <nav class="space-y-1 text-sm" id="toc-nav">
-                        <a href="#trust-badges" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">0. Trust Commitments</a>
-                        <a href="#encryption" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">1. Layered Encryption</a>
-                        <a href="#ephemeral-relay" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">2. Ephemeral Relay Queue</a>
-                        <a href="#key-provisioning" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">3. Key Provisioning Broker</a>
-                        <a href="#apk-hardening" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">4. APK Hardening &amp; Reality</a>
-                        <a href="#network-resilience" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">5. Certificate Trust &amp; Channels</a>
-                        <a href="#tenant-isolation" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">6. Tenant &amp; ACL Isolation</a>
-                        <a href="#consent-transparency" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">7. Consent &amp; Transparency</a>
-                        <a href="#comparison" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">8. App Comparison</a>
-                        <a href="#data-rights" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">9. Data Rights &amp; Deletion</a>
-                        <a href="#disclosure" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">10. Responsible Disclosure</a>
-                        <a href="#faq" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">11. Technical FAQ</a>
-                    </nav>
-                </div>
-            </aside>
-
-            <!-- Article Content -->
-            <div class="lg:col-span-9 space-y-14">
-
-                <!-- 0. Trust Badges -->
-                <section id="trust-badges" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-6">
-                        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">★</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Our Core Security Commitments</h2>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-ban text-emerald-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">No Third-Party Data Sales</div>
-                                <div class="text-xs text-slate-400">Family monitoring data is never sold, shared with advertisers, or transferred to third parties under any circumstances.</div>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-lock text-cyan-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">Encrypted Transport Always</div>
-                                <div class="text-xs text-slate-400">All sensitive data travels over TLS-encrypted channels (HTTPS &amp; MQTTS). Sensitive payloads are additionally encrypted at the client before transmission.</div>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-trash-can text-blue-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">Auto-Purge on Delivery</div>
-                                <div class="text-xs text-slate-400">Activity logs are deleted from relay servers immediately after the parent device retrieves them. No permanent log warehouse exists.</div>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-eye text-purple-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">Visible Monitoring — Always</div>
-                                <div class="text-xs text-slate-400">The child device displays a permanent system notification while monitoring is active. GX is consent-based family software — not covert spyware.</div>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-users text-amber-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">Strict Family Isolation</div>
-                                <div class="text-xs text-slate-400">Per-device encryption keys and server-side ACLs ensure no parent or device can access another family's data.</div>
-                            </div>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
-                            <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-code text-rose-400"></i>
-                            </div>
-                            <div>
-                                <div class="font-bold text-white text-sm mb-1">Zero Master Secrets in APK</div>
-                                <div class="text-xs text-slate-400">Administrative credentials and signing secrets are server-side only. Decompiling the APK exposes no sensitive master keys.</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 1. Layered Encryption -->
-                <section id="encryption" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">01</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Defense-in-Depth Cryptography</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">
-                        Relying on a single layer of security (such as HTTPS alone) is insufficient for sensitive family telemetry. GX Parent Control applies <strong class="text-white">independent cryptographic protection at both the payload layer and the transport layer</strong>, ensuring data remains protected before, during, and after transit.
-                    </p>
-
-                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-key text-cyan-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Client-Side AES-256-GCM</h3>
-                            </div>
-                            <p class="text-sm text-slate-300 mb-3">
-                                Sensitive activity records—including messages, notifications, and keystroke events—are encrypted locally on the child device <em>before</em> serialization or transmission.
-                            </p>
-                            <ul class="text-xs font-mono text-slate-400 space-y-1.5 bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-                                <li>• Algorithm: AES/GCM/NoPadding (256-bit)</li>
-                                <li>• IV: Unique 12-byte SecureRandom per item</li>
-                                <li>• Integrity: 128-bit GCM authentication tag</li>
-                            </ul>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-tower-broadcast text-blue-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Encrypted Transport &amp; Media</h3>
-                            </div>
-                            <p class="text-sm text-slate-300 mb-3">
-                                Encrypted payloads travel inside TLS tunnels, while real-time audio, camera, and screen streams bypass REST storage entirely via WebRTC.
-                            </p>
-                            <ul class="text-xs font-mono text-slate-400 space-y-1.5 bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
-                                <li>• REST APIs: HTTPS (TLS)</li>
-                                <li>• Real-Time Control: MQTTS (TLS)</li>
-                                <li>• Live Streams: WebRTC DTLS + SRTP</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="rounded-xl bg-cyan-950/30 border border-cyan-500/25 p-4 text-sm text-cyan-100 flex gap-3">
-                        <i class="fa-solid fa-circle-info text-cyan-400 mt-1 shrink-0"></i>
-                        <div>
-                            <strong class="text-white">Why GCM instead of basic CBC?</strong> AES-GCM is an <em>authenticated</em> cipher. If even a single bit of ciphertext is modified in transit or storage, decryption automatically fails rather than silently producing corrupted output.
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 2. Ephemeral Relay Architecture -->
-                <section id="ephemeral-relay" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 font-mono text-sm font-bold">02</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Ephemeral Relay Architecture (No Permanent Log Warehouse)</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">
-                        Many monitoring apps dump every SMS, call log, and notification into a permanent third-party cloud database where years of family history accumulate indefinitely. GX Parent Control uses an <strong class="text-white">ephemeral relay queue</strong> instead.
-                    </p>
-
-                    <!-- Visual Pipeline -->
-                    <div class="glass-card rounded-2xl p-6 mb-6">
-                        <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-4">Data Delivery &amp; Auto-Purge Lifecycle</div>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-                            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center">
-                                <i class="fa-solid fa-mobile-screen text-cyan-400 text-xl mb-2"></i>
-                                <div class="font-bold text-white text-sm">1. Child Device</div>
-                                <div class="text-xs text-slate-400 mt-1">Encrypts payload locally with AES-256-GCM</div>
-                            </div>
-                            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center">
-                                <i class="fa-solid fa-server text-blue-400 text-xl mb-2"></i>
-                                <div class="font-bold text-white text-sm">2. Relay Queue</div>
-                                <div class="text-xs text-slate-400 mt-1">Holds encrypted batch temporarily in transit</div>
-                            </div>
-                            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-center">
-                                <i class="fa-solid fa-user-shield text-purple-400 text-xl mb-2"></i>
-                                <div class="font-bold text-white text-sm">3. Parent Device</div>
-                                <div class="text-xs text-slate-400 mt-1">Authenticates, fetches &amp; decrypts locally</div>
-                            </div>
-                            <div class="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-4 text-center">
-                                <i class="fa-solid fa-trash-can-arrow-up text-emerald-400 text-xl mb-2"></i>
-                                <div class="font-bold text-emerald-300 text-sm">4. Auto-Purged</div>
-                                <div class="text-xs text-slate-300 mt-1">Deleted from relay immediately after delivery</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="font-bold text-white mb-2">Why use a private relay database instead of storing logs in public BaaS tables?</h3>
-                        <p class="text-sm text-slate-300">
-                            Public Backend-as-a-Service (BaaS) real-time databases are optimized for persistent state, not high-frequency ephemeral queuing, and often retain backups across multi-tenant cloud infrastructure. By operating a dedicated private relay queue with immediate read-and-delete semantics, GX Parent Control minimizes data residency, eliminates third-party log retention, and keeps historical data strictly on the parent's own device.
-                        </p>
-                    </div>
-                </section>
-
-                <!-- 3. Key Provisioning Broker -->
-                <section id="key-provisioning" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 font-mono text-sm font-bold">03</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Server-Assisted Key Provisioning: The Engineering Trade-Off</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">
-                        When a child device enrolls, it generates a fresh, cryptographically random <strong class="text-white">256-bit (32-byte) AES key</strong>. How that key reaches the parent device is one of the most important architectural decisions in any monitoring platform.
-                    </p>
-
-                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="text-xs font-mono text-amber-400 uppercase mb-2">Why Not Manual Key Entry?</div>
-                            <p class="text-sm text-slate-300">
-                                If parents had to manually copy a 64-character hexadecimal key—or re-scan a physical QR code every time they reinstall the app, clear cache, or switch phones—any lost key would permanently lock the parent out of their child's safety monitoring with no recovery path.
-                            </p>
-                        </div>
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="text-xs font-mono text-emerald-400 uppercase mb-2">How GX Solves It Safely</div>
-                            <p class="text-sm text-slate-300">
-                                GX uses an <strong class="text-white">Authenticated Key Provisioning Broker</strong>. The key is transmitted over HTTPS (TLS), immediately wrapped at rest on the server using <strong class="text-white">AES-256-GCM envelope encryption</strong>, and released only to a JWT-authenticated parent who claims the valid pairing code.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="font-bold text-white mb-3">Step-by-Step Pairing Security</h3>
-                        <ol class="space-y-2.5 text-sm text-slate-300 list-decimal list-inside">
-                            <li><strong class="text-white">Device Enrollment:</strong> The child device generates a random 256-bit AES key and a high-entropy bootstrap token, registering over HTTPS.</li>
-                            <li><strong class="text-white">Envelope Encryption at Rest:</strong> The provisioning server never stores the raw key or device credentials in plaintext; both are sealed with server-side <span class="font-mono text-cyan-300">AES-256-GCM</span> before writing to disk.</li>
-                            <li><strong class="text-white">Authenticated Claim:</strong> To retrieve the key, the parent must present a valid Supabase JWT session token alongside the pairing code, protected by strict per-IP and per-account rate limits.</li>
-                            <li><strong class="text-white">Broker Credential Isolation:</strong> Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship.</li>
-                        </ol>
-                    </div>
-                </section>
-
-                <!-- 4. APK Hardening -->
-                <section id="apk-hardening" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-sm font-bold">04</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">APK Hardening &amp; The Reality of Decompilation</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">
-                        Every Android APK—whether it is a banking app, a messaging app, or a system utility—is a ZIP archive containing compiled Dalvik bytecode (<span class="font-mono text-slate-200">.dex</span>). Anyone can open any APK with tools like <span class="font-mono text-slate-200">jadx</span> or <span class="font-mono text-slate-200">apktool</span>. <strong class="text-white">Static decompilation is a normal property of Android, not a security flaw.</strong>
-                    </p>
-
-                    <div class="grid sm:grid-cols-3 gap-4 mb-6">
-                        <div class="glass-card rounded-2xl p-5">
-                            <i class="fa-solid fa-eye-slash text-cyan-400 text-lg mb-3"></i>
-                            <h3 class="font-bold text-white text-sm mb-2">R8 &amp; Selective String Protection</h3>
-                            <p class="text-xs text-slate-300">
-                                Both apps run full R8 shrinking, aggressive overloading, package flattening, and debug-info stripping. The child service additionally applies compile-time string encryption (StringFog) and asset encryption (<span class="font-mono text-slate-200">AES/CBC/PKCS5Padding</span>), while the parent UI prioritizes Jetpack Compose &amp; Play Integrity/Billing bytecode stability alongside R8.
-                            </p>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5">
-                            <i class="fa-solid fa-server text-blue-400 text-lg mb-3"></i>
-                            <h3 class="font-bold text-white text-sm mb-2">Zero Master Secrets in APK</h3>
-                            <p class="text-xs text-slate-300">
-                                API signing secrets, subscription validation, and authorization rules live strictly on the backend. Decompiling the APK yields zero administrative credentials.
-                            </p>
-                        </div>
-                        <div class="glass-card rounded-2xl p-5">
-                            <i class="fa-solid fa-microchip text-purple-400 text-lg mb-3"></i>
-                            <h3 class="font-bold text-white text-sm mb-2">Selective Reflection Rules</h3>
-                            <p class="text-xs text-slate-300">
-                                Specific serialization models and JNI bridges retain predictable signatures intentionally so WebRTC, Firebase, and background services never crash across OEM Android builds.
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 5. Network Resilience -->
-                <section id="network-resilience" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono text-sm font-bold">05</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Certificate Trust &amp; Channel Separation</h2>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="glass-card rounded-2xl p-6">
-                            <h3 class="font-bold text-white mb-2">Why System CA Validation Instead of Rigid Leaf-Certificate Pinning?</h3>
-                            <p class="text-sm text-slate-300">
-                                Modern TLS infrastructure uses automated 90-day certificate renewals (such as Let's Encrypt). Hardcoding leaf or intermediate certificate hashes inside a mobile binary is a common cause of sudden, fleet-wide app outages when certificates rotate or when users are behind legitimate carrier gateways. GX Parent Control enforces TLS validation against <strong class="text-white">Android's System-Trusted Certificate Authorities</strong>, guaranteeing continuous child-safety connectivity alongside standard server identity verification.
-                            </p>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-6">
-                            <h3 class="font-bold text-white mb-2">Separation of Control Pings &amp; Encrypted Payloads</h3>
-                            <p class="text-sm text-slate-300">
-                                The child application strictly enforces <span class="font-mono text-slate-200">cleartextTrafficPermitted="false"</span> across all network connections. On the parent application, all sensitive data, telemetry, pairing, and authentication calls run exclusively over <strong class="text-white">HTTPS (TLS)</strong> and <strong class="text-white">MQTTS</strong>; a narrowly scoped fallback channel is reserved solely for lightweight FCM push-wakeup pings (which carry zero user messages, keylogs, or encryption keys) to minimize TLS handshake latency during urgent device wakeups.
-                            </p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 6. Tenant Isolation -->
-                <section id="tenant-isolation" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 font-mono text-sm font-bold">06</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Strict Tenant Isolation &amp; Access Control</h2>
-                    </div>
-                    <div class="glass-card rounded-2xl p-6">
-                        <ul class="space-y-3 text-sm text-slate-300">
-                            <li class="flex gap-3">
-                                <i class="fa-solid fa-check-circle text-emerald-400 mt-1 shrink-0"></i>
-                                <span><strong class="text-white">Per-Device Broker ACLs:</strong> Every child device and parent account is provisioned with isolated broker roles. A device cannot publish to or subscribe to another family's topics.</span>
-                            </li>
-                            <li class="flex gap-3">
-                                <i class="fa-solid fa-check-circle text-emerald-400 mt-1 shrink-0"></i>
-                                <span><strong class="text-white">JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified authentication token.</span>
-                            </li>
-                            <li class="flex gap-3">
-                                <i class="fa-solid fa-check-circle text-emerald-400 mt-1 shrink-0"></i>
-                                <span><strong class="text-white">Instant Revocation on Unpair:</strong> Unpairing immediately updates the server-side access list and revokes broker permissions for that parent-child link.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-
-                </section>
-
-                <!-- 7. Consent & Transparency -->
-                <section id="consent-transparency" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 font-mono text-sm font-bold">07</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Consent, Transparency &amp; Ethical Design</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">
-                        GX Parent Control is designed from the ground up around <strong class="text-white">informed consent</strong>. It is a legal, consent-based family safety tool — comparable to Google Family Link, Qustodio, and mSpy — not covert surveillance software.
-                    </p>
-                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-bell text-purple-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Permanent Visible Notification</h3>
-                            </div>
-                            <p class="text-sm text-slate-300">
-                                Every child device running GX displays a <strong class="text-white">persistent foreground notification</strong> that cannot be dismissed: <span class="font-mono text-cyan-300 text-xs">"This device is monitored by a parent."</span> Monitoring is never hidden from the child.
-                            </p>
-                        </div>
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-handshake text-emerald-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Parent-Installed &amp; Consent-Based</h3>
-                            </div>
-                            <p class="text-sm text-slate-300">
-                                The child application is physically installed and activated by the parent on the child's device. It requires explicit device-admin permissions granted by a person with physical access to the phone.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="rounded-xl bg-purple-950/30 border border-purple-500/25 p-4 text-sm text-purple-100 flex gap-3">
-                        <i class="fa-solid fa-scale-balanced text-purple-400 mt-1 shrink-0"></i>
-                        <div>
-                            <strong class="text-white">Legal context:</strong> Parental monitoring of minor children's devices is legal in most jurisdictions when the parent is the legal guardian and the child is informed. GX is designed for parents monitoring their own minor children — not for use on adult devices without consent.
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 8. Comparison Table -->
-                <section id="comparison" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 font-mono text-sm font-bold">08</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">How GX Compares to Other Parental Control Apps</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">Every app in this category makes trade-offs between security, usability, and cost. Here's an honest comparison of key security and privacy properties:</p>
-
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead>
-                                    <tr class="bg-slate-900/80 border-b border-slate-700">
-                                        <th class="text-left px-5 py-4 font-bold text-white">Feature</th>
-                                        <th class="text-center px-4 py-4 font-bold text-cyan-400">GX Parent Control</th>
-                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">Google Family Link</th>
-                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">Qustodio</th>
-                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">mSpy</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-800/60">
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Client-side payload encryption</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> AES-256-GCM</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Visible monitoring notification</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Always</span></td>
-                                        <td class="text-center px-4 py-4"><span class="text-emerald-400 text-xs"><i class="fa-solid fa-check"></i> Always</span></td>
-                                        <td class="text-center px-4 py-4"><span class="text-emerald-400 text-xs"><i class="fa-solid fa-check"></i> Always</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Optional stealth</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Ephemeral log relay (auto-purge)</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Yes</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Google cloud retained</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Cloud retained</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Cloud retained 30+ days</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Live screen &amp; camera streaming</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> WebRTC DTLS/SRTP</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Not available</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Screenshots only</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Screenshots only</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Zero master secrets in APK</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Yes</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Yes (Google infra)</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/20 transition">
-                                        <td class="px-5 py-4 text-slate-300 font-medium">Public security documentation</td>
-                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> This page</span></td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Yes</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
-                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Minimal</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="px-5 py-3 bg-slate-900/50 border-t border-slate-800 text-xs text-slate-500">
-                            Information sourced from public documentation of respective products. Features may vary by subscription tier and device.
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 9. Data Rights & Deletion -->
-                <section id="data-rights" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-sm font-bold">09</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Your Data Rights &amp; Account Deletion</h2>
-                    </div>
-                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-link-slash text-rose-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Instant Device Unpairing</h3>
-                            </div>
-                            <p class="text-sm text-slate-300">
-                                Any parent can unpair a child device at any time from within the app. Unpairing immediately revokes all server-side broker permissions and ACLs for that device relationship — no data can be received after unpairing.
-                            </p>
-                        </div>
-                        <div class="glass-card rounded-2xl p-6">
-                            <div class="flex items-center gap-3 mb-3">
-                                <i class="fa-solid fa-trash-can text-emerald-400 text-lg"></i>
-                                <h3 class="font-bold text-white">Account &amp; Data Deletion</h3>
-                            </div>
-                            <p class="text-sm text-slate-300">
-                                To request full account and data deletion, contact us at <a href="mailto:support@gxparentcontrol.com" class="text-cyan-400 hover:underline">support@gxparentcontrol.com</a>. We will remove your authentication record, relay queue, and all associated provisioning data within 30 days.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="font-bold text-white mb-3">What data does GX hold?</h3>
-                        <div class="grid sm:grid-cols-3 gap-4 text-sm text-slate-300">
-                            <div>
-                                <div class="text-xs font-mono text-cyan-400 uppercase mb-2">Relay Queue (Ephemeral)</div>
-                                <ul class="space-y-1 text-xs">
-                                    <li>• Encrypted activity log batches (deleted on delivery)</li>
-                                    <li>• Device telemetry (battery, network state)</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div class="text-xs font-mono text-blue-400 uppercase mb-2">Provisioning Server</div>
-                                <ul class="space-y-1 text-xs">
-                                    <li>• Encrypted pairing credentials (envelope-encrypted)</li>
-                                    <li>• Parent-child device linkage records</li>
-                                    <li>• Subscription status</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div class="text-xs font-mono text-purple-400 uppercase mb-2">Never Stored</div>
-                                <ul class="space-y-1 text-xs">
-                                    <li>• Live stream recordings</li>
-                                    <li>• Decrypted message/keylog content</li>
-                                    <li>• Photos or media from child device</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 10. Responsible Disclosure -->
-                <section id="disclosure" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono text-sm font-bold">10</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Responsible Disclosure Policy</h2>
-                    </div>
-                    <div class="glass-card rounded-2xl p-6 mb-4">
-                        <p class="text-slate-300 mb-5">
-                            We welcome good-faith security research. If you have discovered a potential vulnerability in GX Parent Control — whether through static analysis, network inspection, or runtime testing — please report it to us privately before public disclosure. We commit to responding within <strong class="text-white">72 hours</strong> and resolving valid reports with priority.
-                        </p>
-                        <div class="grid sm:grid-cols-3 gap-4">
-                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                                <div class="text-xs font-mono text-cyan-400 uppercase mb-2">Step 1 — Report Privately</div>
-                                <p class="text-xs text-slate-300">Email your findings to <a href="mailto:security@gxparentcontrol.com" class="text-cyan-400 hover:underline">security@gxparentcontrol.com</a> with a detailed description, reproduction steps, and potential impact.</p>
-                            </div>
-                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                                <div class="text-xs font-mono text-blue-400 uppercase mb-2">Step 2 — Coordinated Fix</div>
-                                <p class="text-xs text-slate-300">We will acknowledge your report within 72 hours, work with you on a fix timeline, and credit you if you wish after the vulnerability is resolved.</p>
-                            </div>
-                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
-                                <div class="text-xs font-mono text-emerald-400 uppercase mb-2">Step 3 — Safe Disclosure</div>
-                                <p class="text-xs text-slate-300">After the patch is released, we support coordinated public disclosure. We ask for a minimum of 90 days before any public release of technical details.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-xl bg-amber-950/25 border border-amber-500/25 p-4 text-sm text-amber-100 flex gap-3">
-                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-1 shrink-0"></i>
-                        <div>
-                            <strong class="text-white">Out of scope:</strong> Static decompilation findings that do not demonstrate an exploitable, authenticated attack path (e.g., observing that an APK contains server endpoint strings is expected and not a vulnerability).
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 11. Technical FAQ (renumbered) -->
-                <section id="faq" class="scroll-mt-24">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">11</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Technical FAQ</h2>
-                    </div>
-                    <p class="text-slate-300 mb-6">Direct, technical answers to common questions raised during static or network reviews.</p>
-
-                    <div class="space-y-3" id="faq-container">
-
-                        <div class="faq-item glass-card rounded-xl overflow-hidden">
-                            <button type="button" class="faq-trigger w-full text-left px-6 py-4 flex items-center justify-between gap-4">
-                                <span class="font-semibold text-white text-sm sm:text-base">1. Someone decompiled the APK with jadx and saw server endpoints. Does that mean the app is unencrypted?</span>
-                                <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform duration-200"></i>
-                            </button>
-                            <div class="faq-answer px-6 pb-5 text-sm text-slate-300 border-t border-slate-800/60 pt-3">
-                                No. Every client-server Android app must know where its backend lives in order to connect. Being able to unpack an APK with <span class="font-mono text-slate-200">jadx</span> only shows client-side structure; it does not bypass TLS transport encryption, AES-256-GCM payload encryption, or server-side JWT authentication.
-                            </div>
-                        </div>
-
-                        <div class="faq-item glass-card rounded-xl overflow-hidden">
-                            <button type="button" class="faq-trigger w-full text-left px-6 py-4 flex items-center justify-between gap-4">
-                                <span class="font-semibold text-white text-sm sm:text-base">2. Why is an encryption key sent to the provisioning server during device enrollment?</span>
-                                <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform duration-200"></i>
-                            </button>
-                            <div class="faq-answer px-6 pb-5 text-sm text-slate-300 border-t border-slate-800/60 pt-3">
-                                It enables pairing-code recovery and seamless multi-device setup without forcing parents to manually manage 256-bit keys. The key travels over HTTPS (TLS), is immediately sealed at rest using AES-256-GCM envelope encryption on the server, and is only released to an authenticated parent claiming that specific pairing code.
-                            </div>
-                        </div>
-
-                        <div class="faq-item glass-card rounded-xl overflow-hidden">
-                            <button type="button" class="faq-trigger w-full text-left px-6 py-4 flex items-center justify-between gap-4">
-                                <span class="font-semibold text-white text-sm sm:text-base">3. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</span>
-                                <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform duration-200"></i>
-                            </button>
-                            <div class="faq-answer px-6 pb-5 text-sm text-slate-300 border-t border-slate-800/60 pt-3">
-                                A private relay acts as a transient delivery queue (<span class="font-mono text-slate-200">Write → Read → Delete</span>) rather than a permanent cloud database. Once the parent device retrieves encrypted logs, they are purged from the relay—ensuring sensitive family history is not stored indefinitely on third-party cloud infrastructure.
-                            </div>
-                        </div>
-
-                        <div class="faq-item glass-card rounded-xl overflow-hidden">
-                            <button type="button" class="faq-trigger w-full text-left px-6 py-4 flex items-center justify-between gap-4">
-                                <span class="font-semibold text-white text-sm sm:text-base">4. Can another user or device read my child's data?</span>
-                                <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform duration-200"></i>
-                            </button>
-                            <div class="faq-answer px-6 pb-5 text-sm text-slate-300 border-t border-slate-800/60 pt-3">
-                                No. Every device and parent account is isolated by authenticated sessions (JWT), unique per-device encryption keys, and strict server-side ACLs that bind each parent solely to their claimed child devices.
-                            </div>
-                        </div>
-
-                        <div class="faq-item glass-card rounded-xl overflow-hidden">
-                            <button type="button" class="faq-trigger w-full text-left px-6 py-4 flex items-center justify-between gap-4">
-                                <span class="font-semibold text-white text-sm sm:text-base">5. Are live screen, camera, or audio streams recorded on GX servers?</span>
-                                <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform duration-200"></i>
-                            </button>
-                            <div class="faq-answer px-6 pb-5 text-sm text-slate-300 border-t border-slate-800/60 pt-3">
-                                No. Live monitoring uses WebRTC (<span class="font-mono text-slate-200">DTLS/SRTP</span>) to stream encrypted media directly between the child and parent devices (or via an encrypted relay when strict carrier NATs prevent direct peer-to-peer routing). Media streams are never recorded or stored server-side.
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-
-            </div>
+    <!-- 1. Layered Encryption -->
+    <section id="encryption" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">01</span>
+        <h2>Defense-in-Depth Cryptography</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Relying on a single layer of security (such as HTTPS alone) is insufficient for sensitive family telemetry. GX Parent Control applies <strong style="color:var(--text)">independent cryptographic protection at both the payload layer and the transport layer</strong>, ensuring data remains protected before, during, and after transit.</p>
+      <div class="card-grid cols-2" style="margin-bottom:16px">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            <h3>Client-Side AES-256-GCM</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Sensitive activity records—including messages, notifications, and keystroke events—are encrypted locally on the child device <em>before</em> serialization or transmission.</p>
+          <ul class="code-block">
+            <li>Algorithm: AES/GCM/NoPadding (256-bit)</li>
+            <li>IV: Unique 12-byte SecureRandom per item</li>
+            <li>Integrity: 128-bit GCM authentication tag</li>
+          </ul>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/70 bg-slate-950/70 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-cyan-400"></i>
-                <span>GX Parent Control — Security &amp; Architecture Documentation</span>
-            </div>
-            <div class="flex items-center gap-5 flex-wrap justify-center">
-                <a href="index.html" class="hover:text-cyan-400 transition">Home</a>
-                <a href="#encryption" class="hover:text-cyan-400 transition">Encryption</a>
-                <a href="#ephemeral-relay" class="hover:text-cyan-400 transition">Relay</a>
-                <a href="#comparison" class="hover:text-cyan-400 transition">Comparison</a>
-                <a href="#data-rights" class="hover:text-cyan-400 transition">Data Rights</a>
-                <a href="#disclosure" class="hover:text-cyan-400 transition">Disclosure</a>
-                <a href="#faq" class="hover:text-cyan-400 transition">FAQ</a>
-            </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6BAED6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+            <h3>Encrypted Transport &amp; Media</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Encrypted payloads travel inside TLS tunnels, while real-time audio, camera, and screen streams bypass REST storage entirely via WebRTC.</p>
+          <ul class="code-block">
+            <li>REST APIs: HTTPS (TLS)</li>
+            <li>Real-Time Control: MQTTS (TLS)</li>
+            <li>Live Streams: WebRTC DTLS + SRTP</li>
+          </ul>
         </div>
-    </footer>
+      </div>
+      <div class="callout amber">
+        <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div><strong>Why GCM instead of basic CBC?</strong> AES-GCM is an <em>authenticated</em> cipher. If even a single bit of ciphertext is modified in transit or storage, decryption automatically fails rather than silently producing corrupted output.</div>
+      </div>
+    </section>
 
-    <script>
-        // Reading Progress Bar
-        window.addEventListener('scroll', () => {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-            document.getElementById('scroll-progress').style.width = `${progress}%`;
-        });
+    <!-- 2. Ephemeral Relay -->
+    <section id="ephemeral-relay" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">02</span>
+        <h2>Ephemeral Relay Architecture (No Permanent Log Warehouse)</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Many monitoring apps dump every SMS, call log, and notification into a permanent third-party cloud database where years of family history accumulate indefinitely. GX Parent Control uses an <strong style="color:var(--text)">ephemeral relay queue</strong> instead.</p>
+      <div class="card" style="margin-bottom:16px">
+        <div class="toc-title" style="margin-bottom:16px">Data Delivery &amp; Auto-Purge Lifecycle</div>
+        <div class="pipeline">
+          <div class="pipe-step">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            <strong>1. Child Device</strong>
+            <span>Encrypts payload locally with AES-256-GCM</span>
+          </div>
+          <div class="pipe-step">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <strong>2. Relay Queue</strong>
+            <span>Holds encrypted batch temporarily in transit</span>
+          </div>
+          <div class="pipe-step">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16 11s1 1 1 3"/></svg>
+            <strong>3. Parent Device</strong>
+            <span>Authenticates, fetches &amp; decrypts locally</span>
+          </div>
+          <div class="pipe-step highlight">
+            <svg viewBox="0 0 24 24" style="stroke:var(--mint)"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/><path d="M10 11v6M14 11v6"/></svg>
+            <strong>4. Auto-Purged</strong>
+            <span>Deleted from relay immediately after delivery</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:10px">Why use a private relay database instead of storing logs in public BaaS tables?</h3>
+        <p style="font-size:.9rem;color:var(--muted)">Public Backend-as-a-Service (BaaS) real-time databases are optimized for persistent state, not high-frequency ephemeral queuing, and often retain backups across multi-tenant cloud infrastructure. By operating a dedicated private relay queue with immediate read-and-delete semantics, GX Parent Control minimizes data residency, eliminates third-party log retention, and keeps historical data strictly on the parent's own device.</p>
+      </div>
+    </section>
 
-        // FAQ Accordion
-        document.querySelectorAll('.faq-trigger').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = btn.closest('.faq-item');
-                const isOpen = item.classList.contains('open');
-                document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-                if (!isOpen) item.classList.add('open');
-            });
-        });
+    <!-- 3. Key Provisioning -->
+    <section id="key-provisioning" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">03</span>
+        <h2>Server-Assisted Key Provisioning: The Engineering Trade-Off</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">When a child device enrolls, it generates a fresh, cryptographically random <strong style="color:var(--text)">256-bit (32-byte) AES key</strong>. How that key reaches the parent device is one of the most important architectural decisions in any monitoring platform.</p>
+      <div class="card-grid cols-2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="spec-label" style="color:#F29B1E;margin-bottom:10px">Why Not Manual Key Entry?</div>
+          <p style="font-size:.88rem;color:var(--muted)">If parents had to manually copy a 64-character hexadecimal key—or re-scan a physical QR code every time they reinstall the app, clear cache, or switch phones—any lost key would permanently lock the parent out of their child's safety monitoring with no recovery path.</p>
+        </div>
+        <div class="card">
+          <div class="spec-label" style="color:var(--mint);margin-bottom:10px">How GX Solves It Safely</div>
+          <p style="font-size:.88rem;color:var(--muted)">GX uses an <strong style="color:var(--text)">Authenticated Key Provisioning Broker</strong>. The key is transmitted over HTTPS (TLS), immediately wrapped at rest on the server using <strong style="color:var(--text)">AES-256-GCM envelope encryption</strong>, and released only to a JWT-authenticated parent who claims the valid pairing code.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:14px">Step-by-Step Pairing Security</h3>
+        <ol class="step-list">
+          <li>
+            <div>
+              <h3>Device Enrollment</h3>
+              <p>The child device generates a random 256-bit AES key and a high-entropy bootstrap token, registering over HTTPS.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Envelope Encryption at Rest</h3>
+              <p>The provisioning server never stores the raw key or device credentials in plaintext; both are sealed with server-side <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> before writing to disk.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Authenticated Claim</h3>
+              <p>To retrieve the key, the parent must present a valid Supabase JWT session token alongside the pairing code, protected by strict per-IP and per-account rate limits.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Broker Credential Isolation</h3>
+              <p>Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-        // Active TOC Highlight on Scroll
-        const sections = document.querySelectorAll('main section[id]');
-        const tocLinks = document.querySelectorAll('.toc-link');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    tocLinks.forEach(link => {
-                        link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
-                    });
-                }
-            });
-        }, { rootMargin: '-25% 0px -65% 0px' });
-        sections.forEach(sec => observer.observe(sec));
-    </script>
+    <!-- 4. APK Hardening -->
+    <section id="apk-hardening" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">04</span>
+        <h2>APK Hardening &amp; The Reality of Decompilation</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Every Android APK—whether it is a banking app, a messaging app, or a system utility—is a ZIP archive containing compiled Dalvik bytecode (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">.dex</code>). Anyone can open any APK with tools like <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">jadx</code> or <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">apktool</code>. <strong style="color:var(--text)">Static decompilation is a normal property of Android, not a security flaw.</strong></p>
+      <div class="card-grid cols-3">
+        <div class="card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          <h3 style="font-size:.92rem;margin-bottom:8px">R8 &amp; Selective String Protection</h3>
+          <p style="font-size:.82rem;color:var(--muted)">Both apps run full R8 shrinking, aggressive overloading, package flattening, and debug-info stripping. The child service additionally applies compile-time string encryption (StringFog) and asset encryption (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">AES/CBC/PKCS5Padding</code>), while the parent UI prioritizes Jetpack Compose &amp; Play Integrity/Billing bytecode stability alongside R8.</p>
+        </div>
+        <div class="card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6BAED6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <h3 style="font-size:.92rem;margin-bottom:8px">Zero Master Secrets in APK</h3>
+          <p style="font-size:.82rem;color:var(--muted)">API signing secrets, subscription validation, and authorization rules live strictly on the backend. Decompiling the APK yields zero administrative credentials.</p>
+        </div>
+        <div class="card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C87EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+          <h3 style="font-size:.92rem;margin-bottom:8px">Selective Reflection Rules</h3>
+          <p style="font-size:.82rem;color:var(--muted)">Specific serialization models and JNI bridges retain predictable signatures intentionally so WebRTC, Firebase, and background services never crash across OEM Android builds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Certificate Trust -->
+    <section id="network-resilience" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">05</span>
+        <h2>Certificate Trust &amp; Channel Separation</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Why System CA Validation Instead of Rigid Leaf-Certificate Pinning?</h3>
+          <p style="font-size:.9rem;color:var(--muted)">Modern TLS infrastructure uses automated 90-day certificate renewals (such as Let's Encrypt). Hardcoding leaf or intermediate certificate hashes inside a mobile binary is a common cause of sudden, fleet-wide app outages when certificates rotate or when users are behind legitimate carrier gateways. GX Parent Control enforces TLS validation against <strong style="color:var(--text)">Android's System-Trusted Certificate Authorities</strong>, guaranteeing continuous child-safety connectivity alongside standard server identity verification.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">Separation of Control Pings &amp; Encrypted Payloads</h3>
+          <p style="font-size:.9rem;color:var(--muted)">The child application strictly enforces <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">cleartextTrafficPermitted="false"</code> across all network connections. On the parent application, all sensitive data, telemetry, pairing, and authentication calls run exclusively over <strong style="color:var(--text)">HTTPS (TLS)</strong> and <strong style="color:var(--text)">MQTTS</strong>; a narrowly scoped fallback channel is reserved solely for lightweight FCM push-wakeup pings (which carry zero user messages, keylogs, or encryption keys) to minimize TLS handshake latency during urgent device wakeups.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Tenant Isolation -->
+    <section id="tenant-isolation" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">06</span>
+        <h2>Strict Tenant Isolation &amp; Access Control</h2>
+      </div>
+      <div class="card">
+        <ul class="check-list">
+          <li><div><strong>Per-Device Broker ACLs:</strong> Every child device and parent account is provisioned with isolated broker roles. A device cannot publish to or subscribe to another family's topics.</div></li>
+          <li><div><strong>JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified authentication token.</div></li>
+          <li><div><strong>Instant Revocation on Unpair:</strong> Unpairing immediately updates the server-side access list and revokes broker permissions for that parent-child link.</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Consent & Transparency -->
+    <section id="consent-transparency" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">07</span>
+        <h2>Consent, Transparency &amp; Ethical Design</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">GX Parent Control is designed from the ground up around <strong style="color:var(--text)">informed consent</strong>. It is a legal, consent-based family safety tool — comparable to Google Family Link, Qustodio, and mSpy — not covert surveillance software.</p>
+      <div class="card-grid cols-2" style="margin-bottom:16px">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C87EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <h3>Permanent Visible Notification</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted)">Every child device running GX displays a <strong style="color:var(--text)">persistent foreground notification</strong> that cannot be dismissed: <code style="font-size:.8rem;background:var(--raise);padding:1px 6px;border-radius:4px;color:var(--amber)">"This device is monitored by a parent."</code> Monitoring is never hidden from the child.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BD6A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <h3>Parent-Installed &amp; Consent-Based</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted)">The child application is physically installed and activated by the parent on the child's device. It requires explicit device-admin permissions granted by a person with physical access to the phone.</p>
+        </div>
+      </div>
+      <div class="callout purple">
+        <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C87EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><strong>Legal context:</strong> Parental monitoring of minor children's devices is legal in most jurisdictions when the parent is the legal guardian and the child is informed. GX is designed for parents monitoring their own minor children — not for use on adult devices without consent.</div>
+      </div>
+    </section>
+
+    <!-- 8. Comparison Table -->
+    <section id="comparison" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">08</span>
+        <h2>How GX Compares to Other Parental Control Apps</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Every app in this category makes trade-offs between security, usability, and cost. Here's an honest comparison of key security and privacy properties:</p>
+      <div class="cmp-wrap">
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th style="text-align:left">Feature</th>
+                <th class="hl">GX Parent Control</th>
+                <th style="font-weight:500;color:var(--muted)">Google Family Link</th>
+                <th style="font-weight:500;color:var(--muted)">Qustodio</th>
+                <th style="font-weight:500;color:var(--muted)">mSpy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Client-side payload encryption</td>
+                <td class="check">✓ AES-256-GCM</td>
+                <td class="neutral">Transport-only TLS</td>
+                <td class="neutral">Transport-only TLS</td>
+                <td class="neutral">Transport-only TLS</td>
+              </tr>
+              <tr>
+                <td>Visible monitoring notification</td>
+                <td class="check">✓ Always</td>
+                <td class="check">✓ Always</td>
+                <td class="check">✓ Always</td>
+                <td class="neutral">Optional stealth</td>
+              </tr>
+              <tr>
+                <td>Ephemeral log relay (auto-purge)</td>
+                <td class="check">✓ Yes</td>
+                <td class="neutral">Google cloud retained</td>
+                <td class="neutral">Cloud retained</td>
+                <td class="neutral">Cloud retained 30+ days</td>
+              </tr>
+              <tr>
+                <td>Live screen &amp; camera streaming</td>
+                <td class="check">✓ WebRTC DTLS/SRTP</td>
+                <td class="neutral">Not available</td>
+                <td class="neutral">Screenshots only</td>
+                <td class="neutral">Screenshots only</td>
+              </tr>
+              <tr>
+                <td>Zero master secrets in APK</td>
+                <td class="check">✓ Yes</td>
+                <td class="neutral">Yes (Google infra)</td>
+                <td class="neutral">Partial</td>
+                <td class="neutral">Partial</td>
+              </tr>
+              <tr>
+                <td>Public security documentation</td>
+                <td class="check">✓ This page</td>
+                <td class="neutral">Yes</td>
+                <td class="neutral">Partial</td>
+                <td class="neutral">Minimal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-note">Information sourced from public documentation of respective products. Features may vary by subscription tier and device.</div>
+      </div>
+    </section>
+
+    <!-- 9. Data Rights -->
+    <section id="data-rights" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">09</span>
+        <h2>Your Data Rights &amp; Account Deletion</h2>
+      </div>
+      <div class="card-grid cols-2" style="margin-bottom:16px">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></svg>
+            <h3>Instant Device Unpairing</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted)">Any parent can unpair a child device at any time from within the app. Unpairing immediately revokes all server-side broker permissions and ACLs for that device relationship — no data can be received after unpairing.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BD6A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            <h3>Account &amp; Data Deletion</h3>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted)">To request full account and data deletion, contact us at <a href="mailto:guardx.support@gmail.com" style="color:var(--amber);text-decoration:none">guardx.support@gmail.com</a>. We will remove your authentication record, relay queue, and all associated provisioning data within 30 days.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:16px">What data does GX hold?</h3>
+        <div class="data-cols">
+          <div class="data-col">
+            <div class="data-col-label c1">Relay Queue (Ephemeral)</div>
+            <ul>
+              <li>Encrypted activity log batches (deleted on delivery)</li>
+              <li>Device telemetry (battery, network state)</li>
+            </ul>
+          </div>
+          <div class="data-col">
+            <div class="data-col-label c2">Provisioning Server</div>
+            <ul>
+              <li>Encrypted pairing credentials (envelope-encrypted)</li>
+              <li>Parent-child device linkage records</li>
+              <li>Subscription status</li>
+            </ul>
+          </div>
+          <div class="data-col">
+            <div class="data-col-label c3">Never Stored</div>
+            <ul>
+              <li>Live stream recordings</li>
+              <li>Decrypted message/keylog content</li>
+              <li>Photos or media from child device</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Responsible Disclosure -->
+    <section id="disclosure" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">10</span>
+        <h2>Responsible Disclosure Policy</h2>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <p style="color:var(--muted);margin-bottom:20px">We welcome good-faith security research. If you have discovered a potential vulnerability in GX Parent Control — whether through static analysis, network inspection, or runtime testing — please report it to us privately before public disclosure. We commit to responding within <strong style="color:var(--text)">72 hours</strong> and resolving valid reports with priority.</p>
+        <div class="disc-row">
+          <div class="disc-step">
+            <div class="disc-label" style="color:var(--amber)">Step 1 — Report Privately</div>
+            <p style="font-size:.82rem;color:var(--muted)">Email your findings to <a href="mailto:guardx.support@gmail.com" style="color:var(--amber);text-decoration:none">guardx.support@gmail.com</a> with a detailed description, reproduction steps, and potential impact.</p>
+          </div>
+          <div class="disc-step">
+            <div class="disc-label" style="color:#6BAED6">Step 2 — Coordinated Fix</div>
+            <p style="font-size:.82rem;color:var(--muted)">We will acknowledge your report within 72 hours, work with you on a fix timeline, and credit you if you wish after the vulnerability is resolved.</p>
+          </div>
+          <div class="disc-step">
+            <div class="disc-label" style="color:var(--mint)">Step 3 — Safe Disclosure</div>
+            <p style="font-size:.82rem;color:var(--muted)">After the patch is released, we support coordinated public disclosure. We ask for a minimum of 90 days before any public release of technical details.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout amber">
+        <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div><strong>Out of scope:</strong> Static decompilation findings that do not demonstrate an exploitable, authenticated attack path (e.g., observing that an APK contains server endpoint strings is expected and not a vulnerability).</div>
+      </div>
+    </section>
+
+    <!-- 11. Technical FAQ -->
+    <section id="faq" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">11</span>
+        <h2>Technical FAQ</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Direct, technical answers to common questions raised during static or network reviews.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>1. Someone decompiled the APK with jadx and saw server endpoints. Does that mean the app is unencrypted?</summary>
+          <div class="faq-body">No. Every client-server Android app must know where its backend lives in order to connect. Being able to unpack an APK with <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">jadx</code> only shows client-side structure; it does not bypass TLS transport encryption, AES-256-GCM payload encryption, or server-side JWT authentication.</div>
+        </details>
+        <details class="faq-item">
+          <summary>2. Why is an encryption key sent to the provisioning server during device enrollment?</summary>
+          <div class="faq-body">It enables pairing-code recovery and seamless multi-device setup without forcing parents to manually manage 256-bit keys. The key travels over HTTPS (TLS), is immediately sealed at rest using AES-256-GCM envelope encryption on the server, and is only released to an authenticated parent claiming that specific pairing code.</div>
+        </details>
+        <details class="faq-item">
+          <summary>3. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</summary>
+          <div class="faq-body">A private relay acts as a transient delivery queue (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">Write → Read → Delete</code>) rather than a permanent cloud database. Once the parent device retrieves encrypted logs, they are purged from the relay—ensuring sensitive family history is not stored indefinitely on third-party cloud infrastructure.</div>
+        </details>
+        <details class="faq-item">
+          <summary>4. Can another user or device read my child's data?</summary>
+          <div class="faq-body">No. Every device and parent account is isolated by authenticated sessions (JWT), unique per-device encryption keys, and strict server-side ACLs that bind each parent solely to their claimed child devices.</div>
+        </details>
+        <details class="faq-item">
+          <summary>5. Are live screen, camera, or audio streams recorded on GX servers?</summary>
+          <div class="faq-body">No. Live monitoring uses WebRTC (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">DTLS/SRTP</code>) to stream encrypted media directly between the child and parent devices (or via an encrypted relay when strict carrier NATs prevent direct peer-to-peer routing). Media streams are never recorded or stored server-side.</div>
+        </details>
+      </div>
+    </section>
+
+  </div><!-- /article-sections -->
+</div><!-- /doc-wrap -->
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <span style="display:flex;align-items:center;gap:8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      © <span id="yr"></span> GX Parental Control — Security &amp; Architecture Docs
+    </span>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="#encryption">Encryption</a>
+      <a href="#ephemeral-relay">Relay</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#data-rights">Data Rights</a>
+      <a href="#disclosure">Disclosure</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://guardx.site/privacy" rel="noopener">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<button id="top-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>
+</button>
+
+<script>
+// year
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+// progress bar + header shadow + back-to-top
+var prog = document.getElementById("prog"),
+    hdr  = document.querySelector("header"),
+    up   = document.getElementById("top-btn");
+function onScroll() {
+  var h = document.documentElement, y = h.scrollTop, max = h.scrollHeight - h.clientHeight;
+  prog.style.width = (max > 0 ? y / max * 100 : 0) + "%";
+  hdr.classList.toggle("scrolled", y > 8);
+  up.classList.toggle("show", y > 600);
+}
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+// TOC active highlight
+var secs = document.querySelectorAll("section[id]");
+var links = document.querySelectorAll(".toc-link");
+var io = new IntersectionObserver(function(es) {
+  es.forEach(function(e) {
+    if (e.isIntersecting) {
+      links.forEach(function(l) {
+        l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id);
+      });
+    }
+  });
+}, { rootMargin: "-20% 0px -65% 0px" });
+secs.forEach(function(s) { io.observe(s); });
+</script>
 </body>
 </html>
