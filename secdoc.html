@@ -177,19 +177,88 @@
                 <div class="sticky top-24 glass-card rounded-2xl p-5">
                     <div class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-4">Architecture Sections</div>
                     <nav class="space-y-1 text-sm" id="toc-nav">
+                        <a href="#trust-badges" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">0. Trust Commitments</a>
                         <a href="#encryption" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">1. Layered Encryption</a>
                         <a href="#ephemeral-relay" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">2. Ephemeral Relay Queue</a>
                         <a href="#key-provisioning" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">3. Key Provisioning Broker</a>
                         <a href="#apk-hardening" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">4. APK Hardening &amp; Reality</a>
                         <a href="#network-resilience" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">5. Certificate Trust &amp; Channels</a>
                         <a href="#tenant-isolation" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">6. Tenant &amp; ACL Isolation</a>
-                        <a href="#faq" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">7. Technical FAQ</a>
+                        <a href="#consent-transparency" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">7. Consent &amp; Transparency</a>
+                        <a href="#comparison" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">8. App Comparison</a>
+                        <a href="#data-rights" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">9. Data Rights &amp; Deletion</a>
+                        <a href="#disclosure" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">10. Responsible Disclosure</a>
+                        <a href="#faq" class="toc-link block py-2 px-3 rounded-r-lg border-l-2 border-transparent text-slate-300 hover:text-white transition">11. Technical FAQ</a>
                     </nav>
                 </div>
             </aside>
 
             <!-- Article Content -->
             <div class="lg:col-span-9 space-y-14">
+
+                <!-- 0. Trust Badges -->
+                <section id="trust-badges" class="scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">★</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Our Core Security Commitments</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-ban text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">No Third-Party Data Sales</div>
+                                <div class="text-xs text-slate-400">Family monitoring data is never sold, shared with advertisers, or transferred to third parties under any circumstances.</div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-lock text-cyan-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">Encrypted Transport Always</div>
+                                <div class="text-xs text-slate-400">All sensitive data travels over TLS-encrypted channels (HTTPS &amp; MQTTS). Sensitive payloads are additionally encrypted at the client before transmission.</div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-trash-can text-blue-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">Auto-Purge on Delivery</div>
+                                <div class="text-xs text-slate-400">Activity logs are deleted from relay servers immediately after the parent device retrieves them. No permanent log warehouse exists.</div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-eye text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">Visible Monitoring — Always</div>
+                                <div class="text-xs text-slate-400">The child device displays a permanent system notification while monitoring is active. GX is consent-based family software — not covert spyware.</div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-users text-amber-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">Strict Family Isolation</div>
+                                <div class="text-xs text-slate-400">Per-device encryption keys and server-side ACLs ensure no parent or device can access another family's data.</div>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-5 flex gap-4 items-start">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-code text-rose-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-sm mb-1">Zero Master Secrets in APK</div>
+                                <div class="text-xs text-slate-400">Administrative credentials and signing secrets are server-side only. Decompiling the APK exposes no sensitive master keys.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- 1. Layered Encryption -->
                 <section id="encryption" class="scroll-mt-24">
@@ -405,10 +474,210 @@
                     </div>
                 </section>
 
-                <!-- 7. Technical FAQ -->
+                </section>
+
+                <!-- 7. Consent & Transparency -->
+                <section id="consent-transparency" class="scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 font-mono text-sm font-bold">07</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Consent, Transparency &amp; Ethical Design</h2>
+                    </div>
+                    <p class="text-slate-300 mb-6">
+                        GX Parent Control is designed from the ground up around <strong class="text-white">informed consent</strong>. It is a legal, consent-based family safety tool — comparable to Google Family Link, Qustodio, and mSpy — not covert surveillance software.
+                    </p>
+                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
+                        <div class="glass-card rounded-2xl p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i class="fa-solid fa-bell text-purple-400 text-lg"></i>
+                                <h3 class="font-bold text-white">Permanent Visible Notification</h3>
+                            </div>
+                            <p class="text-sm text-slate-300">
+                                Every child device running GX displays a <strong class="text-white">persistent foreground notification</strong> that cannot be dismissed: <span class="font-mono text-cyan-300 text-xs">"This device is monitored by a parent."</span> Monitoring is never hidden from the child.
+                            </p>
+                        </div>
+                        <div class="glass-card rounded-2xl p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i class="fa-solid fa-handshake text-emerald-400 text-lg"></i>
+                                <h3 class="font-bold text-white">Parent-Installed &amp; Consent-Based</h3>
+                            </div>
+                            <p class="text-sm text-slate-300">
+                                The child application is physically installed and activated by the parent on the child's device. It requires explicit device-admin permissions granted by a person with physical access to the phone.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl bg-purple-950/30 border border-purple-500/25 p-4 text-sm text-purple-100 flex gap-3">
+                        <i class="fa-solid fa-scale-balanced text-purple-400 mt-1 shrink-0"></i>
+                        <div>
+                            <strong class="text-white">Legal context:</strong> Parental monitoring of minor children's devices is legal in most jurisdictions when the parent is the legal guardian and the child is informed. GX is designed for parents monitoring their own minor children — not for use on adult devices without consent.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. Comparison Table -->
+                <section id="comparison" class="scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 font-mono text-sm font-bold">08</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">How GX Compares to Other Parental Control Apps</h2>
+                    </div>
+                    <p class="text-slate-300 mb-6">Every app in this category makes trade-offs between security, usability, and cost. Here's an honest comparison of key security and privacy properties:</p>
+
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-slate-900/80 border-b border-slate-700">
+                                        <th class="text-left px-5 py-4 font-bold text-white">Feature</th>
+                                        <th class="text-center px-4 py-4 font-bold text-cyan-400">GX Parent Control</th>
+                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">Google Family Link</th>
+                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">Qustodio</th>
+                                        <th class="text-center px-4 py-4 font-mono text-xs text-slate-300">mSpy</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800/60">
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Client-side payload encryption</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> AES-256-GCM</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Transport-only TLS</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Visible monitoring notification</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Always</span></td>
+                                        <td class="text-center px-4 py-4"><span class="text-emerald-400 text-xs"><i class="fa-solid fa-check"></i> Always</span></td>
+                                        <td class="text-center px-4 py-4"><span class="text-emerald-400 text-xs"><i class="fa-solid fa-check"></i> Always</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Optional stealth</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Ephemeral log relay (auto-purge)</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Yes</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Google cloud retained</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Cloud retained</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Cloud retained 30+ days</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Live screen &amp; camera streaming</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> WebRTC DTLS/SRTP</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Not available</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Screenshots only</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Screenshots only</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Zero master secrets in APK</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> Yes</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Yes (Google infra)</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/20 transition">
+                                        <td class="px-5 py-4 text-slate-300 font-medium">Public security documentation</td>
+                                        <td class="text-center px-4 py-4"><span class="inline-flex items-center gap-1 text-emerald-400"><i class="fa-solid fa-check"></i> This page</span></td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Yes</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Partial</td>
+                                        <td class="text-center px-4 py-4 text-slate-400 text-xs">Minimal</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-5 py-3 bg-slate-900/50 border-t border-slate-800 text-xs text-slate-500">
+                            Information sourced from public documentation of respective products. Features may vary by subscription tier and device.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. Data Rights & Deletion -->
+                <section id="data-rights" class="scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-sm font-bold">09</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Your Data Rights &amp; Account Deletion</h2>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-4 mb-6">
+                        <div class="glass-card rounded-2xl p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i class="fa-solid fa-link-slash text-rose-400 text-lg"></i>
+                                <h3 class="font-bold text-white">Instant Device Unpairing</h3>
+                            </div>
+                            <p class="text-sm text-slate-300">
+                                Any parent can unpair a child device at any time from within the app. Unpairing immediately revokes all server-side broker permissions and ACLs for that device relationship — no data can be received after unpairing.
+                            </p>
+                        </div>
+                        <div class="glass-card rounded-2xl p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i class="fa-solid fa-trash-can text-emerald-400 text-lg"></i>
+                                <h3 class="font-bold text-white">Account &amp; Data Deletion</h3>
+                            </div>
+                            <p class="text-sm text-slate-300">
+                                To request full account and data deletion, contact us at <a href="mailto:support@gxparentcontrol.com" class="text-cyan-400 hover:underline">support@gxparentcontrol.com</a>. We will remove your authentication record, relay queue, and all associated provisioning data within 30 days.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="font-bold text-white mb-3">What data does GX hold?</h3>
+                        <div class="grid sm:grid-cols-3 gap-4 text-sm text-slate-300">
+                            <div>
+                                <div class="text-xs font-mono text-cyan-400 uppercase mb-2">Relay Queue (Ephemeral)</div>
+                                <ul class="space-y-1 text-xs">
+                                    <li>• Encrypted activity log batches (deleted on delivery)</li>
+                                    <li>• Device telemetry (battery, network state)</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-xs font-mono text-blue-400 uppercase mb-2">Provisioning Server</div>
+                                <ul class="space-y-1 text-xs">
+                                    <li>• Encrypted pairing credentials (envelope-encrypted)</li>
+                                    <li>• Parent-child device linkage records</li>
+                                    <li>• Subscription status</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-xs font-mono text-purple-400 uppercase mb-2">Never Stored</div>
+                                <ul class="space-y-1 text-xs">
+                                    <li>• Live stream recordings</li>
+                                    <li>• Decrypted message/keylog content</li>
+                                    <li>• Photos or media from child device</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 10. Responsible Disclosure -->
+                <section id="disclosure" class="scroll-mt-24">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono text-sm font-bold">10</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Responsible Disclosure Policy</h2>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6 mb-4">
+                        <p class="text-slate-300 mb-5">
+                            We welcome good-faith security research. If you have discovered a potential vulnerability in GX Parent Control — whether through static analysis, network inspection, or runtime testing — please report it to us privately before public disclosure. We commit to responding within <strong class="text-white">72 hours</strong> and resolving valid reports with priority.
+                        </p>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                                <div class="text-xs font-mono text-cyan-400 uppercase mb-2">Step 1 — Report Privately</div>
+                                <p class="text-xs text-slate-300">Email your findings to <a href="mailto:security@gxparentcontrol.com" class="text-cyan-400 hover:underline">security@gxparentcontrol.com</a> with a detailed description, reproduction steps, and potential impact.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                                <div class="text-xs font-mono text-blue-400 uppercase mb-2">Step 2 — Coordinated Fix</div>
+                                <p class="text-xs text-slate-300">We will acknowledge your report within 72 hours, work with you on a fix timeline, and credit you if you wish after the vulnerability is resolved.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4">
+                                <div class="text-xs font-mono text-emerald-400 uppercase mb-2">Step 3 — Safe Disclosure</div>
+                                <p class="text-xs text-slate-300">After the patch is released, we support coordinated public disclosure. We ask for a minimum of 90 days before any public release of technical details.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl bg-amber-950/25 border border-amber-500/25 p-4 text-sm text-amber-100 flex gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-1 shrink-0"></i>
+                        <div>
+                            <strong class="text-white">Out of scope:</strong> Static decompilation findings that do not demonstrate an exploitable, authenticated attack path (e.g., observing that an APK contains server endpoint strings is expected and not a vulnerability).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 11. Technical FAQ (renumbered) -->
                 <section id="faq" class="scroll-mt-24">
                     <div class="flex items-center gap-3 mb-4">
-                        <span class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">07</span>
+                        <span class="w-8 h-8 rounded-lg bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-bold">11</span>
                         <h2 class="text-2xl sm:text-3xl font-bold text-white">Technical FAQ</h2>
                     </div>
                     <p class="text-slate-300 mb-6">Direct, technical answers to common questions raised during static or network reviews.</p>
@@ -479,10 +748,13 @@
                 <i class="fa-solid fa-shield-halved text-cyan-400"></i>
                 <span>GX Parent Control — Security &amp; Architecture Documentation</span>
             </div>
-            <div class="flex items-center gap-5">
+            <div class="flex items-center gap-5 flex-wrap justify-center">
                 <a href="index.html" class="hover:text-cyan-400 transition">Home</a>
                 <a href="#encryption" class="hover:text-cyan-400 transition">Encryption</a>
                 <a href="#ephemeral-relay" class="hover:text-cyan-400 transition">Relay</a>
+                <a href="#comparison" class="hover:text-cyan-400 transition">Comparison</a>
+                <a href="#data-rights" class="hover:text-cyan-400 transition">Data Rights</a>
+                <a href="#disclosure" class="hover:text-cyan-400 transition">Disclosure</a>
                 <a href="#faq" class="hover:text-cyan-400 transition">FAQ</a>
             </div>
         </div>
