@@ -411,7 +411,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
 
       <div class="card" style="margin-bottom:16px">
         <h3 style="margin-bottom:10px">Kids v11.3+ Ciphertext-Only Schemas &amp; Rolling Compatibility</h3>
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px"><strong style="color:var(--text)">Kids v11.3+ Upgrade:</strong> Starting in <strong style="color:var(--amber)">Kids v11.3+</strong>, SMS sync payloads transmit <strong style="color:var(--text)">ciphertext-only <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">AES-256-GCM</code> fields</strong> (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">from</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">message</code>) with legacy plaintext compatibility fields removed. When paired with updated Parent clients, <strong style="color:var(--amber)">Kids v11.3+</strong> also automatically upgrades <strong style="color:var(--text)">GPS coordinates, Contacts, and Gallery/Screenshot uploads (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">GXE1</code>)</strong> to client-side <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">AES-256-GCM</code> encryption.</p>
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px"><strong style="color:var(--text)">Kids v11.3+ Upgrade:</strong> Starting in <strong style="color:var(--amber)">Kids v11.3+</strong>, SMS, Notifications, Call Logs (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">number</code>/<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">name</code>), and Keystrokes transmit <strong style="color:var(--text)">ciphertext-only <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">AES-256-GCM</code> payloads</strong> with all legacy plaintext compatibility fields removed (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">address</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">body</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">plain_title</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">plain_message</code>). When paired with updated Parent clients, <strong style="color:var(--amber)">Kids v11.3+</strong> also upgrades <strong style="color:var(--text)">GPS coordinates, Contacts, and Gallery/Screenshot uploads (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">GXE1</code>)</strong> to client-side <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">AES-256-GCM</code> encryption—all layered inside <strong style="color:var(--text)">TLS 1.2/1.3</strong> transport tunnels.</p>
         <p style="font-size:.9rem;color:var(--muted)">For legacy <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">&lt; v11.3</code> installations already in the field, the Parent app maintains zero-downtime backward compatibility across <strong style="color:var(--text)">TLS 1.2/1.3</strong> channels so existing families never experience service interruption.</p>
       </div>
 
@@ -455,8 +455,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="card-grid cols-2">
         <div class="card">
-          <h3 style="margin-bottom:10px">Why a Private Relay Instead of BaaS Tables?</h3>
-          <p style="font-size:.88rem;color:var(--muted)">Public Backend-as-a-Service (BaaS) real-time databases are built for persistent state, not high-frequency ephemeral queuing, and often retain backups across multi-tenant cloud infrastructure. Operating a dedicated private relay queue with read-and-delete semantics minimizes data residency and keeps historical logs on the parent's own device.</p>
+          <h3 style="margin-bottom:10px">Ciphertext-Only Relay &amp; Log Hygiene</h3>
+          <p style="font-size:.88rem;color:var(--muted)">In <strong style="color:var(--amber)">Kids v11.3+</strong>, the relay holds encrypted ciphertext payloads only—server request logs and crash-reporting pipelines never record decrypted SMS, GPS, or Contact contents, and ciphertext is purged immediately upon delivery to the Parent device.</p>
         </div>
         <div class="card">
           <h3 style="margin-bottom:10px">Why MQTT Uses Retained Messages for Status Only</h3>
@@ -622,7 +622,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="callout purple">
         <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C87EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div><strong>Legal context:</strong> Parental monitoring of minor children's devices is legal in most jurisdictions when the parent is the legal guardian and the child is informed. GX is designed for parents monitoring their own minor children — not for use on adult devices without consent.</div>
+        <div><strong>Clear Data &amp; Control Guarantees:</strong> Only the authorized paired parent account(s) can access data from the child device. All sensitive payloads are encrypted before leaving the device, active camera/mic/screen sessions follow Android's foreground indicators, and parents can immediately stop sharing at any time by unpairing or uninstalling.</div>
       </div>
     </section>
 
@@ -736,11 +736,11 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             </ul>
           </div>
           <div class="data-col">
-            <div class="data-col-label c3">Never Stored</div>
+            <div class="data-col-label c3">Never Stored / Encrypted-Only</div>
             <ul>
-              <li>Live WebRTC audio/camera/screen streams</li>
+              <li>Live WebRTC audio/camera/screen streams (never recorded)</li>
               <li>Permanent message/keylog archives</li>
-              <li>Long-term cloud log warehouses</li>
+              <li>Unencrypted gallery/screenshot files on Kids v11.3+ (<code style="font-size:.76rem;background:var(--raise);padding:1px 4px;border-radius:4px">GXE1</code> encrypted prior to upload)</li>
             </ul>
           </div>
         </div>
@@ -829,8 +829,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
 
       <div class="card-grid cols-2">
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">1. Envelope Encryption, Key Lifetime &amp; 96-bit IVs</h3>
-          <p style="font-size:.85rem;color:var(--muted)">GX intentionally uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> rather than QR-only Zero-Knowledge E2EE so parents never suffer permanent data lockout when switching phones or reinstalling. The wrapping key is isolated in host environment config outside the SQLite database. A stable per-pairing 256-bit key avoids multi-device desync during offline queue drains, while unique 96-bit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecureRandom</code> IVs per item keep AES-GCM collision probability mathematically negligible at single-device volumes.</p>
+          <h3 style="margin-bottom:8px;color:var(--amber)">1. Envelope Encryption &amp; Zero-Knowledge Target Roadmap</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Currently, GX uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> so parents never suffer permanent lockout when switching phones or reinstalling (with the wrapping key isolated outside the database). Our next-generation <strong style="color:var(--amber)">Zero-Knowledge Target Architecture</strong> introduces client-held <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">X25519</code>/<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">Ed25519</code> device keypairs, per-parent wrapped keys, and parent-controlled offline recovery phrases so zero decryption keys ever touch the server.</p>
         </div>
 
         <div class="card">
