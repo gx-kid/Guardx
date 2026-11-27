@@ -410,8 +410,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
 
       <div class="card" style="margin-bottom:16px">
-        <h3 style="margin-bottom:10px">Why Dual-Field Payloads &amp; Transport-Only Telemetry Exist During Rolling Upgrades</h3>
-        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px">In a live mobile ecosystem where parents and children may run different app versions simultaneously, abruptly removing legacy JSON fields breaks message parsing on older paired parent devices. To ensure <strong style="color:var(--text)">zero-downtime backward compatibility</strong> during rolling migrations, message payloads may carry dual-schema compatibility fields inside the <strong style="color:var(--text)">HTTPS/MQTTS TLS tunnel</strong> until legacy client versions are retired.</p>
+        <h3 style="margin-bottom:10px">Transitional Dual-Field Schemas &amp; Transport-Only Telemetry</h3>
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px">In a live mobile ecosystem where parents and children may run different app versions simultaneously, abruptly removing legacy JSON fields breaks message parsing on older paired parent devices. To maintain <strong style="color:var(--text)">zero-downtime backward compatibility</strong> during rolling migrations, message payloads temporarily carry transitional compatibility fields inside the <strong style="color:var(--text)">HTTPS/MQTTS TLS tunnel</strong>—a migration bridge scheduled for deprecation to ciphertext-only payloads once legacy client versions sunset.</p>
         <p style="font-size:.9rem;color:var(--muted)">Similarly, high-frequency structural data—such as GPS coordinates, battery/network telemetry, contact lists, and media uploads—relies on <strong style="color:var(--text)">TLS 1.2/1.3 transport encryption</strong> rather than redundant per-field client-side wrapping, avoiding unnecessary CPU wake-locks and battery drain on budget Android devices while keeping network traffic fully encrypted in transit.</p>
       </div>
 
@@ -479,11 +479,11 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         </div>
         <div class="card">
           <div class="spec-label" style="color:var(--mint);margin-bottom:10px">How GX Solves It Safely</div>
-          <p style="font-size:.88rem;color:var(--muted)">GX uses an <strong style="color:var(--text)">Authenticated Key Provisioning Broker</strong>. The key is transmitted over HTTPS (TLS), immediately wrapped at rest on the server using <strong style="color:var(--text)">AES-256-GCM envelope encryption</strong>, and released only to a JWT-authenticated parent who claims the valid pairing code.</p>
+          <p style="font-size:.88rem;color:var(--muted)">GX uses an <strong style="color:var(--text)">Authenticated Key Provisioning Broker</strong> (not Zero-Knowledge E2EE). The key is transmitted over HTTPS (TLS), immediately wrapped at rest on the server using <strong style="color:var(--text)">AES-256-GCM envelope encryption</strong>, and released only to a JWT-authenticated parent who claims the valid pairing code.</p>
         </div>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:14px">Step-by-Step Pairing Security</h3>
+        <h3 style="margin-bottom:14px">Step-by-Step Pairing Security &amp; Wrapping Key Isolation</h3>
         <ol class="step-list">
           <li>
             <div>
@@ -493,8 +493,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           </li>
           <li>
             <div>
-              <h3>Envelope Encryption at Rest</h3>
-              <p>The provisioning server never stores the raw key or device credentials in plaintext; both are sealed with server-side <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> before writing to disk.</p>
+              <h3>Envelope Encryption at Rest &amp; Key Separation</h3>
+              <p>The provisioning server never stores the raw key or device credentials in plaintext; both are sealed with server-side <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> before writing to disk. The server wrapping key is stored in isolated host environment configuration <em>outside</em> the SQLite database file—meaning a database dump alone cannot unwrap stored keys without separate infrastructure-level access.</p>
             </div>
           </li>
           <li>
@@ -505,8 +505,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           </li>
           <li>
             <div>
-              <h3>Broker Credential Isolation</h3>
-              <p>Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship.</p>
+              <h3>Broker Credential Isolation &amp; Revocation</h3>
+              <p>Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship. Unpairing immediately revokes active broker ACLs and archives the pairing record.</p>
             </div>
           </li>
         </ol>
@@ -557,7 +557,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         </div>
         <div class="card">
           <h3 style="margin-bottom:10px">Accessibility-Assisted OEM Update Completion</h3>
-          <p style="font-size:.88rem;color:var(--muted)">Modern Android OEMs (Samsung, Xiaomi, ColorOS, Vivo) fragment installation dialogs and often block background security patches behind multi-step system prompts. When a parent-authorized child device receives an official update, GX uses Android's <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PackageInstaller</code> session API and accessibility-assisted confirmation so parents don't have to physically recollect the child's phone for every patch.</p>
+          <p style="font-size:.88rem;color:var(--muted)">Modern Android OEMs (Samsung, Xiaomi, ColorOS, Vivo) fragment installation dialogs and often block background security patches behind multi-step system prompts. On already-paired, parent-managed child devices, GX uses Android's <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PackageInstaller</code> session API and scoped accessibility-assisted confirmation—solely for updates verified by OS-enforced <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">APK Signature Scheme v2/v3</code> provenance—so parents don't have to physically recollect the child's phone for every patch.</p>
         </div>
       </div>
     </section>
@@ -588,7 +588,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="card">
         <ul class="check-list">
-          <li><div><strong>Per-Device Broker ACLs:</strong> Every child device and parent account is provisioned with isolated broker roles. Command authorization is enforced at the TLS + MQTT broker ACL layer—eliminating redundant per-packet asymmetric signature overhead on low-bandwidth cellular links while ensuring no user can publish to another family's topics.</div></li>
+          <li><div><strong>Per-Device Broker ACLs &amp; Trust Boundary:</strong> Every child device and parent account is provisioned with isolated broker roles. Command authorization is currently enforced at the TLS + MQTT broker ACL layer—eliminating redundant per-packet asymmetric signature overhead on low-bandwidth cellular links while blocking cross-tenant topic access. Per-command parent cryptographic signatures and nonce expiry windows are part of our ongoing zero-trust roadmap.</div></li>
           <li><div><strong>JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified Supabase authentication token.</div></li>
           <li><div><strong>Rate Limiting &amp; Replay Guards:</strong> Enrollment, pairing claims, and unpair endpoints enforce per-IP and per-account rate limits alongside idempotent bootstrap token verification and strict state-machine checks (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PENDING → CONNECTED → UNPAIRED</code>).</div></li>
           <li><div><strong>On-Device Sandbox Isolation:</strong> Local app preferences, offline queues, and pairing state are stored strictly inside Android's private application sandbox (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">Context.MODE_PRIVATE</code>), isolated by the Linux UID boundary from other installed apps.</div></li>
@@ -714,16 +714,16 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5BD6A4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
             <h3>Account &amp; Data Deletion</h3>
           </div>
-          <p style="font-size:.88rem;color:var(--muted)">To request full account and data deletion, contact us at <a href="mailto:guardx.support@gmail.com" style="color:var(--amber);text-decoration:none">guardx.support@gmail.com</a>. We will remove your authentication record, relay queue, and all associated provisioning data within 30 days.</p>
+          <p style="font-size:.88rem;color:var(--muted)">To request full account and data deletion, contact us at <a href="mailto:guardx.support@gmail.com" style="color:var(--amber);text-decoration:none">guardx.support@gmail.com</a>. Consistent with our Privacy Policy, we remove your authentication record, active relay queue, and associated provisioning data within <strong style="color:var(--text)">48 hours</strong>.</p>
         </div>
       </div>
       <div class="card">
-        <h3 style="margin-bottom:16px">What data does GX hold?</h3>
+        <h3 style="margin-bottom:16px">What data does GX process &amp; hold?</h3>
         <div class="data-cols">
           <div class="data-col">
             <div class="data-col-label c1">Relay Queue (Ephemeral)</div>
             <ul>
-              <li>Activity log batches (deleted on delivery)</li>
+              <li>Activity logs (SMS, notifications, GPS, contacts, call logs — deleted on delivery)</li>
               <li>Device telemetry (battery, network state)</li>
             </ul>
           </div>
@@ -738,7 +738,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="data-col">
             <div class="data-col-label c3">Never Stored</div>
             <ul>
-              <li>Live stream recordings</li>
+              <li>Live WebRTC audio/camera/screen streams</li>
               <li>Permanent message/keylog archives</li>
               <li>Long-term cloud log warehouses</li>
             </ul>
@@ -794,7 +794,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         </details>
         <details class="faq-item">
           <summary>3. Why do some payloads carry both encrypted fields and compatibility fields, or rely on TLS alone?</summary>
-          <div class="faq-body">All traffic travels inside TLS-encrypted tunnels (HTTPS/MQTTS). During rolling app updates, dual-schema fields ensure older parent clients can still parse messages without breaking, while high-frequency structural telemetry (like GPS coordinates and battery state) relies directly on TLS 1.2/1.3 transport security to preserve battery life on the child's device.</div>
+          <div class="faq-body">All traffic travels inside TLS-encrypted tunnels (HTTPS/MQTTS). During rolling app updates, transitional dual-schema fields ensure older parent clients can still parse messages without breaking, while high-frequency structural telemetry (like GPS coordinates and battery state) relies directly on TLS 1.2/1.3 transport security to preserve battery life on the child's device.</div>
         </details>
         <details class="faq-item">
           <summary>4. How are OTA app updates protected against tampering if a broadcast omits a checksum?</summary>
@@ -830,7 +830,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       <div class="card-grid cols-2">
         <div class="card">
           <h3 style="margin-bottom:8px;color:var(--amber)">1. Envelope Encryption, Key Lifetime &amp; 96-bit IVs</h3>
-          <p style="font-size:.85rem;color:var(--muted)">GX intentionally uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> rather than QR-only Zero-Knowledge E2EE so parents never suffer permanent data lockout when switching phones or reinstalling. A stable per-pairing 256-bit key avoids multi-device desync during offline queue drains, while unique 96-bit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecureRandom</code> IVs per item keep AES-GCM collision probability mathematically negligible at single-device message volumes.</p>
+          <p style="font-size:.85rem;color:var(--muted)">GX intentionally uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> rather than QR-only Zero-Knowledge E2EE so parents never suffer permanent data lockout when switching phones or reinstalling. The wrapping key is isolated in host environment config outside the SQLite database. A stable per-pairing 256-bit key avoids multi-device desync during offline queue drains, while unique 96-bit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecureRandom</code> IVs per item keep AES-GCM collision probability mathematically negligible at single-device volumes.</p>
         </div>
 
         <div class="card">
@@ -854,8 +854,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">6. OS Survival, Sandbox &amp; Deletion SOP</h3>
-          <p style="font-size:.85rem;color:var(--muted)">Background continuity on Android 12–15 relies on explicit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">foregroundServiceType</code> declarations and high-priority FCM wakeups rather than invasive hacks. Local state stays inside <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">MODE_PRIVATE</code> sandboxing, Play Integrity / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecurityChecker</code> monitors runtime integrity, and account deletion requests purge provisioning records within our 30-day operational SOP.</p>
+          <h3 style="margin-bottom:8px;color:var(--amber)">6. OS Survival, Sandbox &amp; 48-Hour Deletion SOP</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Background continuity on Android 12–15 relies on explicit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">foregroundServiceType</code> declarations and high-priority FCM wakeups rather than invasive hacks. Local state stays inside <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">MODE_PRIVATE</code> sandboxing, Play Integrity / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecurityChecker</code> monitors runtime integrity, and account deletion requests purge provisioning records within <strong style="color:var(--text)">48 hours</strong>, aligned with our Privacy Policy.</p>
         </div>
       </div>
     </section>
