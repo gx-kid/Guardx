@@ -279,7 +279,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         <a href="#trust-badges" class="toc-link">0. Trust Commitments</a>
         <a href="#encryption" class="toc-link">1. Layered Encryption</a>
         <a href="#ephemeral-relay" class="toc-link">2. Ephemeral Relay &amp; Presence</a>
-        <a href="#key-provisioning" class="toc-link">3. Key Provisioning Broker</a>
+        <a href="#key-provisioning" class="toc-link">3. Secure Pairing &amp; Broker Auth</a>
         <a href="#apk-hardening" class="toc-link">4. APK Hardening &amp; Reality</a>
         <a href="#ota-updates" class="toc-link">5. OTA Signing &amp; Updates</a>
         <a href="#network-resilience" class="toc-link">6. Certificate Trust &amp; Channels</a>
@@ -323,8 +323,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
               <svg viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
             <div>
-              <h3 style="font-size:.92rem;margin-bottom:5px">Encrypted Transport Always</h3>
-              <p style="font-size:.82rem;color:var(--muted)">All monitoring data travels over TLS-encrypted channels (HTTPS &amp; MQTTS), with client-side AES-256-GCM encryption on sensitive text pipelines.</p>
+              <h3 style="font-size:.92rem;margin-bottom:5px">Encrypted Transport &amp; Payload Crypto</h3>
+              <p style="font-size:.82rem;color:var(--muted)">All traffic travels over TLS 1.2/1.3 (HTTPS &amp; MQTTS), with client-side AES-256-GCM on SMS, Notifications, Call Logs, Keystrokes, and (in Kids v11.3+ with <code style="font-size:.76rem;background:var(--raise);padding:1px 4px;border-radius:4px">parent_enc_v2</code>) GPS, Contacts, and <code style="font-size:.76rem;background:var(--raise);padding:1px 4px;border-radius:4px">GXE1</code> media, plus HMAC-SHA256 command signing.</p>
             </div>
           </div>
         </div>
@@ -381,14 +381,14 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         <span class="sec-num">01</span>
         <h2>Defense-in-Depth Cryptography &amp; Schema Evolution</h2>
       </div>
-      <p style="color:var(--muted);margin-bottom:22px">GX Parent Control applies <strong style="color:var(--text)">TLS transport encryption across every channel</strong> alongside <strong style="color:var(--text)">client-side AES-256-GCM encryption</strong> on sensitive text pipelines, balanced carefully with battery efficiency and backward compatibility across active app versions.</p>
+      <p style="color:var(--muted);margin-bottom:22px">GX Parent Control applies <strong style="color:var(--text)">TLS 1.2/1.3 transport encryption across every channel</strong> alongside <strong style="color:var(--text)">client-side AES-256-GCM encryption</strong> on SMS, Notifications, Call Logs, Keystrokes, and (in <strong style="color:var(--amber)">Kids v11.3+</strong> with <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">parent_enc_v2</code>) GPS coordinates, Contacts, and <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">GXE1</code> media uploads.</p>
       <div class="card-grid cols-2" style="margin-bottom:16px">
         <div class="card">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
             <h3>Client-Side AES-256-GCM</h3>
           </div>
-          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Sensitive text streams—including SMS messages, notifications, and keystroke events—are encrypted locally on the child device using <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">EncryptionHelper</code> before serialization.</p>
+          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">SMS, notifications, call logs, and keystrokes—plus GPS, contacts, and <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">GXE1</code> media when <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">parent_enc_v2</code> is active—are encrypted locally on the child device using <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">EncryptionHelper</code> before serialization.</p>
           <ul class="code-block">
             <li>Algorithm: AES/GCM/NoPadding (256-bit)</li>
             <li>IV: Unique 12-byte SecureRandom per item</li>
@@ -455,8 +455,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="card-grid cols-2">
         <div class="card">
-          <h3 style="margin-bottom:10px">Ciphertext-Only Relay &amp; Log Hygiene</h3>
-          <p style="font-size:.88rem;color:var(--muted)">In <strong style="color:var(--amber)">Kids v11.3+</strong>, the relay holds encrypted ciphertext payloads only—server request logs and crash-reporting pipelines never record decrypted SMS, GPS, or Contact contents, and ciphertext is purged immediately upon delivery to the Parent device.</p>
+          <h3 style="margin-bottom:10px">Ciphertext-Only Relay, Metadata Scope &amp; Log Hygiene</h3>
+          <p style="font-size:.88rem;color:var(--muted)">In <strong style="color:var(--amber)">Kids v11.3+</strong>, the relay holds encrypted ciphertext payloads for SMS, Notifications, Call Logs, Keystrokes, and (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">parent_enc_v2</code>) GPS/Contacts, purging them immediately upon delivery. Structural telemetry metadata (battery level, network state, timestamps, and device IDs) is transmitted over TLS 1.2/1.3 without AES-GCM wrapping.</p>
         </div>
         <div class="card">
           <h3 style="margin-bottom:10px">Why MQTT Uses Retained Messages for Status Only</h3>
@@ -465,48 +465,32 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
     </section>
 
-    <!-- 3. Key Provisioning -->
+    <!-- 3. Secure Pairing & Broker Auth -->
     <section id="key-provisioning" style="scroll-margin-top:84px">
       <div class="sec-header">
         <span class="sec-num">03</span>
-        <h2>Server-Assisted Key Provisioning: The Engineering Trade-Off</h2>
+        <h2>Authenticated Pairing &amp; Role-Scoped Broker Credentials</h2>
       </div>
-      <p style="color:var(--muted);margin-bottom:22px">When a child device enrolls, it generates a fresh, cryptographically random <strong style="color:var(--text)">256-bit (32-byte) AES key</strong>. How that key reaches the parent device is one of the most important architectural decisions in any monitoring platform.</p>
-      <div class="card-grid cols-2" style="margin-bottom:16px">
-        <div class="card">
-          <div class="spec-label" style="color:#F29B1E;margin-bottom:10px">Why Not Manual Key Entry?</div>
-          <p style="font-size:.88rem;color:var(--muted)">If parents had to manually copy a 64-character hexadecimal key—or re-scan a physical QR code every time they reinstall the app, clear cache, or switch phones—any lost key would permanently lock the parent out of their child's safety monitoring with no recovery path.</p>
-        </div>
-        <div class="card">
-          <div class="spec-label" style="color:var(--mint);margin-bottom:10px">How GX Solves It Safely</div>
-          <p style="font-size:.88rem;color:var(--muted)">GX uses an <strong style="color:var(--text)">Authenticated Key Provisioning Broker</strong> (not Zero-Knowledge E2EE). The key is transmitted over HTTPS (TLS), immediately wrapped at rest on the server using <strong style="color:var(--text)">AES-256-GCM envelope encryption</strong>, and released only to a JWT-authenticated parent who claims the valid pairing code.</p>
-        </div>
-      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Device pairing and MQTTS broker access are gated by cryptographic device tokens, authenticated parent sessions, and strict server-side Access Control Lists (ACLs).</p>
       <div class="card">
-        <h3 style="margin-bottom:14px">Step-by-Step Pairing Security &amp; Wrapping Key Isolation</h3>
+        <h3 style="margin-bottom:14px">Step-by-Step Pairing &amp; Credential Isolation</h3>
         <ol class="step-list">
           <li>
             <div>
               <h3>Device Enrollment</h3>
-              <p>The child device generates a random 256-bit AES key and a high-entropy bootstrap token, registering over HTTPS.</p>
-            </div>
-          </li>
-          <li>
-            <div>
-              <h3>Envelope Encryption at Rest, Wrapping Key Location &amp; Admin Scope</h3>
-              <p>The provisioning server never stores the raw key or device credentials in plaintext; both are sealed with server-side <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> before writing to disk. The server wrapping key is stored in isolated host environment configuration (<em>outside</em> the SQLite database file), so a database dump alone cannot unwrap stored keys without separate host-level access. <strong style="color:var(--text)">Admin Trust Boundary:</strong> Because this is Server-Assisted Envelope Encryption (not Zero-Knowledge E2EE), an infrastructure administrator with root access to both the host environment secret and the database technically has the capability to unwrap stored keys.</p>
+              <p>The child device generates a high-entropy bootstrap token and registers its pairing session over HTTPS (TLS 1.2/1.3).</p>
             </div>
           </li>
           <li>
             <div>
               <h3>Authenticated Claim</h3>
-              <p>To retrieve the key, the parent must present a valid Supabase JWT session token alongside the pairing code, protected by strict per-IP and per-account rate limits.</p>
+              <p>To link a child device, the parent must present a valid Supabase JWT session token alongside the pairing code, protected by strict per-IP and per-account rate limits.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Broker Credential Isolation, Rotation &amp; Revocation (Kids v11.3+)</h3>
-              <p>Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship. Starting in <strong style="color:var(--amber)">Kids v11.3+</strong>, normal enrollment provisions the key exclusively via the envelope-encrypted broker (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">/mqtt-api/enroll</code>) and no longer mirrors the key to Supabase fallback tables, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">/api/telemetry</code>, or retained MQTT <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">/status</code> messages. Unpairing immediately revokes active broker ACLs and archives the pairing record.</p>
+              <h3>Broker Credential Isolation &amp; Revocation</h3>
+              <p>Once paired, both devices receive unique, role-scoped MQTTS credentials restricted to their specific pairing relationship. Unpairing immediately revokes active broker ACLs and archives the pairing record.</p>
             </div>
           </li>
         </ol>
@@ -588,7 +572,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="card">
         <ul class="check-list">
-          <li><div><strong>Per-Device Broker ACLs &amp; HMAC Command Signing (Kids v11.3+):</strong> Every child device and parent account is provisioned with isolated broker roles at the TLS + MQTT ACL layer. Starting in <strong style="color:var(--amber)">Kids v11.3+</strong> paired with updated Parent apps, commands also carry <strong style="color:var(--text)">HMAC-SHA256 cryptographic signatures</strong> (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">sig</code>) bound to <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">kidUid|command_id|action|timestamp|expires_at</code> across both MQTT and local LAN channels, while maintaining dual-mode compatibility for legacy <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">&lt; v11.3</code> installations.</div></li>
+          <li><div><strong>Per-Device Broker ACLs, HMAC Signing, TTL &amp; Replay Guards (Kids v11.3+):</strong> Every child device and parent account is provisioned with isolated broker roles at the TLS + MQTT ACL layer. Starting in <strong style="color:var(--amber)">Kids v11.3+</strong> paired with updated Parent apps, commands carry <strong style="color:var(--text)">HMAC-SHA256 signatures</strong> (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">sig</code>) bound to <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">kidUid|command_id|action|timestamp|expires_at</code>, alongside <strong style="color:var(--text)">TTL expiry checks</strong> (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">expires_at</code>) and <strong style="color:var(--text)">command_id replay deduplication</strong> across MQTT and LAN channels (dual-mode compatible with <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">&lt; v11.3</code>).</div></li>
           <li><div><strong>JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified Supabase authentication token.</div></li>
           <li><div><strong>Rate Limiting &amp; Replay Guards:</strong> Enrollment, pairing claims, and unpair endpoints enforce per-IP and per-account rate limits alongside idempotent bootstrap token verification and strict state-machine checks (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PENDING → CONNECTED → UNPAIRED</code>).</div></li>
           <li><div><strong>On-Device Sandbox Isolation:</strong> Local app preferences, offline queues, and pairing state are stored strictly inside Android's private application sandbox (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">Context.MODE_PRIVATE</code>), isolated by the Linux UID boundary from other installed apps.</div></li>
@@ -707,7 +691,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></svg>
             <h3>Instant Device Unpairing</h3>
           </div>
-          <p style="font-size:.88rem;color:var(--muted)">Any parent can unpair a child device at any time from within the app. Unpairing immediately revokes all server-side broker permissions and ACLs for that device relationship — no data can be received after unpairing.</p>
+          <p style="font-size:.88rem;color:var(--muted)">Any parent can unpair a child device at any time from within the app. Unpairing immediately revokes all server-side broker permissions and ACLs for that device relationship — no future data or commands can be exchanged after unpairing. <em>Note:</em> because data-key rotation on unpair is not yet automated, previously cached keys on a parent device remain tied only to historical ciphertext already retrieved before unpair.</p>
         </div>
         <div class="card">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -730,7 +714,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="data-col">
             <div class="data-col-label c2">Provisioning Server</div>
             <ul>
-              <li>Encrypted pairing credentials (envelope-encrypted)</li>
+              <li>Encrypted pairing &amp; broker credentials</li>
               <li>Parent-child device linkage records</li>
               <li>Subscription status</li>
             </ul>
@@ -789,31 +773,27 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="faq-body">No. Every client-server Android app must know where its backend lives in order to connect. Being able to unpack an APK with <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">jadx</code> only shows client-side structure; it does not bypass TLS transport encryption, AES-256-GCM payload encryption, or server-side JWT authentication.</div>
         </details>
         <details class="faq-item">
-          <summary>2. Why is an encryption key sent to the provisioning server during device enrollment?</summary>
-          <div class="faq-body">It enables pairing-code recovery and seamless multi-device setup without forcing parents to manually manage 256-bit keys. The key travels over HTTPS (TLS), is immediately sealed at rest using AES-256-GCM envelope encryption on the server, and is only released to an authenticated parent claiming that specific pairing code.</div>
+          <summary>2. Do payloads still carry legacy plaintext compatibility fields, or rely on TLS alone?</summary>
+          <div class="faq-body">All traffic travels inside TLS 1.2/1.3 tunnels (HTTPS/MQTTS). In <strong style="color:var(--text)">Kids v11.3+</strong>, legacy plaintext compatibility fields (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">address</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">body</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">plain_title</code>, <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">plain_message</code>) are removed from SMS and Notifications, Call Logs are AES-256-GCM encrypted, and when paired with <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">parent_enc_v2</code>, GPS, Contacts, and Gallery/Screenshot uploads (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">GXE1</code>) are also AES-256-GCM encrypted. Only lightweight numeric/status telemetry (such as battery level and network state) relies directly on TLS 1.2/1.3.</div>
         </details>
         <details class="faq-item">
-          <summary>3. Why do some payloads carry both encrypted fields and compatibility fields, or rely on TLS alone?</summary>
-          <div class="faq-body">All traffic travels inside TLS-encrypted tunnels (HTTPS/MQTTS). During rolling app updates, transitional dual-schema fields ensure older parent clients can still parse messages without breaking, while high-frequency structural telemetry (like GPS coordinates and battery state) relies directly on TLS 1.2/1.3 transport security to preserve battery life on the child's device.</div>
+          <summary>3. How are OTA app updates protected against tampering?</summary>
+          <div class="faq-body">Android's operating system enforces cryptographic <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">APK Signature Scheme v2/v3</code> verification at install time—PackageManager strictly refuses any APK not signed by the exact same private release keystore. Additionally, <strong style="color:var(--text)">Kids v11.3+</strong> enforces <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">sha256</code> checksum verification when provided in update metadata before installation.</div>
         </details>
         <details class="faq-item">
-          <summary>4. How are OTA app updates protected against tampering if a broadcast omits a checksum?</summary>
-          <div class="faq-body">Android's operating system enforces cryptographic <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">APK Signature Scheme v2/v3</code> verification at install time. Even if an update metadata packet lacks an optional SHA-256 string, Android's PackageManager strictly refuses to install any APK not signed by the exact same private release keystore as the installed application.</div>
-        </details>
-        <details class="faq-item">
-          <summary>5. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</summary>
+          <summary>4. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</summary>
           <div class="faq-body">A private relay acts as a transient delivery queue (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">Write → Read → Delete</code>) rather than a permanent cloud database. Once the parent device retrieves logs, they are purged from the relay—ensuring sensitive family history is not stored indefinitely on third-party cloud infrastructure.</div>
         </details>
         <details class="faq-item">
-          <summary>6. Are live screen, camera, or audio streams recorded on GX servers?</summary>
+          <summary>5. Are live screen, camera, or audio streams recorded on GX servers?</summary>
           <div class="faq-body">No. Live monitoring uses WebRTC (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">DTLS/SRTP</code>) to stream encrypted media directly between the child and parent devices (or via an encrypted relay when strict carrier NATs prevent direct peer-to-peer routing). Media streams are never recorded or stored server-side.</div>
         </details>
         <details class="faq-item">
-          <summary>7. Why are Firebase/Supabase client keys or STUN/TURN endpoints visible in the APK?</summary>
+          <summary>6. Why are Firebase/Supabase client keys or STUN/TURN endpoints visible in the APK?</summary>
           <div class="faq-body">Firebase configs, Supabase <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">anon</code> keys, and STUN/TURN ICE addresses are intentionally public client routing identifiers required for authentication and NAT traversal. Actual data access is enforced server-side via Row-Level Security (RLS) and JWT validation, and TURN relays only see <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">DTLS/SRTP</code>-encrypted media packets.</div>
         </details>
         <details class="faq-item">
-          <summary>8. How is local app state protected on the phone, and what prevents API replay abuse?</summary>
+          <summary>7. How is local app state protected on the phone, and what prevents API replay abuse?</summary>
           <div class="faq-body">Local state and offline queues are isolated inside Android's <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">MODE_PRIVATE</code> app sandbox, inaccessible to other apps on standard devices. On the backend, enrollment and pairing endpoints enforce per-IP/per-account rate limits, idempotent token checks, and strict pairing state-machine transitions.</div>
         </details>
       </div>
@@ -829,32 +809,27 @@ html{scrollbar-color:#4A4A45 var(--bg)}
 
       <div class="card-grid cols-2">
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">1. Envelope Encryption &amp; Zero-Knowledge Target Roadmap</h3>
-          <p style="font-size:.85rem;color:var(--muted)">Currently, GX uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> so parents never suffer permanent lockout when switching phones or reinstalling (with the wrapping key isolated outside the database). Our next-generation <strong style="color:var(--amber)">Zero-Knowledge Target Architecture</strong> introduces client-held <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">X25519</code>/<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">Ed25519</code> device keypairs, per-parent wrapped keys, and parent-controlled offline recovery phrases so zero decryption keys ever touch the server.</p>
-        </div>
-
-        <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">2. Multi-Tenant Ownership, Pairing &amp; Sessions</h3>
+          <h3 style="margin-bottom:8px;color:var(--amber)">1. Multi-Tenant Ownership, Pairing &amp; Sessions</h3>
           <p style="font-size:.85rem;color:var(--muted)">Every pairing claim, credential fetch, and unpair action validates the caller's Supabase JWT (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">sub</code>) against server-side parent-child link records, preventing cross-account IDOR access. Pairing endpoints enforce both per-IP and per-account rate limits, while unpairing immediately revokes broker ACLs without waiting for client token expiry.</p>
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">3. Broker Wildcards, Reconnect Jitter &amp; Scale</h3>
+          <h3 style="margin-bottom:8px;color:var(--amber)">2. Broker Wildcards, Reconnect Jitter &amp; Scale</h3>
           <p style="font-size:.85rem;color:var(--muted)">The MQTTS broker disables anonymous access and binds each device/parent to isolated role-scoped topics, blocking cross-tenant wildcard subscriptions (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">#</code> / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">+</code>). To prevent thundering-herd spikes after network drops or OTA broadcasts, clients apply reconnect backoff and randomized <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">rollout_jitter_seconds</code>.</p>
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">4. Anti-Downgrade, Keystore &amp; Supply Chain</h3>
+          <h3 style="margin-bottom:8px;color:var(--amber)">3. Anti-Downgrade &amp; Supply Chain</h3>
           <p style="font-size:.85rem;color:var(--muted)">Release signing keystores (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">release.jks</code>) and environment secrets are excluded from source control via strict <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">.gitignore</code> rules. During OTA updates, both client-side version checks (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">isUpdateNewer</code>) and Android OS <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">versionCode</code> enforcement block unauthorized downgrade attacks.</p>
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">5. Server-Verified Billing &amp; Media Signing</h3>
+          <h3 style="margin-bottom:8px;color:var(--amber)">4. Server-Verified Billing &amp; Media Signing</h3>
           <p style="font-size:.85rem;color:var(--muted)">Subscription entitlements are verified against server-side records rather than trusting local device preferences alone. Media uploads use server-generated signatures with zero upload-secret exposure in the APK, while WebRTC uses dynamically fetched ICE/TURN configurations paired with mandatory <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">DTLS/SRTP</code> encryption.</p>
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom:8px;color:var(--amber)">6. OS Survival, Sandbox &amp; 48-Hour Deletion SOP</h3>
+          <h3 style="margin-bottom:8px;color:var(--amber)">5. OS Survival, Sandbox &amp; 48-Hour Deletion SOP</h3>
           <p style="font-size:.85rem;color:var(--muted)">Background continuity on Android 12–15 relies on explicit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">foregroundServiceType</code> declarations and high-priority FCM wakeups rather than invasive hacks. Local state stays inside <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">MODE_PRIVATE</code> sandboxing, Play Integrity / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecurityChecker</code> monitors runtime integrity, and account deletion requests purge provisioning records within <strong style="color:var(--text)">48 hours</strong>, aligned with our Privacy Policy.</p>
         </div>
       </div>
@@ -901,33 +876,23 @@ html{scrollbar-color:#4A4A45 var(--bg)}
 
       <div class="faq-list">
         <details class="faq-item">
-          <summary>1. Why not pure Zero-Knowledge E2EE (ECDH / QR-only) with zero server key escrow?</summary>
-          <div class="faq-body">Pure QR-only E2EE works well for chat apps where losing history is acceptable, but in child-safety monitoring, parents frequently replace phones, clear app data, or link a second parent device. Without server-assisted envelope-encrypted recovery, losing the parent phone causes <strong style="color:var(--text)">permanent lockout</strong> until the parent physically reacquires the child's device. Envelope encryption (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> at rest) solves multi-parent linking and recovery cleanly.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary>2. Why not Signal-style Double Ratchet (per-message forward secrecy) for queued logs?</summary>
+          <summary>1. Why not Signal-style Double Ratchet (per-message forward secrecy) for queued logs?</summary>
           <div class="faq-body">Ratchet protocols require synchronized state and ordered delivery. Child devices routinely enter Doze mode, lose cellular signal, and buffer hundreds of events in offline queues while the parent app is closed. Out-of-order delivery or a parent app reinstall would <strong style="color:var(--text)">permanently desynchronize</strong> the ratchet and corrupt queued safety logs. A stable per-pairing 256-bit AES-GCM key guarantees deterministic decryption across offline batches.</div>
         </details>
 
         <details class="faq-item">
-          <summary>3. Why isn't the shared pairing key locked inside non-exportable Android Keystore (StrongBox/TEE)?</summary>
-          <div class="faq-body">By definition, a symmetric key shared between a child phone and one or more parent phones <strong style="color:var(--text)">must be transferable</strong> during pairing—hardware-bound non-exportable TEE keys cannot leave one device's silicon to decrypt payloads on another phone. Additionally, StrongBox/TEE implementations vary inconsistently across budget OEM chipsets.</div>
+          <summary>2. Why not hardcoded SSL pinning plus heavy per-packet RSA/ECDSA signatures?</summary>
+          <div class="faq-body">Hardcoded leaf/intermediate pinning risks <strong style="color:var(--text)">fleet-wide outages</strong> during automated 90-day TLS certificate rotations or behind legitimate carrier proxies. For command integrity, instead of heavy RSA/ECDSA per-packet operations, <strong style="color:var(--text)">Kids v11.3+</strong> uses lightweight <strong style="color:var(--text)">HMAC-SHA256</strong> command signatures paired with TTL (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">expires_at</code>) and <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">command_id</code> replay deduplication over TLS + Broker ACLs.</div>
         </details>
 
         <details class="faq-item">
-          <summary>4. Why not hardcoded SSL pinning plus per-packet asymmetric command signatures?</summary>
-          <div class="faq-body">Hardcoded leaf/intermediate pinning risks <strong style="color:var(--text)">fleet-wide outages</strong> during automated 90-day TLS certificate rotations or behind legitimate carrier proxies when older clients haven't updated. Likewise, signing every small MQTT control packet with RSA/ECDSA adds unnecessary CPU wakeups and battery drain on low-end devices—TLS + Broker ACLs already authenticate every session at the transport layer.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary>5. Why not distribute the child app solely via Google Play instead of using an OTA updater?</summary>
+          <summary>3. Why not distribute the child app solely via Google Play instead of using an OTA updater?</summary>
           <div class="faq-body">Play Store policies restrict <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">READ_SMS</code>, <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">READ_CALL_LOG</code>, and broad <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AccessibilityService</code> APIs even for legitimate parental-control software. Direct distribution with OS-enforced <strong style="color:var(--text)">APK Signature Scheme v2/v3</strong> OTA updates is the only viable way to deliver full safety features and keep child devices patched.</div>
         </details>
 
         <details class="faq-item">
-          <summary>6. Why not wrap every single numeric/telemetry field (GPS, battery, timestamps) in AES-GCM?</summary>
-          <div class="faq-body">Wrapping every small coordinate or timestamp individually inflates payload overhead (12-byte IV + 16-byte GCM tag + Base64 per field) and triggers frequent cryptographic wake-locks that drain battery on budget phones. Because the entire transport channel is already encrypted with <strong style="color:var(--text)">TLS 1.2/1.3</strong>, reserving client-side AES-256-GCM for sensitive text payloads balances defense-in-depth with device battery life.</div>
+          <summary>4. Why not wrap every single numeric/telemetry field (battery, network state, timestamps) in AES-GCM?</summary>
+          <div class="faq-body">In <strong style="color:var(--text)">Kids v11.3+</strong> with <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">parent_enc_v2</code>, GPS coordinates <em>are</em> AES-256-GCM encrypted. However, wrapping every small battery percentage or timestamp individually inflates payload overhead (12-byte IV + 16-byte GCM tag + Base64 per field) and triggers unnecessary wake-locks, so non-identifying status telemetry relies on <strong style="color:var(--text)">TLS 1.2/1.3</strong>.</div>
         </details>
       </div>
     </section>
