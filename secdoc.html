@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GX Parent Control | Security &amp; Architecture Whitepaper</title>
-<meta name="description" content="How GX Parental Control protects family data with AES-256-GCM encryption, ephemeral relay architecture, and zero master secrets in the APK.">
+<meta name="description" content="How GX Parental Control protects family data with AES-256-GCM encryption, ephemeral relay architecture, OS-enforced APK signing, and zero master secrets in the APK.">
 <link rel="canonical" href="https://guardx.site/secdoc">
 <meta name="theme-color" content="#1F1F1D">
 <link rel="icon" type="image/png" href="https://guardx.site/logo.png">
@@ -214,6 +214,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
     </a>
     <nav aria-label="Main">
       <a href="#encryption">Encryption</a>
+      <a href="#ota-updates">OTA Security</a>
       <a href="#comparison">Comparison</a>
       <a href="#faq">Technical FAQ</a>
     </nav>
@@ -234,7 +235,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       SECURITY &amp; PRIVACY ARCHITECTURE WHITEPAPER
     </div>
     <h1>How GX Parent Control Protects <span style="color:var(--amber);white-space:nowrap">Family Data &amp; Privacy</span></h1>
-    <p>Parental monitoring software handles sensitive family information. Instead of hiding behind vague marketing claims, this document explains our exact cryptographic layers, ephemeral relay design, key provisioning model, application hardening, and the engineering trade-offs behind every architectural decision.</p>
+    <p>Parental monitoring software handles sensitive family information. Instead of hiding behind vague marketing claims, this document explains our exact cryptographic layers, ephemeral relay design, rolling schema compatibility, OS-enforced update signing, and the engineering trade-offs behind every architectural decision.</p>
 
     <!-- Spec Pills -->
     <div class="spec-row">
@@ -259,9 +260,9 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         <div class="spec-sub">Purged on Delivery</div>
       </div>
       <div class="spec-pill">
-        <div class="spec-label">Client Secrets</div>
-        <div class="spec-val">Server-Isolated</div>
-        <div class="spec-sub">Zero Master Keys in APK</div>
+        <div class="spec-label">OTA Integrity</div>
+        <div class="spec-val">APK Sig v2/v3</div>
+        <div class="spec-sub">OS-Enforced Keystore</div>
       </div>
     </div>
   </div>
@@ -277,16 +278,18 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       <div id="toc-nav" style="display:flex;flex-direction:column">
         <a href="#trust-badges" class="toc-link">0. Trust Commitments</a>
         <a href="#encryption" class="toc-link">1. Layered Encryption</a>
-        <a href="#ephemeral-relay" class="toc-link">2. Ephemeral Relay Queue</a>
+        <a href="#ephemeral-relay" class="toc-link">2. Ephemeral Relay &amp; Presence</a>
         <a href="#key-provisioning" class="toc-link">3. Key Provisioning Broker</a>
         <a href="#apk-hardening" class="toc-link">4. APK Hardening &amp; Reality</a>
-        <a href="#network-resilience" class="toc-link">5. Certificate Trust &amp; Channels</a>
-        <a href="#tenant-isolation" class="toc-link">6. Tenant &amp; ACL Isolation</a>
-        <a href="#consent-transparency" class="toc-link">7. Consent &amp; Transparency</a>
-        <a href="#comparison" class="toc-link">8. App Comparison</a>
-        <a href="#data-rights" class="toc-link">9. Data Rights &amp; Deletion</a>
-        <a href="#disclosure" class="toc-link">10. Responsible Disclosure</a>
-        <a href="#faq" class="toc-link">11. Technical FAQ</a>
+        <a href="#ota-updates" class="toc-link">5. OTA Signing &amp; Updates</a>
+        <a href="#network-resilience" class="toc-link">6. Certificate Trust &amp; Channels</a>
+        <a href="#tenant-isolation" class="toc-link">7. Tenant &amp; ACL Isolation</a>
+        <a href="#consent-transparency" class="toc-link">8. Consent &amp; Transparency</a>
+        <a href="#comparison" class="toc-link">9. App Comparison</a>
+        <a href="#data-rights" class="toc-link">10. Data Rights &amp; Deletion</a>
+        <a href="#disclosure" class="toc-link">11. Responsible Disclosure</a>
+        <a href="#faq" class="toc-link">12. Technical FAQ</a>
+        <a href="#engineering-rationale" class="toc-link">13. Engineering Trade-Offs</a>
       </div>
     </div>
   </aside>
@@ -319,7 +322,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             </div>
             <div>
               <h3 style="font-size:.92rem;margin-bottom:5px">Encrypted Transport Always</h3>
-              <p style="font-size:.82rem;color:var(--muted)">All sensitive data travels over TLS-encrypted channels (HTTPS &amp; MQTTS). Sensitive payloads are additionally encrypted at the client before transmission.</p>
+              <p style="font-size:.82rem;color:var(--muted)">All monitoring data travels over TLS-encrypted channels (HTTPS &amp; MQTTS), with client-side AES-256-GCM encryption on sensitive text pipelines.</p>
             </div>
           </div>
         </div>
@@ -352,7 +355,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             </div>
             <div>
               <h3 style="font-size:.92rem;margin-bottom:5px">Strict Family Isolation</h3>
-              <p style="font-size:.82rem;color:var(--muted)">Per-device encryption keys and server-side ACLs ensure no parent or device can access another family's data.</p>
+              <p style="font-size:.82rem;color:var(--muted)">Per-device encryption keys and broker ACLs ensure no parent or device can subscribe to or read another family's data.</p>
             </div>
           </div>
         </div>
@@ -374,16 +377,16 @@ html{scrollbar-color:#4A4A45 var(--bg)}
     <section id="encryption" style="scroll-margin-top:84px">
       <div class="sec-header">
         <span class="sec-num">01</span>
-        <h2>Defense-in-Depth Cryptography</h2>
+        <h2>Defense-in-Depth Cryptography &amp; Schema Evolution</h2>
       </div>
-      <p style="color:var(--muted);margin-bottom:22px">Relying on a single layer of security (such as HTTPS alone) is insufficient for sensitive family telemetry. GX Parent Control applies <strong style="color:var(--text)">independent cryptographic protection at both the payload layer and the transport layer</strong>, ensuring data remains protected before, during, and after transit.</p>
+      <p style="color:var(--muted);margin-bottom:22px">GX Parent Control applies <strong style="color:var(--text)">TLS transport encryption across every channel</strong> alongside <strong style="color:var(--text)">client-side AES-256-GCM encryption</strong> on sensitive text pipelines, balanced carefully with battery efficiency and backward compatibility across active app versions.</p>
       <div class="card-grid cols-2" style="margin-bottom:16px">
         <div class="card">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
             <h3>Client-Side AES-256-GCM</h3>
           </div>
-          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Sensitive activity records—including messages, notifications, and keystroke events—are encrypted locally on the child device <em>before</em> serialization or transmission.</p>
+          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Sensitive text streams—including SMS messages, notifications, and keystroke events—are encrypted locally on the child device using <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">EncryptionHelper</code> before serialization.</p>
           <ul class="code-block">
             <li>Algorithm: AES/GCM/NoPadding (256-bit)</li>
             <li>IV: Unique 12-byte SecureRandom per item</li>
@@ -395,7 +398,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6BAED6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
             <h3>Encrypted Transport &amp; Media</h3>
           </div>
-          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Encrypted payloads travel inside TLS tunnels, while real-time audio, camera, and screen streams bypass REST storage entirely via WebRTC.</p>
+          <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">All API and signaling traffic travels inside TLS tunnels, while real-time audio, camera, and screen streams bypass REST storage entirely via WebRTC.</p>
           <ul class="code-block">
             <li>REST APIs: HTTPS (TLS)</li>
             <li>Real-Time Control: MQTTS (TLS)</li>
@@ -403,17 +406,24 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           </ul>
         </div>
       </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <h3 style="margin-bottom:10px">Why Dual-Field Payloads &amp; Transport-Only Telemetry Exist During Rolling Upgrades</h3>
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px">In a live mobile ecosystem where parents and children may run different app versions simultaneously, abruptly removing legacy JSON fields breaks message parsing on older paired parent devices. To ensure <strong style="color:var(--text)">zero-downtime backward compatibility</strong> during rolling migrations, message payloads may carry dual-schema compatibility fields inside the <strong style="color:var(--text)">HTTPS/MQTTS TLS tunnel</strong> until legacy client versions are retired.</p>
+        <p style="font-size:.9rem;color:var(--muted)">Similarly, high-frequency structural data—such as GPS coordinates, battery/network telemetry, contact lists, and media uploads—relies on <strong style="color:var(--text)">TLS 1.2/1.3 transport encryption</strong> rather than redundant per-field client-side wrapping, avoiding unnecessary CPU wake-locks and battery drain on budget Android devices while keeping network traffic fully encrypted in transit.</p>
+      </div>
+
       <div class="callout amber">
         <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         <div><strong>Why GCM instead of basic CBC?</strong> AES-GCM is an <em>authenticated</em> cipher. If even a single bit of ciphertext is modified in transit or storage, decryption automatically fails rather than silently producing corrupted output.</div>
       </div>
     </section>
 
-    <!-- 2. Ephemeral Relay -->
+    <!-- 2. Ephemeral Relay & Presence -->
     <section id="ephemeral-relay" style="scroll-margin-top:84px">
       <div class="sec-header">
         <span class="sec-num">02</span>
-        <h2>Ephemeral Relay Architecture (No Permanent Log Warehouse)</h2>
+        <h2>Ephemeral Relay Architecture &amp; Presence State</h2>
       </div>
       <p style="color:var(--muted);margin-bottom:22px">Many monitoring apps dump every SMS, call log, and notification into a permanent third-party cloud database where years of family history accumulate indefinitely. GX Parent Control uses an <strong style="color:var(--text)">ephemeral relay queue</strong> instead.</p>
       <div class="card" style="margin-bottom:16px">
@@ -422,12 +432,12 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="pipe-step">
             <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
             <strong>1. Child Device</strong>
-            <span>Encrypts payload locally with AES-256-GCM</span>
+            <span>Serializes &amp; encrypts payload locally</span>
           </div>
           <div class="pipe-step">
             <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
             <strong>2. Relay Queue</strong>
-            <span>Holds encrypted batch temporarily in transit</span>
+            <span>Holds batch temporarily in transit</span>
           </div>
           <div class="pipe-step">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16 11s1 1 1 3"/></svg>
@@ -441,9 +451,15 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           </div>
         </div>
       </div>
-      <div class="card">
-        <h3 style="margin-bottom:10px">Why use a private relay database instead of storing logs in public BaaS tables?</h3>
-        <p style="font-size:.9rem;color:var(--muted)">Public Backend-as-a-Service (BaaS) real-time databases are optimized for persistent state, not high-frequency ephemeral queuing, and often retain backups across multi-tenant cloud infrastructure. By operating a dedicated private relay queue with immediate read-and-delete semantics, GX Parent Control minimizes data residency, eliminates third-party log retention, and keeps historical data strictly on the parent's own device.</p>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Why a Private Relay Instead of BaaS Tables?</h3>
+          <p style="font-size:.88rem;color:var(--muted)">Public Backend-as-a-Service (BaaS) real-time databases are built for persistent state, not high-frequency ephemeral queuing, and often retain backups across multi-tenant cloud infrastructure. Operating a dedicated private relay queue with read-and-delete semantics minimizes data residency and keeps historical logs on the parent's own device.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">Why MQTT Uses Retained Messages for Status Only</h3>
+          <p style="font-size:.88rem;color:var(--muted)">In MQTT, the <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">retained</code> flag is reserved strictly for device presence (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">/status</code> — online/offline/lastSeen) so a parent opening the dashboard sees immediate connection state without waiting for a heartbeat. Activity logs and events are never published as retained messages.</p>
+        </div>
       </div>
     </section>
 
@@ -519,12 +535,35 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <p style="font-size:.82rem;color:var(--muted)">Specific serialization models and JNI bridges retain predictable signatures intentionally so WebRTC, Firebase, and background services never crash across OEM Android builds.</p>
         </div>
       </div>
+      <div class="card" style="margin-top:14px">
+        <h3 style="margin-bottom:8px">Public Client Identifiers vs. Backend Secrets (BaaS &amp; WebRTC ICE)</h3>
+        <p style="font-size:.88rem;color:var(--muted)">Mobile apps using Firebase, Supabase, or WebRTC must bundle public client routing identifiers (such as project URLs, public <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">anon</code> keys, and dynamically fetched STUN/TURN ICE endpoints for carrier NAT traversal). By design, these identifiers carry zero administrative privileges—database access is gated by server-side <strong style="color:var(--text)">Row-Level Security (RLS)</strong> and JWT verification, while TURN-relayed media streams remain end-to-end encrypted via <strong style="color:var(--text)">WebRTC DTLS/SRTP</strong>.</p>
+      </div>
     </section>
 
-    <!-- 5. Certificate Trust -->
-    <section id="network-resilience" style="scroll-margin-top:84px">
+    <!-- 5. OTA Signing & Updates -->
+    <section id="ota-updates" style="scroll-margin-top:84px">
       <div class="sec-header">
         <span class="sec-num">05</span>
+        <h2>OTA Update Integrity &amp; OS-Enforced Signing</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Because comprehensive child-safety services (SMS, call-log, and accessibility oversight) cannot be distributed through standard app-store channels, GX Kids uses an <strong style="color:var(--text)">Over-the-Air (OTA) self-update pipeline</strong> to deliver security patches and Android OS compatibility fixes remotely.</p>
+      <div class="card-grid cols-2" style="margin-bottom:16px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">OS-Level APK Signature Enforcement</h3>
+          <p style="font-size:.88rem;color:var(--muted)">On Android, an app update <strong style="color:var(--text)">cannot be installed by any third party</strong> unless the new APK is cryptographically signed with the exact same private release keystore (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">APK Signature Scheme v2/v3</code>) as the currently installed app. Even if an update broadcast omits an optional metadata checksum, Android's PackageManager rejects any binary lacking a matching developer signature.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">Accessibility-Assisted OEM Update Completion</h3>
+          <p style="font-size:.88rem;color:var(--muted)">Modern Android OEMs (Samsung, Xiaomi, ColorOS, Vivo) fragment installation dialogs and often block background security patches behind multi-step system prompts. When a parent-authorized child device receives an official update, GX uses Android's <code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PackageInstaller</code> session API and accessibility-assisted confirmation so parents don't have to physically recollect the child's phone for every patch.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Certificate Trust -->
+    <section id="network-resilience" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">06</span>
         <h2>Certificate Trust &amp; Channel Separation</h2>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
@@ -539,25 +578,27 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
     </section>
 
-    <!-- 6. Tenant Isolation -->
+    <!-- 7. Tenant Isolation -->
     <section id="tenant-isolation" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">06</span>
-        <h2>Strict Tenant Isolation &amp; Access Control</h2>
+        <span class="sec-num">07</span>
+        <h2>Strict Tenant Isolation &amp; Broker-Level Command Auth</h2>
       </div>
       <div class="card">
         <ul class="check-list">
-          <li><div><strong>Per-Device Broker ACLs:</strong> Every child device and parent account is provisioned with isolated broker roles. A device cannot publish to or subscribe to another family's topics.</div></li>
-          <li><div><strong>JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified authentication token.</div></li>
+          <li><div><strong>Per-Device Broker ACLs:</strong> Every child device and parent account is provisioned with isolated broker roles. Command authorization is enforced at the TLS + MQTT broker ACL layer—eliminating redundant per-packet asymmetric signature overhead on low-bandwidth cellular links while ensuring no user can publish to another family's topics.</div></li>
+          <li><div><strong>JWT-Verified Operations:</strong> Claiming a pairing code, fetching credentials, or unpairing a device requires a valid, server-verified Supabase authentication token.</div></li>
+          <li><div><strong>Rate Limiting &amp; Replay Guards:</strong> Enrollment, pairing claims, and unpair endpoints enforce per-IP and per-account rate limits alongside idempotent bootstrap token verification and strict state-machine checks (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">PENDING → CONNECTED → UNPAIRED</code>).</div></li>
+          <li><div><strong>On-Device Sandbox Isolation:</strong> Local app preferences, offline queues, and pairing state are stored strictly inside Android's private application sandbox (<code style="font-size:.8rem;background:var(--raise);padding:1px 5px;border-radius:4px">Context.MODE_PRIVATE</code>), isolated by the Linux UID boundary from other installed apps.</div></li>
           <li><div><strong>Instant Revocation on Unpair:</strong> Unpairing immediately updates the server-side access list and revokes broker permissions for that parent-child link.</div></li>
         </ul>
       </div>
     </section>
 
-    <!-- 7. Consent & Transparency -->
+    <!-- 8. Consent & Transparency -->
     <section id="consent-transparency" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">07</span>
+        <span class="sec-num">08</span>
         <h2>Consent, Transparency &amp; Ethical Design</h2>
       </div>
       <p style="color:var(--muted);margin-bottom:22px">GX Parent Control is designed from the ground up around <strong style="color:var(--text)">informed consent</strong>. It is a legal, consent-based family safety tool — comparable to Google Family Link, Qustodio, and mSpy — not covert surveillance software.</p>
@@ -583,10 +624,10 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
     </section>
 
-    <!-- 8. Comparison Table -->
+    <!-- 9. Comparison Table -->
     <section id="comparison" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">08</span>
+        <span class="sec-num">09</span>
         <h2>How GX Compares to Other Parental Control Apps</h2>
       </div>
       <p style="color:var(--muted);margin-bottom:22px">Every app in this category makes trade-offs between security, usability, and cost. Here's an honest comparison of key security and privacy properties:</p>
@@ -652,10 +693,10 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
     </section>
 
-    <!-- 9. Data Rights -->
+    <!-- 10. Data Rights -->
     <section id="data-rights" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">09</span>
+        <span class="sec-num">10</span>
         <h2>Your Data Rights &amp; Account Deletion</h2>
       </div>
       <div class="card-grid cols-2" style="margin-bottom:16px">
@@ -680,7 +721,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="data-col">
             <div class="data-col-label c1">Relay Queue (Ephemeral)</div>
             <ul>
-              <li>Encrypted activity log batches (deleted on delivery)</li>
+              <li>Activity log batches (deleted on delivery)</li>
               <li>Device telemetry (battery, network state)</li>
             </ul>
           </div>
@@ -696,18 +737,18 @@ html{scrollbar-color:#4A4A45 var(--bg)}
             <div class="data-col-label c3">Never Stored</div>
             <ul>
               <li>Live stream recordings</li>
-              <li>Decrypted message/keylog content</li>
-              <li>Photos or media from child device</li>
+              <li>Permanent message/keylog archives</li>
+              <li>Long-term cloud log warehouses</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 10. Responsible Disclosure -->
+    <!-- 11. Responsible Disclosure -->
     <section id="disclosure" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">10</span>
+        <span class="sec-num">11</span>
         <h2>Responsible Disclosure Policy</h2>
       </div>
       <div class="card" style="margin-bottom:16px">
@@ -729,14 +770,14 @@ html{scrollbar-color:#4A4A45 var(--bg)}
       </div>
       <div class="callout amber">
         <svg class="callout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFB547" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div><strong>Out of scope:</strong> Static decompilation findings that do not demonstrate an exploitable, authenticated attack path (e.g., observing that an APK contains server endpoint strings is expected and not a vulnerability).</div>
+        <div><strong>Out of scope:</strong> Static decompilation findings that do not demonstrate an exploitable, authenticated attack path (e.g., observing that an APK contains server endpoint strings or backward-compatible schema keys is expected and not a vulnerability).</div>
       </div>
     </section>
 
-    <!-- 11. Technical FAQ -->
+    <!-- 12. Technical FAQ -->
     <section id="faq" style="scroll-margin-top:84px">
       <div class="sec-header">
-        <span class="sec-num">11</span>
+        <span class="sec-num">12</span>
         <h2>Technical FAQ</h2>
       </div>
       <p style="color:var(--muted);margin-bottom:22px">Direct, technical answers to common questions raised during static or network reviews.</p>
@@ -750,17 +791,70 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <div class="faq-body">It enables pairing-code recovery and seamless multi-device setup without forcing parents to manually manage 256-bit keys. The key travels over HTTPS (TLS), is immediately sealed at rest using AES-256-GCM envelope encryption on the server, and is only released to an authenticated parent claiming that specific pairing code.</div>
         </details>
         <details class="faq-item">
-          <summary>3. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</summary>
-          <div class="faq-body">A private relay acts as a transient delivery queue (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">Write → Read → Delete</code>) rather than a permanent cloud database. Once the parent device retrieves encrypted logs, they are purged from the relay—ensuring sensitive family history is not stored indefinitely on third-party cloud infrastructure.</div>
+          <summary>3. Why do some payloads carry both encrypted fields and compatibility fields, or rely on TLS alone?</summary>
+          <div class="faq-body">All traffic travels inside TLS-encrypted tunnels (HTTPS/MQTTS). During rolling app updates, dual-schema fields ensure older parent clients can still parse messages without breaking, while high-frequency structural telemetry (like GPS coordinates and battery state) relies directly on TLS 1.2/1.3 transport security to preserve battery life on the child's device.</div>
         </details>
         <details class="faq-item">
-          <summary>4. Can another user or device read my child's data?</summary>
-          <div class="faq-body">No. Every device and parent account is isolated by authenticated sessions (JWT), unique per-device encryption keys, and strict server-side ACLs that bind each parent solely to their claimed child devices.</div>
+          <summary>4. How are OTA app updates protected against tampering if a broadcast omits a checksum?</summary>
+          <div class="faq-body">Android's operating system enforces cryptographic <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">APK Signature Scheme v2/v3</code> verification at install time. Even if an update metadata packet lacks an optional SHA-256 string, Android's PackageManager strictly refuses to install any APK not signed by the exact same private release keystore as the installed application.</div>
         </details>
         <details class="faq-item">
-          <summary>5. Are live screen, camera, or audio streams recorded on GX servers?</summary>
+          <summary>5. Why does GX use a private VPS relay instead of storing logs directly in Firebase?</summary>
+          <div class="faq-body">A private relay acts as a transient delivery queue (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">Write → Read → Delete</code>) rather than a permanent cloud database. Once the parent device retrieves logs, they are purged from the relay—ensuring sensitive family history is not stored indefinitely on third-party cloud infrastructure.</div>
+        </details>
+        <details class="faq-item">
+          <summary>6. Are live screen, camera, or audio streams recorded on GX servers?</summary>
           <div class="faq-body">No. Live monitoring uses WebRTC (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">DTLS/SRTP</code>) to stream encrypted media directly between the child and parent devices (or via an encrypted relay when strict carrier NATs prevent direct peer-to-peer routing). Media streams are never recorded or stored server-side.</div>
         </details>
+        <details class="faq-item">
+          <summary>7. Why are Firebase/Supabase client keys or STUN/TURN endpoints visible in the APK?</summary>
+          <div class="faq-body">Firebase configs, Supabase <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">anon</code> keys, and STUN/TURN ICE addresses are intentionally public client routing identifiers required for authentication and NAT traversal. Actual data access is enforced server-side via Row-Level Security (RLS) and JWT validation, and TURN relays only see <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">DTLS/SRTP</code>-encrypted media packets.</div>
+        </details>
+        <details class="faq-item">
+          <summary>8. How is local app state protected on the phone, and what prevents API replay abuse?</summary>
+          <div class="faq-body">Local state and offline queues are isolated inside Android's <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">MODE_PRIVATE</code> app sandbox, inaccessible to other apps on standard devices. On the backend, enrollment and pairing endpoints enforce per-IP/per-account rate limits, idempotent token checks, and strict pairing state-machine transitions.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 13. Deep-Dive Engineering Trade-Offs -->
+    <section id="engineering-rationale" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">13</span>
+        <h2>Deep-Dive Engineering Trade-Offs &amp; Design Rationale</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Every production mobile platform balances strict cryptographic theory against real-world Android OEM constraints, cellular reliability, and family recovery. Below is the engineering rationale behind our deeper architectural choices.</p>
+
+      <div class="card-grid cols-2">
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">1. Envelope Encryption, Key Lifetime &amp; 96-bit IVs</h3>
+          <p style="font-size:.85rem;color:var(--muted)">GX intentionally uses <strong style="color:var(--text)">Server-Assisted Envelope Encryption</strong> rather than QR-only Zero-Knowledge E2EE so parents never suffer permanent data lockout when switching phones or reinstalling. A stable per-pairing 256-bit key avoids multi-device desync during offline queue drains, while unique 96-bit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecureRandom</code> IVs per item keep AES-GCM collision probability mathematically negligible at single-device message volumes.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">2. Multi-Tenant Ownership, Pairing &amp; Sessions</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Every pairing claim, credential fetch, and unpair action validates the caller's Supabase JWT (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">sub</code>) against server-side parent-child link records, preventing cross-account IDOR access. Pairing endpoints enforce both per-IP and per-account rate limits, while unpairing immediately revokes broker ACLs without waiting for client token expiry.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">3. Broker Wildcards, Reconnect Jitter &amp; Scale</h3>
+          <p style="font-size:.85rem;color:var(--muted)">The MQTTS broker disables anonymous access and binds each device/parent to isolated role-scoped topics, blocking cross-tenant wildcard subscriptions (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">#</code> / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">+</code>). To prevent thundering-herd spikes after network drops or OTA broadcasts, clients apply reconnect backoff and randomized <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">rollout_jitter_seconds</code>.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">4. Anti-Downgrade, Keystore &amp; Supply Chain</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Release signing keystores (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">release.jks</code>) and environment secrets are excluded from source control via strict <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">.gitignore</code> rules. During OTA updates, both client-side version checks (<code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">isUpdateNewer</code>) and Android OS <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">versionCode</code> enforcement block unauthorized downgrade attacks.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">5. Server-Verified Billing &amp; Media Signing</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Subscription entitlements are verified against server-side records rather than trusting local device preferences alone. Media uploads use server-generated signatures with zero upload-secret exposure in the APK, while WebRTC uses dynamically fetched ICE/TURN configurations paired with mandatory <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">DTLS/SRTP</code> encryption.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px;color:var(--amber)">6. OS Survival, Sandbox &amp; Deletion SOP</h3>
+          <p style="font-size:.85rem;color:var(--muted)">Background continuity on Android 12–15 relies on explicit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">foregroundServiceType</code> declarations and high-priority FCM wakeups rather than invasive hacks. Local state stays inside <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">MODE_PRIVATE</code> sandboxing, Play Integrity / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecurityChecker</code> monitors runtime integrity, and account deletion requests purge provisioning records within our 30-day operational SOP.</p>
+        </div>
       </div>
     </section>
 
@@ -778,7 +872,7 @@ html{scrollbar-color:#4A4A45 var(--bg)}
     <div class="foot-links">
       <a href="index.html">Home</a>
       <a href="#encryption">Encryption</a>
-      <a href="#ephemeral-relay">Relay</a>
+      <a href="#ota-updates">OTA Security</a>
       <a href="#comparison">Comparison</a>
       <a href="#data-rights">Data Rights</a>
       <a href="#disclosure">Disclosure</a>
