@@ -290,6 +290,8 @@ html{scrollbar-color:#4A4A45 var(--bg)}
         <a href="#disclosure" class="toc-link">11. Responsible Disclosure</a>
         <a href="#faq" class="toc-link">12. Technical FAQ</a>
         <a href="#engineering-rationale" class="toc-link">13. Engineering Trade-Offs</a>
+        <a href="#no-unauthorized-access" class="toc-link">14. No Cross-Device Access</a>
+        <a href="#senior-architecture-qa" class="toc-link">15. Senior SE Q&amp;A</a>
       </div>
     </div>
   </aside>
@@ -855,6 +857,78 @@ html{scrollbar-color:#4A4A45 var(--bg)}
           <h3 style="margin-bottom:8px;color:var(--amber)">6. OS Survival, Sandbox &amp; Deletion SOP</h3>
           <p style="font-size:.85rem;color:var(--muted)">Background continuity on Android 12–15 relies on explicit <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">foregroundServiceType</code> declarations and high-priority FCM wakeups rather than invasive hacks. Local state stays inside <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">MODE_PRIVATE</code> sandboxing, Play Integrity / <code style="font-size:.78rem;background:var(--raise);padding:1px 5px;border-radius:4px">SecurityChecker</code> monitors runtime integrity, and account deletion requests purge provisioning records within our 30-day operational SOP.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- 14. Why Unauthorized or Random Device Access Is Impossible -->
+    <section id="no-unauthorized-access" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">14</span>
+        <h2>Why Arbitrary or Cross-Account Device Access Is Not Possible</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">A common concern with any family-safety platform is whether someone—either another user or an infrastructure operator—can arbitrarily view any phone. GX Parent Control is architected around <strong style="color:var(--text)">four hard boundaries</strong> that prevent unauthorized or cross-device access:</p>
+
+      <div class="card-grid cols-2">
+        <div class="card">
+          <div class="spec-label" style="color:var(--mint);margin-bottom:8px">1. Physical Access &amp; Explicit Enrollment Required</div>
+          <p style="font-size:.86rem;color:var(--muted)"><strong style="color:var(--text)">No silent remote reach:</strong> No device can transmit telemetry, logs, or accept commands unless the GX Kids app is physically installed, granted explicit Android permissions on-device, and enrolled through an active pairing flow. You cannot "type a device ID" on a server to connect to an arbitrary phone.</p>
+        </div>
+
+        <div class="card">
+          <div class="spec-label" style="color:var(--mint);margin-bottom:8px">2. Per-Family Tenant Isolation &amp; Broker ACLs</div>
+          <p style="font-size:.86rem;color:var(--muted)"><strong style="color:var(--text)">Cross-account access is blocked:</strong> Every parent-child link receives isolated MQTTS credentials, unique per-device encryption keys, and strict server-side Access Control Lists (ACLs). One parent account cannot subscribe to, query, or read another family's paired device topics or data.</p>
+        </div>
+
+        <div class="card">
+          <div class="spec-label" style="color:var(--mint);margin-bottom:8px">3. Visible Monitoring &amp; OS Permission Boundaries</div>
+          <p style="font-size:.86rem;color:var(--muted)"><strong style="color:var(--text)">Strict Android OS enforcement:</strong> While active, the child device displays a persistent, non-dismissible system notification. Every capability operates strictly within Android's app sandbox and user-granted OS permissions—GX cannot bypass Android security boundaries.</p>
+        </div>
+
+        <div class="card">
+          <div class="spec-label" style="color:var(--mint);margin-bottom:8px">4. Ephemeral Relay &amp; No Central Spy Archive</div>
+          <p style="font-size:.86rem;color:var(--muted)"><strong style="color:var(--text)">No permanent server-side data warehouse:</strong> The relay queue is transient and purges activity log batches upon delivery to the parent device, while live WebRTC streams are never recorded on servers. There is no accumulated central database of users' private phone history.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15. Senior Engineering Q&A: Why Not the Textbook "Ideal"? -->
+    <section id="senior-architecture-qa" style="scroll-margin-top:84px">
+      <div class="sec-header">
+        <span class="sec-num">15</span>
+        <h2>Senior Engineering Q&amp;A: Why Not the Textbook "Ideal"?</h2>
+      </div>
+      <p style="color:var(--muted);margin-bottom:22px">Experienced software engineers often ask why a production mobile system doesn't adopt every textbook cryptographic ideal. Here is why specific idealized patterns break down under real-world Android OS, OEM, and family-recovery constraints.</p>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>1. Why not pure Zero-Knowledge E2EE (ECDH / QR-only) with zero server key escrow?</summary>
+          <div class="faq-body">Pure QR-only E2EE works well for chat apps where losing history is acceptable, but in child-safety monitoring, parents frequently replace phones, clear app data, or link a second parent device. Without server-assisted envelope-encrypted recovery, losing the parent phone causes <strong style="color:var(--text)">permanent lockout</strong> until the parent physically reacquires the child's device. Envelope encryption (<code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AES-256-GCM</code> at rest) solves multi-parent linking and recovery cleanly.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>2. Why not Signal-style Double Ratchet (per-message forward secrecy) for queued logs?</summary>
+          <div class="faq-body">Ratchet protocols require synchronized state and ordered delivery. Child devices routinely enter Doze mode, lose cellular signal, and buffer hundreds of events in offline queues while the parent app is closed. Out-of-order delivery or a parent app reinstall would <strong style="color:var(--text)">permanently desynchronize</strong> the ratchet and corrupt queued safety logs. A stable per-pairing 256-bit AES-GCM key guarantees deterministic decryption across offline batches.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>3. Why isn't the shared pairing key locked inside non-exportable Android Keystore (StrongBox/TEE)?</summary>
+          <div class="faq-body">By definition, a symmetric key shared between a child phone and one or more parent phones <strong style="color:var(--text)">must be transferable</strong> during pairing—hardware-bound non-exportable TEE keys cannot leave one device's silicon to decrypt payloads on another phone. Additionally, StrongBox/TEE implementations vary inconsistently across budget OEM chipsets.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>4. Why not hardcoded SSL pinning plus per-packet asymmetric command signatures?</summary>
+          <div class="faq-body">Hardcoded leaf/intermediate pinning risks <strong style="color:var(--text)">fleet-wide outages</strong> during automated 90-day TLS certificate rotations or behind legitimate carrier proxies when older clients haven't updated. Likewise, signing every small MQTT control packet with RSA/ECDSA adds unnecessary CPU wakeups and battery drain on low-end devices—TLS + Broker ACLs already authenticate every session at the transport layer.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>5. Why not distribute the child app solely via Google Play instead of using an OTA updater?</summary>
+          <div class="faq-body">Play Store policies restrict <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">READ_SMS</code>, <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">READ_CALL_LOG</code>, and broad <code style="font-size:.82rem;background:var(--raise);padding:1px 6px;border-radius:4px">AccessibilityService</code> APIs even for legitimate parental-control software. Direct distribution with OS-enforced <strong style="color:var(--text)">APK Signature Scheme v2/v3</strong> OTA updates is the only viable way to deliver full safety features and keep child devices patched.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>6. Why not wrap every single numeric/telemetry field (GPS, battery, timestamps) in AES-GCM?</summary>
+          <div class="faq-body">Wrapping every small coordinate or timestamp individually inflates payload overhead (12-byte IV + 16-byte GCM tag + Base64 per field) and triggers frequent cryptographic wake-locks that drain battery on budget phones. Because the entire transport channel is already encrypted with <strong style="color:var(--text)">TLS 1.2/1.3</strong>, reserving client-side AES-256-GCM for sensitive text payloads balances defense-in-depth with device battery life.</div>
+        </details>
       </div>
     </section>
 
