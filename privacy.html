@@ -1,123 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | GuardX</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #020408;
-            color: #ffffff;
-            margin: 0;
-            line-height: 1.6;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy | GX Parental Control</title>
+<meta name="description" content="GX Parental Control privacy policy — how we collect, use, and protect your family's data.">
+<link rel="canonical" href="https://guardx.site/privacy">
+<meta name="theme-color" content="#1F1F1D">
+<link rel="icon" type="image/png" href="https://guardx.site/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1F1F1D;--paper:#262624;--raise:#2E2E2B;--line:#3D3D39;--text:#F2F1EC;--muted:#A9A8A0;--amber:#FFB547;--amber-d:#F29B1E;--mint:#5BD6A4;--r:14px}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font:400 17px/1.65 "DM Sans",system-ui,sans-serif;color:var(--text);background-color:var(--bg);background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1.6px);background-size:14px 14px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;letter-spacing:-.02em}
+h1{font-size:clamp(2.4rem,6vw,4rem);font-weight:800}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+.wrap{width:min(760px,100% - 40px);margin-inline:auto}
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+/* progress */
+#prog{position:fixed;inset:0 auto auto 0;height:3px;width:0;background:var(--amber);z-index:50}
 
-        .text-gradient {
-            background: linear-gradient(to right, #00d2ff, #3a7bd5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(31,31,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .25s}
+header.scrolled{box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.15rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo img{width:30px;height:30px;object-fit:contain}
+.badge{font:700 .7rem "DM Sans",sans-serif;padding:3px 10px;border-radius:999px;background:rgba(255,181,71,.14);border:1px solid rgba(255,181,71,.3);color:var(--amber);letter-spacing:.06em}
+
+/* back btn */
+.btn-back{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font:700 .88rem "DM Sans",sans-serif;text-decoration:none;border:2px solid #5A5A54;color:var(--text);background:transparent;transition:transform .15s,background .15s}
+.btn-back:hover{background:var(--text);color:#1F1F1D;border-color:var(--text);transform:translateY(-2px)}
+.btn-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* hero */
+.hero{padding:52px 0 48px;border-bottom:1px solid var(--line)}
+.tag-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:999px;background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.25);color:var(--amber);font:.7rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.08em;margin-bottom:20px}
+.hero h1{margin-bottom:14px}
+.hero h1 span{color:var(--amber)}
+.update-row{display:flex;align-items:center;gap:12px;margin-top:14px}
+.update-line{width:40px;height:2px;background:var(--amber);flex:none}
+.update-text{font:.78rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* main content */
+main{padding:52px 0 80px}
+.policy-sections{display:flex;flex-direction:column;gap:40px}
+
+/* section block */
+.policy-block{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:28px 32px;transition:border-color .2s}
+.policy-block:hover{border-color:rgba(255,181,71,.25)}
+.block-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.block-num{font:700 .72rem "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.25);padding:4px 10px;border-radius:6px;white-space:nowrap}
+.policy-block p{color:var(--muted);font-size:.95rem;line-height:1.7}
+.policy-block p+p{margin-top:10px}
+
+/* data collection cards */
+.dc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.dc-card{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;transition:border-color .2s,transform .2s}
+.dc-card:hover{border-color:var(--amber);transform:translateY(-3px)}
+.dc-card svg{width:22px;height:22px;fill:none;stroke:var(--amber);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-bottom:12px;display:block}
+.dc-card h3{font-size:.92rem;margin-bottom:6px}
+.dc-card p{font-size:.82rem;color:var(--muted)}
+
+/* permission list */
+.perm-list{list-style:none;padding:0;margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.perm-list li{display:flex;gap:12px;align-items:flex-start;font:.9rem "DM Sans",sans-serif;color:var(--muted)}
+.perm-list li::before{content:"";display:block;flex:none;width:14px;height:8px;border:solid var(--mint);border-width:0 0 2.5px 2.5px;transform:rotate(-45deg);margin-top:7px}
+.perm-list strong{color:var(--text)}
+
+/* deletion block */
+.deletion-highlight{background:rgba(255,181,71,.06);border:1px solid rgba(255,181,71,.22);border-radius:var(--r);padding:28px 32px;margin-top:16px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;transition:background .25s}
+.deletion-highlight:hover{background:rgba(255,181,71,.1)}
+.del-email-label{font:.72rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.del-email{font:700 1rem "DM Sans",sans-serif;color:var(--amber);text-decoration:none}
+.del-email:hover{text-decoration:underline}
+.del-badge{background:var(--raise);border:1px solid var(--line);padding:8px 16px;border-radius:999px;font:700 .82rem "DM Sans",sans-serif;color:var(--text);white-space:nowrap}
+
+/* developer note */
+.dev-note{border-top:1px solid var(--line);padding-top:28px;text-align:center}
+.dev-note p{font:.8rem "DM Sans",sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* footer */
+footer{background:#141413;color:var(--muted);padding:30px 0;font-size:.88rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+footer a{text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--text)}
+.foot-links{display:flex;flex-wrap:wrap;gap:18px}
+
+/* back to top */
+#top-btn{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:2px solid var(--amber);background:var(--bg);color:var(--amber);display:grid;place-items:center;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(10px);transition:.25s;z-index:30}
+#top-btn.show{opacity:1;pointer-events:auto;transform:none}
+#top-btn:hover{background:var(--amber);color:#1F1F1D}
+#top-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
+::selection{background:var(--amber);color:#1F1F1D}
+html{scrollbar-color:#4A4A45 var(--bg)}
+
+@media(max-width:620px){
+  .dc-grid{grid-template-columns:1fr}
+  .deletion-highlight{flex-direction:column;align-items:flex-start}
+  .foot-links{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
-<body class="py-20 px-6">
+<body>
+<div id="prog"></div>
 
-    <div class="max-w-4xl mx-auto">
-        <a href="index.html" class="inline-flex items-center space-x-2 text-gray-500 hover:text-cyan-400 transition mb-12 group">
-            <i class="fas fa-arrow-left text-xs group-hover:-translate-x-1 transition"></i>
-            <span class="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
-        </a>
+<!-- Header -->
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="GX Parental Control home">
+      <img src="https://guardx.site/logo.png" alt="GX Parental Control logo">
+      GX Parental Control
+      <span class="badge">PRIVACY</span>
+    </a>
+    <a class="btn-back" href="index.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+      Back to Home
+    </a>
+  </div>
+</header>
 
-        <header class="mb-16">
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tighter italic leading-none">
-                Privacy <span class="text-gradient">Policy.</span>
-            </h1>
-            <div class="flex items-center space-x-4">
-                <div class="h-[1px] w-12 bg-cyan-500"></div>
-                <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.3em]">Last Updated: April 15, 2026</p>
-            </div>
-        </header>
+<main id="top">
 
-        <div class="glass-card p-8 md:p-16 rounded-[40px] space-y-12">
-            
-            <section>
-                <h2 class="text-xl font-black mb-4 italic uppercase tracking-tight text-white">01. Overview</h2>
-                <p class="text-gray-400 font-light">
-                    Welcome to <strong>GuardX (Gx Kids Parent Control App)</strong>. We prioritize the security of your family's data. This policy explains how our Parent Application handles information to ensure a safe monitoring environment.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-black mb-6 italic uppercase tracking-tight text-white border-l-4 border-cyan-500 pl-4">02. Data Collection</h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
-                        <i class="fas fa-user-shield text-cyan-400 mb-4"></i>
-                        <h3 class="text-sm font-bold mb-2 uppercase">Authentication</h3>
-                        <p class="text-xs text-gray-500">We use Google Sign-In for secure access. We only store your email address for account management.</p>
-                    </div>
-                    <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
-                        <i class="fas fa-link text-cyan-400 mb-4"></i>
-                        <h3 class="text-sm font-bold mb-2 uppercase">Device Pairing</h3>
-                        <p class="text-xs text-gray-500">Encrypted pairing codes via <strong>Firebase</strong> are used to securely link the Parent and Child applications.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-black mb-4 italic uppercase tracking-tight text-white">03. App Permissions</h2>
-                <p class="text-gray-400 font-light mb-4">
-                    The GuardX Parent App requires specific permissions to function:
-                </p>
-                <ul class="space-y-3">
-                    <li class="flex items-start space-x-3 text-sm text-gray-400">
-                        <i class="fas fa-check-circle text-cyan-500 mt-1"></i>
-                        <span><strong>Notification Access:</strong> Used exclusively to deliver real-time parental alerts from the child's device.</span>
-                    </li>
-                    <li class="flex items-start space-x-3 text-sm text-gray-400">
-                        <i class="fas fa-check-circle text-cyan-500 mt-1"></i>
-                        <span><strong>Internet Access:</strong> Necessary for Firebase data synchronization and remote monitoring features.</span>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="bg-gradient-to-br from-cyan-500/10 to-transparent p-8 rounded-[30px] border border-cyan-500/20">
-                <h2 class="text-xl font-black mb-4 italic uppercase tracking-tight text-white">04. Data Deletion</h2>
-                <p class="text-gray-400 text-sm font-light mb-6">
-                    We believe in your right to be forgotten. You can request a total wipe of your data and account at any time.
-                </p>
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">Support Email</p>
-                        <p class="text-cyan-400 font-bold">guardx.support@gmail.com</p>
-                    </div>
-                    <div class="bg-black/40 px-6 py-3 rounded-2xl border border-white/5">
-                        <p class="text-[10px] font-bold text-white uppercase">48-Hour Processing Guarantee</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="pt-10 border-t border-white/5 text-center">
-                <p class="text-[9px] text-gray-600 font-black uppercase tracking-[0.5em]">
-                    Developer: Isuru Anupama
-                </p>
-            </section>
-
-        </div>
-
-        <footer class="mt-12 text-center">
-            <p class="text-[9px] text-gray-700 font-black uppercase tracking-widest">© 2026 GuardX Systems • All Rights Reserved</p>
-        </footer>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="tag-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        LEGAL DOCUMENT
+      </div>
+      <h1>Privacy <span>Policy.</span></h1>
+      <p style="color:var(--muted);font-size:1.05rem;max-width:52ch;margin-top:12px">How GX Parental Control collects, uses, and protects your family's data — written plainly, with no hidden clauses.</p>
+      <div class="update-row">
+        <div class="update-line"></div>
+        <span class="update-text">Last Updated: April 15, 2026</span>
+      </div>
     </div>
+  </section>
 
+  <!-- Policy content -->
+  <div class="wrap" style="padding-top:48px;padding-bottom:80px">
+    <div class="policy-sections">
+
+      <!-- 01. Overview -->
+      <div class="policy-block">
+        <div class="block-header">
+          <span class="block-num">01</span>
+          <h2>Overview</h2>
+        </div>
+        <p>Welcome to <strong style="color:var(--text)">GuardX (GX Kids Parent Control App)</strong>. We prioritize the security of your family's data. This policy explains how our Parent Application handles information to ensure a safe monitoring environment.</p>
+      </div>
+
+      <!-- 02. Data Collection -->
+      <div class="policy-block">
+        <div class="block-header">
+          <span class="block-num">02</span>
+          <h2>Data Collection</h2>
+        </div>
+        <p>We collect only the minimum data required to operate the app securely. Here's exactly what we store and why:</p>
+        <div class="dc-grid">
+          <div class="dc-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16 11s1 1 1 3"/></svg>
+            <h3>Authentication</h3>
+            <p>We use Google Sign-In for secure access. We only store your email address for account management.</p>
+          </div>
+          <div class="dc-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 0 0-.12-7.07 5.006 5.006 0 0 0-6.95 0l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5.004 5.004 0 0 0 .12 7.07 5.006 5.006 0 0 0 6.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></svg>
+            <h3>Device Pairing</h3>
+            <p>Encrypted pairing codes are used to securely link the Parent and Child applications via our secure relay.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03. App Permissions -->
+      <div class="policy-block">
+        <div class="block-header">
+          <span class="block-num">03</span>
+          <h2>App Permissions</h2>
+        </div>
+        <p>The GX Parental Control app requires the following permissions to function. Each permission serves a specific purpose and is not used beyond its stated scope:</p>
+        <ul class="perm-list">
+          <li><div><strong>Notification Access:</strong> Used exclusively to deliver real-time parental alerts from the child's device.</div></li>
+          <li><div><strong>Internet Access:</strong> Necessary for data synchronization and remote monitoring features over encrypted channels.</div></li>
+        </ul>
+      </div>
+
+      <!-- 04. Data Deletion -->
+      <div class="policy-block">
+        <div class="block-header">
+          <span class="block-num">04</span>
+          <h2>Data Deletion</h2>
+        </div>
+        <p>We believe in your right to be forgotten. You can request a total wipe of your data and account at any time — no questions asked.</p>
+        <div class="deletion-highlight">
+          <div>
+            <div class="del-email-label">Support Email</div>
+            <a class="del-email" href="mailto:guardx.support@gmail.com">guardx.support@gmail.com</a>
+          </div>
+          <span class="del-badge">48-Hour Processing Guarantee</span>
+        </div>
+      </div>
+
+      <!-- Developer note -->
+      <div class="dev-note">
+        <p>Developer: Isuru Anupama</p>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> GX Parental Control. All rights reserved.</span>
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="secdoc.html">Security Whitepaper</a>
+      <a href="mailto:guardx.support@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<button id="top-btn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>
+</button>
+
+<script>
+document.getElementById("yr").textContent = new Date().getFullYear();
+var prog = document.getElementById("prog"),
+    hdr  = document.querySelector("header"),
+    up   = document.getElementById("top-btn");
+function onScroll() {
+  var h = document.documentElement, y = h.scrollTop, max = h.scrollHeight - h.clientHeight;
+  prog.style.width = (max > 0 ? y / max * 100 : 0) + "%";
+  hdr.classList.toggle("scrolled", y > 8);
+  up.classList.toggle("show", y > 400);
+}
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+</script>
 </body>
 </html>
